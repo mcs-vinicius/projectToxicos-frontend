@@ -23,8 +23,8 @@ const Home = ({ userRole }) => {
     setLoading(true);
     try {
       const [seasonsRes, contentRes] = await Promise.all([
-        axios.get("http://localhost:5000/seasons"),
-        axios.get("http://localhost:5000/home-content")
+        axios.get(`${import.meta.env.VITE_API_URL}/seasons`),
+        axios.get(`${import.meta.env.VITE_API_URL}/home-content`)
       ]);
 
       const seasons = seasonsRes.data;
@@ -61,7 +61,7 @@ const Home = ({ userRole }) => {
 
   const handleSaveChanges = async () => {
     try {
-      await axios.put("http://localhost:5000/home-content", homeContent);
+      await axios.put(`${import.meta.env.VITE_API_URL}/home-content`, homeContent);
       alert("Conteúdo salvo com sucesso!");
       setIsEditing(false);
     } catch (error) {
