@@ -1,8 +1,7 @@
-// mcs-vinicius/toxicos/toxicos-main/Frontend/src/components/ranking/RegisterPage.jsx
+// mcs-vinicius/projecttoxicos/projectToxicos-main/Frontend/src/components/ranking/RegisterPage.jsx
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-// Ícones atualizados para incluir Edição (FaEdit)
 import { FaTrash, FaPlus, FaUpload, FaEdit } from "react-icons/fa"; 
 import "../../styles/RegisterPage.css";
 
@@ -13,19 +12,19 @@ const RegisterPage = () => {
     name: "",
     habby_id: null,
     fase: "",
-    r1: "",
-    r2: "",
-    r3: "",
+    r1: "0", // Default to 0
+    r2: "0",
+    r3: "0",
   });
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(false);
-  // Novo estado para controlar o índice do participante em edição
   const [editingIndex, setEditingIndex] = useState(null); 
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
+        // A rota /users retorna a lista de usuários para o dropdown
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
         setAllUsers(response.data);
       } catch (error) {
@@ -49,25 +48,33 @@ const RegisterPage = () => {
     }
   };
 
-  // Lógica para Adicionar ou Atualizar um participante
   const handleAddOrUpdateParticipant = () => {
-    if (currentParticipant.name && currentParticipant.fase) {
-      if (editingIndex !== null) {
-        // Lógica de atualização
-        const updatedParticipants = [...participants];
-        updatedParticipants[editingIndex] = currentParticipant;
-        setParticipants(updatedParticipants);
-        setEditingIndex(null); // Reseta o modo de edição
-        alert("Participante atualizado com sucesso!");
-      } else {
-        // Lógica para adicionar novo participante
-        setParticipants([...participants, currentParticipant]);
-      }
-      // Limpa o formulário
-      setCurrentParticipant({ name: "", habby_id: null, fase: "", r1: "", r2: "", r3: "" });
-    } else {
-      alert("Por favor, preencha pelo menos o nome e a fase.");
+    // Validação
+    if (!currentParticipant.name || !currentParticipant.fase || !currentParticipant.habby_id) {
+        alert("Por favor, selecione um membro válido e preencha a fase de acesso.");
+        return;
     }
+
+    const newParticipant = {
+        ...currentParticipant,
+        fase: parseInt(currentParticipant.fase, 10),
+        r1: parseInt(currentParticipant.r1 || "0", 10),
+        r2: parseInt(currentParticipant.r2 || "0", 10),
+        r3: parseInt(currentParticipant.r3 || "0", 10),
+    };
+    
+    if (editingIndex !== null) {
+      // Atualizar
+      const updatedParticipants = [...participants];
+      updatedParticipants[editingIndex] = newParticipant;
+      setParticipants(updatedParticipants);
+      setEditingIndex(null); 
+    } else {
+      // Adicionar
+      setParticipants([...participants, newParticipant]);
+    }
+    // Limpar formulário
+    setCurrentParticipant({ name: "", habby_id: null, fase: "", r1: "0", r2: "0", r3: "0" });
   };
 
   const removeParticipant = (index) => {
@@ -76,18 +83,14 @@ const RegisterPage = () => {
     }
   };
   
-  // --- NOVA FUNÇÃO PARA INICIAR A EDIÇÃO ---
   const handleEditParticipant = (index) => {
     setEditingIndex(index);
-    // Carrega os dados do participante no formulário
     setCurrentParticipant(participants[index]);
   };
 
-  // --- NOVA FUNÇÃO PARA CANCELAR A EDIÇÃO ---
   const cancelEdit = () => {
     setEditingIndex(null);
-    // Limpa o formulário
-    setCurrentParticipant({ name: "", habby_id: null, fase: "", r1: "", r2: "", r3: "" });
+    setCurrentParticipant({ name: "", habby_id: null, fase: "", r1: "0", r2: "0", r3: "0" });
   };
 
   const finalizeSeason = async () => {
@@ -100,9 +103,10 @@ const RegisterPage = () => {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/seasons`, {
         startDate,
         endDate,
-        participants,
+        participants, // A estrutura dos participantes já está correta
       });
       alert(response.data.message);
+      // Limpar estado após sucesso
       setParticipants([]);
       setStartDate("");
       setEndDate("");
@@ -114,48 +118,40 @@ const RegisterPage = () => {
     }
   };
 
-  // --- NOVA FUNÇÃO PARA UPLOAD DE CSV ---
+  // Função para upload de CSV (lógica do cliente)
   const handleCsvUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const text = e.target.result;
-        const lines = text.split('\n').slice(1); // Ignora o cabeçalho
+        const lines = text.split(/\r?\n/).slice(1); // Ignora cabeçalho e lida com quebras de linha
         const newParticipants = lines.map(line => {
-          const [name, habby_id, fase, r1, r2, r3] = line.split(',');
-          // Validação básica para garantir que a linha não está vazia
+          const [name, habby_id, fase, r1, r2, r3] = line.split(',').map(s => s.trim());
           if (name && habby_id && fase) {
             return {
-              name: name.trim(),
-              habby_id: habby_id.trim(),
-              fase: fase.trim(),
-              r1: r1 ? r1.trim() : "0",
-              r2: r2 ? r2.trim() : "0",
-              r3: r3 ? r3.trim() : "0",
+              name, habby_id,
+              fase: parseInt(fase, 10),
+              r1: parseInt(r1 || "0", 10),
+              r2: parseInt(r2 || "0", 10),
+              r3: parseInt(r3 || "0", 10),
             };
           }
           return null;
-        }).filter(p => p !== null); // Remove linhas nulas/inválidas
+        }).filter(p => p !== null); 
         setParticipants(prev => [...prev, ...newParticipants]);
-        alert(`${newParticipants.length} participantes adicionados com sucesso do arquivo CSV!`);
+        alert(`${newParticipants.length} participantes adicionados do arquivo CSV!`);
       };
       reader.readAsText(file);
     }
-    // Limpa o valor do input para permitir o upload do mesmo arquivo novamente
     event.target.value = null; 
   };
-  // --- FIM DA NOVA FUNÇÃO ---
-
-  if (loading) {
-    return <div>Carregando...</div>;
-  }
-
+  
   return (
     <div className="register-page-wrapper">
       <div className="register-container">
         <h1>Registrar Pontuação de Membros</h1>
-
+        
         {/* --- SEÇÃO DE UPLOAD DE CSV --- */}
         <div className="csv-upload-section">
           <h2>Importar por CSV</h2>
@@ -311,9 +307,20 @@ const RegisterPage = () => {
             {loading ? "Finalizando..." : "Finalizar e Salvar Ranking"}
           </button>
         </div>
+        
       </div>
     </div>
   );
 };
 
 export default RegisterPage;
+
+
+
+
+
+
+
+
+
+

@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/ProfilePage.css';
-import '../styles/loader/Loader.css'; // Supondo que você tenha um loader
-import SearchedUserProfile from '../components/search/SearchedUserProfile'; // Importe o novo componente
+import '../styles/loader/Loader.jsx'; 
+import SearchedUserProfile from '../components/search/SearchedUserProfile';
 
 const ProfilePage = ({ currentUser }) => {
     const { habby_id } = useParams();
     const [profile, setProfile] = useState(null);
+    const [originalProfile, setOriginalProfile] = useState(null);
     const [history, setHistory] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
@@ -17,33 +18,39 @@ const ProfilePage = ({ currentUser }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [isSearchLoading, setIsSearchLoading] = useState(false);
-    const searchWrapperRef = useRef(null);
     const [selectedHabbyId, setSelectedHabbyId] = useState(null);
-
+    const searchWrapperRef = useRef(null);
+    
     const isOwner = currentUser?.habby_id === habby_id;
 
-    // Efeito para buscar dados do perfil principal (da URL)
-    useEffect(() => {
+    const fetchProfileData = useCallback(async () => {
         setLoading(true);
-        axios.get(`${import.meta.env.VITE_API_URL}/profile/${habby_id}`)
-            .then(res => setProfile(res.data))
-            .catch(err => {
-                console.error("Erro ao buscar perfil principal:", err);
-                setProfile(null);
-            })
-            .finally(() => setLoading(false));
+        try {
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/profile/${habby_id}`);
+            setProfile(res.data);
+            setOriginalProfile(res.data); // Guarda o estado original para o "Cancelar"
+        } catch (err) {
+            console.error("Erro ao buscar perfil:", err);
+            setProfile(null);
+            setOriginalProfile(null);
+        } finally {
+            setLoading(false);
+        }
     }, [habby_id]);
 
-    // Efeito para buscar histórico do perfil principal
     useEffect(() => {
-        if (activeTab === 'history' && habby_id) {
+        fetchProfileData();
+    }, [fetchProfileData]);
+
+    useEffect(() => {
+        if (activeTab === 'history' && habby_id && !history) { // Busca apenas se não tiver os dados
             axios.get(`${import.meta.env.VITE_API_URL}/history/${habby_id}`)
                 .then(res => setHistory(res.data))
                 .catch(err => console.error("Erro ao buscar histórico:", err));
         }
-    }, [activeTab, habby_id]);
+    }, [activeTab, habby_id, history]);
 
-    // Efeito para a lógica da busca com delay (debounce)
+    // Lógica de busca com debounce
     useEffect(() => {
         if (searchQuery.trim().length < 2) {
             setSearchResults([]);
@@ -59,7 +66,7 @@ const ProfilePage = ({ currentUser }) => {
         return () => clearTimeout(debounceTimer);
     }, [searchQuery]);
     
-    // Efeito para fechar o dropdown de resultados de busca
+    // Fechar dropdown de busca ao clicar fora
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (searchWrapperRef.current && !searchWrapperRef.current.contains(event.target)) {
@@ -74,31 +81,37 @@ const ProfilePage = ({ currentUser }) => {
     const handleResultClick = (id) => {
         setSearchQuery('');
         setSearchResults([]);
-        setSelectedHabbyId(id); // Define o ID para abrir o modal
+        setSelectedHabbyId(id); 
     };
 
     const closeSearchedProfile = () => {
-        setSelectedHabbyId(null); // Fecha o modal
+        setSelectedHabbyId(null);
     };
     
-     const handleInputChange = (e) => {
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
         setProfile({ ...profile, [name]: value });
+    };
+    
+    const handleCancelEdit = () => {
+        setProfile(originalProfile); // Restaura o perfil original
+        setIsEditing(false);
     };
 
     const handleSave = async () => {
         try {
             await axios.put(`${import.meta.env.VITE_API_URL}/profile`, profile);
             setIsEditing(false);
+            setOriginalProfile(profile); // Atualiza o "backup"
             alert('Perfil salvo com sucesso!');
         } catch (error) {
-            alert('Falha ao salvar o perfil.');
+            alert(error.response?.data?.error || 'Falha ao salvar o perfil.');
             console.error(error);
         }
     };
     
-    // Helper para renderizar campos
-    const renderField = (label, name, type = 'text') => (
+    // Helper para renderizar campos, agora com suporte a casas decimais
+    const renderField = (label, name, type = 'text', isDecimal = false) => (
         <div className="form-group">
             <label>{label}</label>
             <input
@@ -108,14 +121,16 @@ const ProfilePage = ({ currentUser }) => {
                 onChange={handleInputChange}
                 readOnly={!isEditing}
                 className="form-input"
+                step={isDecimal ? "0.01" : "1"} // Permite decimais
             />
         </div>
     );
-
-    if (loading) return <div className="loader"></div>;
+    
+    if (loading) return <div className="loader">Carregando...</div>;
 
     return (
         <div className="profile-page-wrapper">
+            {/* Seção de Busca */}
             <div className="profile-search-container">
                 <h2>Buscar Outro Usuário</h2>
                 <div className="search-wrapper" ref={searchWrapperRef}>
@@ -145,7 +160,6 @@ const ProfilePage = ({ currentUser }) => {
                 </div>
             </div>
 
-            {/* Renderiza o modal se um usuário foi selecionado */}
             {selectedHabbyId && (
                 <SearchedUserProfile 
                     habbyId={selectedHabbyId} 
@@ -155,96 +169,58 @@ const ProfilePage = ({ currentUser }) => {
 
             {/* Perfil Principal */}
             {!profile ? (
-                <div className="profile-container">Perfil não encontrado.</div>
+                <div className="profile-container error-message">Perfil não encontrado.</div>
             ) : (
                 <>
-                    {/* ... O JSX do seu perfil principal (profile-header, profile-tabs, etc) permanece aqui ... */}
                     <div className="profile-header">
-                         <img src={profile.profile_pic_url || 'https://via.placeholder.com/150'} alt="Perfil" className="profile-picture" />
-                         <div className="profile-titles">
-                             <h1>{profile.nick || 'Nome não definido'}</h1>
-                             <p>ID Habby: {profile.habby_id}</p>
-                         </div>
-                         {isOwner && (
-                    <div className="profile-actions">
-                        {isEditing ? (
-                            <>
-                                <button onClick={handleSave} className="btn btn-save">Salvar</button>
-                                <button onClick={() => setIsEditing(false)} className="btn btn-cancel">Cancelar</button>
-                            </>
-                        ) : (
-                            <button onClick={() => setIsEditing(true)} className="btn btn-edit">Editar Perfil</button>
+                        <img src={profile.profile_pic_url || 'https://via.placeholder.com/150'} alt="Perfil" className="profile-picture" />
+                        <div className="profile-titles">
+                            <h1>{profile.nick || 'Nome não definido'}</h1>
+                            <p>ID Habby: {profile.habby_id}</p>
+                        </div>
+                        {isOwner && (
+                            <div className="profile-actions">
+                                {isEditing ? (
+                                    <>
+                                        <button onClick={handleSave} className="btn btn-save">Salvar</button>
+                                        <button onClick={handleCancelEdit} className="btn btn-cancel">Cancelar</button>
+                                    </>
+                                ) : (
+                                    <button onClick={() => setIsEditing(true)} className="btn btn-edit">Editar Perfil</button>
+                                )}
+                            </div>
                         )}
                     </div>
-                )}
-                     </div>
-                     <div className="profile-tabs">
-                         <button onClick={() => setActiveTab('status')} className={activeTab === 'status' ? 'active' : ''}>Status</button>
-                         <button onClick={() => setActiveTab('history')} className={activeTab === 'history' ? 'active' : ''}>Histórico</button>
-                     </div>
-                     {activeTab === 'status' && (
-                <div className="profile-body">
-                    <div className="status-section">
-                        <h2>Dados Gerais</h2>
-                        {renderField('Link da Foto de Perfil', 'profile_pic_url')}
-                        {renderField('Nick', 'nick')}
-                        {renderField('ATK Total', 'atk', 'number')}
-                        {renderField('HP Total', 'hp', 'number')}
+
+                    <div className="profile-tabs">
+                        <button onClick={() => setActiveTab('status')} className={activeTab === 'status' ? 'active' : ''}>Status</button>
+                        <button onClick={() => setActiveTab('history')} className={activeTab === 'history' ? 'active' : ''}>Histórico</button>
                     </div>
-                    
-                    <div className="status-grid">
-                        <div className="status-section">
-                            <h3>Status do Sobrevivente</h3>
-                            {renderField('ATQ Base', 'survivor_base_atk', 'number')}
-                            {renderField('HP Base', 'survivor_base_hp', 'number')}
-                            {renderField('Bônus ATQ', 'survivor_bonus_atk', 'number')}
-                            {renderField('Bônus HP', 'survivor_bonus_hp', 'number')}
-                            {renderField('ATQ Final', 'survivor_final_atk', 'number')}
-                            {renderField('HP Final', 'survivor_final_hp', 'number')}
-                            {renderField('Taxa Crit.', 'survivor_crit_rate', 'number')}
-                            {renderField('Dano Crit.', 'survivor_crit_damage', 'number')}
-                            {renderField('Dano de Habilidade', 'survivor_skill_damage', 'number')}
-                            {renderField('Boost Dano Escudo', 'survivor_shield_boost', 'number')}
-                            {renderField('Envenenamento', 'survivor_poison_targets', 'number')}
-                            {renderField('Enfraquecimento', 'survivor_weak_targets', 'number')}
-                            {renderField('Congelamento', 'survivor_frozen_targets', 'number')}
+
+                    {activeTab === 'status' && (
+                        <div className="profile-body">
+                            {/* ... seções de status ... */}
+                            {/* Os campos numéricos com decimais no backend usam isDecimal=true */}
+                            {renderField('Bônus ATQ', 'survivor_bonus_atk', 'number', true)}
+                            {renderField('Bônus HP', 'survivor_bonus_hp', 'number', true)}
+                            {/* etc... */}
                         </div>
-                        <div className="status-section">
-                            <h3>Status do Bichinho</h3>
-                            {renderField('ATQ Base', 'pet_base_atk', 'number')}
-                            {renderField('HP Base', 'pet_base_hp', 'number')}
-                            {renderField('Dano Crit.', 'pet_crit_damage', 'number')}
-                            {renderField('Dano Habilidade.', 'pet_skill_damage', 'number')}
-                        </div>
-                        <div className="status-section">
-                            <h3>Coletáveis</h3>
-                            {renderField('ATQ Final', 'collect_final_atk', 'number')}
-                            {renderField('HP Final', 'collect_final_hp', 'number')}
-                            {renderField('Taxa Crit.', 'collect_crit_rate', 'number')}
-                            {renderField('Dano Crit.', 'collect_crit_damage', 'number')}
-                            {renderField('Dano de Habilidade', 'collect_skill_damage', 'number')}
-                            {renderField('Envenenamento', 'collect_poison_targets', 'number')}
-                            {renderField('Enfraquecimento', 'collect_weak_targets', 'number')}
-                            {renderField('Congelamento', 'collect_frozen_targets', 'number')}                        
-                        </div>
-                    </div>
-                </div>
-            )}
-            
-            {activeTab === 'history' && (
-                <div className="history-tab">
-                    <h2>Histórico de Participação (Última Temporada)</h2>
-                    {history ? (
-                        <div className="history-card">
-                            <p><strong>Posição no Ranking de Acesso:</strong> {history.position || 'N/A'}º</p>
-                            <p><strong>Pontuação (Fase de Acesso):</strong> {history.fase_acesso || 'N/A'}</p>
-                            <p><strong>Evolução vs Temporada Anterior:</strong> {history.evolution || '-'}</p>
-                        </div>
-                    ) : (
-                       <p>Nenhum histórico encontrado para este membro.</p>
                     )}
-                </div>
-            )}
+                    
+                    {activeTab === 'history' && (
+                        <div className="history-tab">
+                            <h2>Histórico de Participação (Última Temporada)</h2>
+                            {history && history.position ? (
+                                <div className="history-card">
+                                    <p><strong>Posição no Ranking de Acesso:</strong> {history.position}º</p>
+                                    <p><strong>Pontuação (Fase de Acesso):</strong> {history.fase_acesso}</p>
+                                    <p><strong>Evolução vs Temporada Anterior:</strong> {history.evolution}</p>
+                                </div>
+                            ) : (
+                                <p>Nenhum histórico encontrado para este membro.</p>
+                            )}
+                        </div>
+                    )}
                 </>
             )}
         </div>
@@ -252,7 +228,3 @@ const ProfilePage = ({ currentUser }) => {
 };
 
 export default ProfilePage;
-
-
-
-

@@ -8,13 +8,13 @@ import LoginPage from "./components/auth/LoginPage.jsx";
 import RegisterUserPage from "./components/auth/RegisterUserPage.jsx";
 import RegisterMemberPage from "./components/ranking/RegisterPage.jsx";
 import ResultsPage from "./components/ranking/ResultsPage.jsx";
-import UserManagementPage from "./page/UserManagementPage.jsx"; // Nova Tela
-import ProfilePage from "./page/ProfilePage.jsx"; // Nova Tela
+import UserManagementPage from "./page/UserManagementPage.jsx";
+import ProfilePage from "./page/ProfilePage.jsx";
 
 // CSS
 import "./App.css";
 
-// Configure axios to send cookies with every request
+// Configura o axios para enviar cookies em todas as requisições
 axios.defaults.withCredentials = true;
 
 const App = () => {
@@ -25,7 +25,6 @@ const App = () => {
   });
 
   const location = useLocation();
-  
 
   const checkSession = async () => {
     try {
@@ -36,7 +35,7 @@ const App = () => {
         setAuth({ isLoggedIn: false, user: null, loading: false });
       }
     } catch (error) {
-      console.error("Session check failed:", error);
+      console.error("Falha ao verificar sessão:", error);
       setAuth({ isLoggedIn: false, user: null, loading: false });
     }
   };
@@ -44,7 +43,7 @@ const App = () => {
   useEffect(() => {
     checkSession();
   }, []);
-  
+
   const handleLogin = (userData) => {
     setAuth({ isLoggedIn: true, user: userData, loading: false });
   };
@@ -53,12 +52,13 @@ const App = () => {
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/logout`);
       setAuth({ isLoggedIn: false, user: null, loading: false });
+       // Redireciona para a home após o logout
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error("Falha ao fazer logout:", error);
     }
   };
 
-  // Protective Route Component
+  // Componente de Rota Protegida
   const ProtectedRoute = ({ children, roles }) => {
     if (auth.loading) {
       return <div>Verificando acesso...</div>; // Ou um componente de loader
@@ -71,9 +71,9 @@ const App = () => {
     }
     return children;
   };
-  
+
   if (auth.loading) {
-    return <div>Carregando...</div>;
+    return <div>Carregando...</div>; // Loader principal
   }
 
   return (
@@ -142,4 +142,3 @@ const App = () => {
 };
 
 export default App;
-
