@@ -1,5 +1,3 @@
-// mcs-vinicius/projecttoxicos/projectToxicos-main/Frontend/src/page/Home.jsx
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/HomePage.css'; 
