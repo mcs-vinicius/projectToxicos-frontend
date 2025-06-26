@@ -147,7 +147,7 @@ const Home = ({ userRole }) => {
             </div>
           )}
         </div>
-
+     
         <div className="section">
           <h2 className="section-title">Sobre Nós</h2>
           {isEditing ? (
