@@ -234,6 +234,9 @@ tfoot tr {
 /* ResultsPage.css */
 /* ... (estilos existentes) ... */
 
+/* ResultsPage.css */
+/* ... (estilos existentes) ... */
+
 @media (max-width: 768px) {
     .container {
         padding: 20px 15px;
@@ -251,10 +254,11 @@ tfoot tr {
     
     .table-wrapper {
         min-width: unset; /* Remove a largura mínima */
+        overflow-x: hidden; /* Garante que não haja scroll horizontal indesejado */
     }
 
     /* Adaptação da tabela para layout de cards */
-    table, thead, tbody, th, td, tr {
+    table, thead, tbody, th, tr, td {
         display: block;
     }
     
@@ -266,43 +270,48 @@ tfoot tr {
     
     tr {
         border: 1px solid rgba(0, 255, 255, 0.2);
-        margin-bottom: 15px;
+        border-radius: 6px; /* Bordas arredondadas para o card */
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: rgba(10, 25, 47, 0.5); /* Fundo sutil para cada card */
     }
     
     td {
         border: none;
         border-bottom: 1px solid rgba(0, 255, 255, 0.1);
         position: relative;
-        padding-left: 50%;
+        padding: 12px 10px 12px 45%; /* Ajusta o padding para dar espaço ao rótulo */
         text-align: right; /* Alinha o valor à direita */
+        display: flex; /* Flexbox para melhor alinhamento */
+        justify-content: flex-end;
+        align-items: center;
+        min-height: 40px;
+    }
+
+    td:last-child {
+        border-bottom: none; /* Remove a borda do último item */
     }
     
     td:before {
+        content: attr(data-label); /* Use um atributo data-label no seu HTML */
         position: absolute;
         left: 10px;
-        width: 45%;
-        padding-right: 10px;
+        width: 40%; /* Largura do rótulo */
+        padding-right: 15px;
         white-space: nowrap;
         text-align: left; /* Alinha o rótulo à esquerda */
         font-weight: bold;
-        color: #00ffff;
+        color: #00ffff; /* Ciano Neon para os rótulos */
     }
 
-     .leftlabel{
-      display: flex;
-      justify-content: center;
+    .leftlabel {
+      justify-content: flex-end;
     }
 
-    /* Adicionar os rótulos via CSS */
-    .table-wrapper:first-child td:nth-of-type(1):before { content: "Posição"; }
-    .table-wrapper:first-child td:nth-of-type(2):before { content: "Nome"; }
-    .table-wrapper:first-child td:nth-of-type(3):before { content: "Fase de Acesso"; }
-    .table-wrapper:first-child td:nth-of-type(4):before { content: "Evolução"; }
-    
-    .table-wrapper:last-child td:nth-of-type(1):before { content: "Posição"; }
-    .table-wrapper:last-child td:nth-of-type(2):before { content: "Nome"; }
-    .table-wrapper:last-child td:nth-of-type(3):before { content: "1ª Rodada"; }
-    .table-wrapper:last-child td:nth-of-type(4):before { content: "2ª Rodada"; }
-    .table-wrapper:last-child td:nth-of-type(5):before { content: "3ª Rodada"; }
-    .table-wrapper:last-child td:nth-of-type(6):before { content: "Total"; }
+    /* Adicionar os data-labels no seu HTML/JSX */
+    /* Exemplo para o componente ResultsPage.jsx */
+    /* <td data-label="Posição">{i + 1}º</td>
+    <td data-label="Nome" className="leftlabel">{p.name}</td>
+    ...
+    */
 }
