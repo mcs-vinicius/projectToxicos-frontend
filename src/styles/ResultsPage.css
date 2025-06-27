@@ -231,8 +231,56 @@ tfoot tr {
   justify-content: center;
 }
 
-/* ResultsPage.css */
-/* ... (estilos existentes) ... */
+/* src/styles/ResultsPage.css */
+
+/* ... (código existente) */
+
+/* NOVO: Container para as informações da temporada e o botão de exclusão */
+.season-info-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 40px;
+  flex-wrap: wrap; /* Permite quebrar a linha em telas menores */
+}
+
+.season-info {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #00ffff;
+  border: 1px dashed rgba(0, 255, 255, 0.3);
+  padding: 10px 20px;
+  border-radius: 4px;
+  margin-bottom: 0; /* Removido o margin-bottom para alinhar com o botão */
+}
+
+/* NOVO: Estilo para o botão de deletar temporada */
+.btn-delete-season {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  font-family: 'Chakra Petch', sans-serif;
+  color: #ff2d55; /* Rosa/Vermelho Neon */
+  background-color: transparent;
+  border: 2px solid #ff2d55;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.btn-delete-season:hover {
+  background-color: #ff2d55;
+  color: #fff;
+  box-shadow: 0 0 15px #ff2d55;
+}
+
+
+/* ... (resto do CSS) */
 
 /* ResultsPage.css */
 /* ... (estilos existentes) ... */
@@ -332,7 +380,7 @@ tfoot tr {
     }
 
     .lvTotal{
-      width: 90%;
+      width: 95%;
       display: block;
     }
     .lvAA{

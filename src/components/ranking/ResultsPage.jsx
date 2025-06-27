@@ -1,27 +1,44 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../../styles/ResultsPage.css";
+import { FaTrash } from "react-icons/fa"; // Importando o ícone
 
-const ResultsPage = () => {
+const ResultsPage = ({ currentUser }) => {
   const [seasons, setSeasons] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    async function fetchSeasons() {
-      try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/seasons`);
-        const data = response.data;
-        setSeasons(data);
+  async function fetchSeasons() {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/seasons`);
+      const data = response.data;
+      setSeasons(data);
 
-        if (data.length > 0) {
-          setCurrentPage(data.length);
-        }
-      } catch (error) {
-        console.error("Erro ao buscar temporadas:", error);
+      if (data.length > 0) {
+        setCurrentPage(data.length);
       }
+    } catch (error) {
+      console.error("Erro ao buscar temporadas:", error);
     }
+  }
+
+  useEffect(() => {
     fetchSeasons();
   }, []);
+
+  // NOVA FUNÇÃO: Lógica para deletar a temporada
+  const handleDeleteSeason = async (seasonId) => {
+    if (window.confirm(`Tem certeza que deseja excluir a Temporada ${currentPage}? Esta ação não pode ser desfeita.`)) {
+      try {
+        await axios.delete(`${import.meta.env.VITE_API_URL}/seasons/${seasonId}`);
+        alert('Temporada excluída com sucesso!');
+        // Re-busca os dados para atualizar a lista
+        fetchSeasons(); 
+      } catch (error) {
+        console.error("Erro ao excluir temporada:", error);
+        alert(error.response?.data?.error || "Não foi possível excluir a temporada.");
+      }
+    }
+  };
 
   const totalPages = seasons.length;
   const season = seasons[currentPage - 1];
@@ -98,9 +115,22 @@ const ResultsPage = () => {
 
       {season && rankingData ? (
         <>
-          <div className="season-info">
-            Temporada {currentPage} - {formatDateBR(season.start_date)} até{" "}
-            {formatDateBR(season.end_date)}
+          <div className="season-info-container">
+            <div className="season-info">
+              Temporada {currentPage} - {formatDateBR(season.start_date)} até{" "}
+              {formatDateBR(season.end_date)}
+            </div>
+            {/* NOVO: Botão de exclusão para admins */}
+            {currentUser?.role === 'admin' && (
+              <button 
+                className="btn-delete-season" 
+                onClick={() => handleDeleteSeason(season.id)}
+                title="Excluir esta Temporada"
+              >
+                <FaTrash /> Excluir Temporada
+              </button>
+            )}
+
           </div>
 
           <div className="tables-container">

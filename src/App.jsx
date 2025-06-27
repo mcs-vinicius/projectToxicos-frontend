@@ -112,7 +112,7 @@ const App = () => {
         <Routes>
           {/* Rotas Públicas */}
           <Route path="/" element={<HomePage userRole={auth.user?.role} />} />
-          <Route path="/results" element={<ResultsPage />} />
+          <Route path="/results" element={<ResultsPage currentUser={auth.user} />} />
           <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
           <Route path="/register-user" element={<RegisterUserPage />} />
 
