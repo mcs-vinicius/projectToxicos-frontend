@@ -203,17 +203,17 @@ const ProfilePage = ({ currentUser }) => {
                             {/* Os campos numéricos com decimais no backend usam isDecimal=true */}
                             {renderField('ATQ Base', 'survivor_base_atk', 'number', false)}
                             {renderField('HP Base', 'survivor_base_hp', 'number', false)}
-                            {renderField('Bônus ATQ', 'survivor_bonus_atk','number', true, label=" %")}
-                            {renderField('Bônus HP', 'survivor_bonus_hp', 'number', true, label=" %")}
+                            {renderField('Bônus ATQ', 'survivor_bonus_atk','number', true)}
+                            {renderField('Bônus HP', 'survivor_bonus_hp', 'number', true)}
                             {renderField('ATQ Final', 'survivor_final_atk', 'number', false)}
                             {renderField('HP Final', 'survivor_final_hp', 'number', false)}
-                            {renderField('Taxa Crit.', 'survivor_crit_rate', 'number', true, label=" %")}
-                            {renderField('Dano Crit.', 'survivor_crit_damage', 'number', true, label=" %")}
-                            {renderField('Dano de Habilidade', 'survivor_skill_damage', 'number', true, label=" %")}
-                            {renderField('Boost Dano Escudo', 'survivor_shield_boost', 'number', true, label=" %")}
-                            {renderField('Envenenamento', 'survivor_poison_targets', 'number', true, label=" %")}
-                            {renderField('Enfraquecimento', 'survivor_weak_targets', 'number', true, label=" %")}
-                            {renderField('Congelamento', 'survivor_frozen_targets', 'number', true, label=" %")}
+                            {renderField('Taxa Crit.', 'survivor_crit_rate', 'number', true)}
+                            {renderField('Dano Crit.', 'survivor_crit_damage', 'number', true)}
+                            {renderField('Dano de Habilidade', 'survivor_skill_damage', 'number', true)}
+                            {renderField('Boost Dano Escudo', 'survivor_shield_boost', 'number', true)}
+                            {renderField('Envenenamento', 'survivor_poison_targets', 'number', true)}
+                            {renderField('Enfraquecimento', 'survivor_weak_targets', 'number', true)}
+                            {renderField('Congelamento', 'survivor_frozen_targets', 'number', true)}
                             {/* etc... */}
                         </div>                
                     )}
