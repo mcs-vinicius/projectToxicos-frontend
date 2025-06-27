@@ -330,4 +330,9 @@ tfoot tr {
     .leftlabel {
       justify-content: flex-end;
     }
+    .lvTotal{
+      display: flex;
+      width: 100%;
+      
+    }
 }
