@@ -248,17 +248,40 @@ tfoot tr {
     }
 
     .tables-container {
-        flex-direction: column; /* Empilha as tabelas */
+        flex-direction: column;
         gap: 40px;
     }
     
     .table-wrapper {
-        min-width: unset; /* Remove a largura mínima */
-        overflow-x: hidden; /* Garante que não haja scroll horizontal indesejado */
+        min-width: unset;
+        border-radius: 6px;
+        /* * A MUDANÇA PRINCIPAL ESTÁ AQUI:
+         * Definimos uma altura máxima e ativamos a rolagem vertical.
+         * Agora, se a lista de cards for muito longa, ela se tornará rolável.
+        */
+        max-height: 65vh; /* Ocupa no máximo 65% da altura da tela */
+        overflow-y: auto; /* Adiciona a barra de rolagem vertical quando necessário */
+        padding-right: 5px; /* Espaço para a barra de rolagem não sobrepor o conteúdo */
     }
 
-    /* Adaptação da tabela para layout de cards */
-    table, thead, tbody, th, tr, td {
+    /* Estilização da barra de rolagem (opcional, mas recomendado para a estética) */
+    .table-wrapper::-webkit-scrollbar {
+        width: 8px;
+    }
+    .table-wrapper::-webkit-scrollbar-track {
+        background: rgba(10, 25, 47, 0.5);
+        border-radius: 4px;
+    }
+    .table-wrapper::-webkit-scrollbar-thumb {
+        background-color: #00ffff;
+        border-radius: 4px;
+    }
+    .table-wrapper::-webkit-scrollbar-thumb:hover {
+        background-color: #00b3b3;
+    }
+
+    /* Adaptação da tabela para layout de cards (mantém o que já funcionava) */
+    table, thead, tbody, th, td, tr {
         display: block;
     }
     
@@ -270,48 +293,41 @@ tfoot tr {
     
     tr {
         border: 1px solid rgba(0, 255, 255, 0.2);
-        border-radius: 6px; /* Bordas arredondadas para o card */
+        border-radius: 6px;
         margin-bottom: 20px;
         padding: 10px;
-        background-color: rgba(10, 25, 47, 0.5); /* Fundo sutil para cada card */
+        background-color: rgba(10, 25, 47, 0.5);
     }
     
     td {
         border: none;
         border-bottom: 1px solid rgba(0, 255, 255, 0.1);
         position: relative;
-        padding: 12px 10px 12px 45%; /* Ajusta o padding para dar espaço ao rótulo */
-        text-align: right; /* Alinha o valor à direita */
-        display: flex; /* Flexbox para melhor alinhamento */
+        padding: 12px 10px 12px 45%;
+        text-align: right;
+        display: flex;
         justify-content: flex-end;
         align-items: center;
         min-height: 40px;
     }
 
     td:last-child {
-        border-bottom: none; /* Remove a borda do último item */
+        border-bottom: none;
     }
     
     td:before {
-        content: attr(data-label); /* Use um atributo data-label no seu HTML */
+        content: attr(data-label); /* Lembre-se de usar data-label no HTML/JSX */
         position: absolute;
         left: 10px;
-        width: 40%; /* Largura do rótulo */
+        width: 40%;
         padding-right: 15px;
         white-space: nowrap;
-        text-align: left; /* Alinha o rótulo à esquerda */
+        text-align: left;
         font-weight: bold;
-        color: #00ffff; /* Ciano Neon para os rótulos */
+        color: #00ffff;
     }
 
     .leftlabel {
       justify-content: flex-end;
     }
-
-    /* Adicionar os data-labels no seu HTML/JSX */
-    /* Exemplo para o componente ResultsPage.jsx */
-    /* <td data-label="Posição">{i + 1}º</td>
-    <td data-label="Nome" className="leftlabel">{p.name}</td>
-    ...
-    */
 }
