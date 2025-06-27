@@ -112,7 +112,6 @@ const ResultsPage = ({ currentUser }) => {
   return (
     <div className="container">
       <h1 className="title">Expedição Lunar</h1>
-
       {season && rankingData ? (
         <>
           <div className="season-info-container">
