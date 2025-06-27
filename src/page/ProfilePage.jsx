@@ -26,7 +26,7 @@ const ProfilePage = ({ currentUser }) => {
     const fetchProfileData = useCallback(async () => {
         setLoading(true);
         try {
-            const res = await axios.get(`${import.meta.env.VITE_API_URL}/profile/${habby_id}`);
+            const res = await axios.get(`${import.meta.env.VITE_API_URL}/profile/${habby_id}`, { withCredentials: true } );
             setProfile(res.data);
             setOriginalProfile(res.data); // Guarda o estado original para o "Cancelar"
         } catch (err) {
@@ -44,7 +44,7 @@ const ProfilePage = ({ currentUser }) => {
 
     useEffect(() => {
         if (activeTab === 'history' && habby_id && !history) { // Busca apenas se não tiver os dados
-            axios.get(`${import.meta.env.VITE_API_URL}/history/${habby_id}`)
+            axios.get(`${import.meta.env.VITE_API_URL}/history/${habby_id}`,{ withCredentials: true } )
                 .then(res => setHistory(res.data))
                 .catch(err => console.error("Erro ao buscar histórico:", err));
         }
@@ -58,7 +58,7 @@ const ProfilePage = ({ currentUser }) => {
         }
         const debounceTimer = setTimeout(() => {
             setIsSearchLoading(true);
-            axios.get(`${import.meta.env.VITE_API_URL}/search-users?query=${searchQuery}`)
+            axios.get(`${import.meta.env.VITE_API_URL}/search-users?query=${searchQuery}`,{ withCredentials: true } )
                 .then(res => setSearchResults(res.data))
                 .catch(() => setSearchResults([]))
                 .finally(() => setIsSearchLoading(false));
@@ -100,7 +100,7 @@ const ProfilePage = ({ currentUser }) => {
 
     const handleSave = async () => {
         try {
-            await axios.put(`${import.meta.env.VITE_API_URL}/profile`, profile);
+            await axios.put(`${import.meta.env.VITE_API_URL}/profile`, profile,{ withCredentials: true } );
             setIsEditing(false);
             setOriginalProfile(profile); // Atualiza o "backup"
             alert('Perfil salvo com sucesso!');
