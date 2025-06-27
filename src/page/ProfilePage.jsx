@@ -121,7 +121,7 @@ const ProfilePage = ({ currentUser }) => {
                 onChange={handleInputChange}
                 readOnly={!isEditing}
                 className="form-input"
-                step={isDecimal ? "1" : "1"} // Permite decimais
+                step={isDecimal ? "0,01" : "1"} // Permite decimais
             />
         </div>
     );
