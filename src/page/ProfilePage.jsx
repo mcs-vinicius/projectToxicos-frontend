@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/ProfilePage.css';
-import '../styles/loader/Loader.jsx'; 
+import '../styles/loader/Loader.jsx';
 import SearchedUserProfile from '../components/search/SearchedUserProfile';
 
 const ProfilePage = ({ currentUser }) => {
@@ -28,7 +28,7 @@ const ProfilePage = ({ currentUser }) => {
         try {
             const res = await axios.get(`${import.meta.env.VITE_API_URL}/profile/${habby_id}`, { withCredentials: true } );
             setProfile(res.data);
-            setOriginalProfile(res.data); // Guarda o estado original para o "Cancelar"
+            setOriginalProfile(res.data);
         } catch (err) {
             console.error("Erro ao buscar perfil:", err);
             setProfile(null);
@@ -43,7 +43,7 @@ const ProfilePage = ({ currentUser }) => {
     }, [fetchProfileData]);
 
     useEffect(() => {
-        if (activeTab === 'history' && habby_id && !history) { // Busca apenas se não tiver os dados
+        if (activeTab === 'history' && habby_id && !history) {
             axios.get(`${import.meta.env.VITE_API_URL}/history/${habby_id}`,{ withCredentials: true } )
                 .then(res => setHistory(res.data))
                 .catch(err => console.error("Erro ao buscar histórico:", err));
@@ -94,7 +94,7 @@ const ProfilePage = ({ currentUser }) => {
     };
     
     const handleCancelEdit = () => {
-        setProfile(originalProfile); // Restaura o perfil original
+        setProfile(originalProfile);
         setIsEditing(false);
     };
 
@@ -102,7 +102,7 @@ const ProfilePage = ({ currentUser }) => {
         try {
             await axios.put(`${import.meta.env.VITE_API_URL}/profile`, profile,{ withCredentials: true } );
             setIsEditing(false);
-            setOriginalProfile(profile); // Atualiza o "backup"
+            setOriginalProfile(profile);
             alert('Perfil salvo com sucesso!');
         } catch (error) {
             alert(error.response?.data?.error || 'Falha ao salvar o perfil.');
@@ -110,21 +110,50 @@ const ProfilePage = ({ currentUser }) => {
         }
     };
     
-    // Helper para renderizar campos, agora com suporte a casas decimais
-    const renderField = (label, name, type = 'text', isDecimal = false) => (
-        <div className="form-group">
-            <label>{label}</label>
-            <input
-                type={type}
-                name={name}
-                value={profile[name] || ''}
-                onChange={handleInputChange}
-                readOnly={!isEditing}
-                className="form-input"
-                step={isDecimal ? "0,01" : "1"} // Permite decimais
-            />
-        </div>
-    );
+    // --- MODIFICAÇÃO PRINCIPAL ---
+    // Helper para renderizar campos, agora com lógica para porcentagens
+    const renderField = (label, name, type = 'number', isPercentage = false) => {
+        const rawValue = profile[name];
+        
+        // Função auxiliar para garantir que o valor seja um inteiro arredondado
+        const getIntValue = (value) => {
+            const parsed = parseFloat(value);
+            return isNaN(parsed) ? 0 : Math.round(parsed);
+        };
+
+        if (isEditing) {
+            return (
+                <div className="form-group">
+                    <label>{label}</label>
+                    <input
+                        type={type}
+                        name={name}
+                        // No modo de edição, mostramos o valor inteiro
+                        value={rawValue != null ? getIntValue(rawValue) : ''}
+                        onChange={handleInputChange}
+                        className="form-input"
+                        step="1" // Apenas números inteiros
+                    />
+                </div>
+            );
+        } else {
+            // No modo de visualização
+            let displayValue = rawValue || (type === 'number' ? '0' : '');
+            if (isPercentage) {
+                // Para porcentagens, formatamos como "XX %"
+                displayValue = `${getIntValue(rawValue)} %`;
+            }
+
+            return (
+                <div className="form-group">
+                    <label>{label}</label>
+                    <div className="form-input-static">
+                        {displayValue}
+                    </div>
+                </div>
+            );
+        }
+    };
     
     if (loading) return <div className="loader">Carregando...</div>;
 
@@ -200,13 +229,15 @@ const ProfilePage = ({ currentUser }) => {
                     {activeTab === 'status' && (
                         <div className="profile-body">
                             <h3>Status do Sobrevivente</h3>
-                            {/* Os campos numéricos com decimais no backend usam isDecimal=true */}
-                            {renderField('ATQ Base', 'survivor_base_atk', 'number', false)}
-                            {renderField('HP Base', 'survivor_base_hp', 'number', false)}
-                            {renderField('Bônus ATQ', 'survivor_bonus_atk','number', true)}
+                            {/* Campos numéricos normais */}
+                            {renderField('ATQ Base', 'survivor_base_atk')}
+                            {renderField('HP Base', 'survivor_base_hp')}
+                            {renderField('ATQ Final', 'survivor_final_atk')}
+                            {renderField('HP Final', 'survivor_final_hp')}
+                            
+                            {/* Campos de porcentagem com isPercentage=true */}
+                            {renderField('Bônus ATQ', 'survivor_bonus_atk', 'number', true)}
                             {renderField('Bônus HP', 'survivor_bonus_hp', 'number', true)}
-                            {renderField('ATQ Final', 'survivor_final_atk', 'number', false)}
-                            {renderField('HP Final', 'survivor_final_hp', 'number', false)}
                             {renderField('Taxa Crit.', 'survivor_crit_rate', 'number', true)}
                             {renderField('Dano Crit.', 'survivor_crit_damage', 'number', true)}
                             {renderField('Dano de Habilidade', 'survivor_skill_damage', 'number', true)}
@@ -214,8 +245,7 @@ const ProfilePage = ({ currentUser }) => {
                             {renderField('Envenenamento', 'survivor_poison_targets', 'number', true)}
                             {renderField('Enfraquecimento', 'survivor_weak_targets', 'number', true)}
                             {renderField('Congelamento', 'survivor_frozen_targets', 'number', true)}
-                            {/* etc... */}
-                        </div>                
+                        </div>                          
                     )}
                     
                     {activeTab === 'history' && (

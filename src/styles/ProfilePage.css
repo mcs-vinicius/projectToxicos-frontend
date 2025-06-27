@@ -323,6 +323,21 @@
 }
 
 
+.form-input-static {
+  width: 100%;
+  padding: 10px 12px;
+  background-color: #1e1e2f; /* Cor de fundo para campos estáticos */
+  color: #c0c0d0;
+  border: 1px solid #4a4a6a;
+  border-radius: 4px;
+  font-size: 1rem;
+  min-height: 42px; /* Garante a mesma altura dos inputs */
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  font-family: 'Chakra Petch', sans-serif;
+}
+
 
 /* ProfilePage.css */
 /* ... (estilos existentes) ... */
