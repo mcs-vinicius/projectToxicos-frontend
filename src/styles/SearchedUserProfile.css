@@ -11,7 +11,7 @@
     -webkit-backdrop-filter: blur(5px); /* Para Safari e Chrome */
     backdrop-filter: blur(5px);
     z-index: 1001; /* Garante que o modal fique sobre a navbar */
-}
+  }
 
 .modal-content {
     background-color: #0d203d;
