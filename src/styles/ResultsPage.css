@@ -333,6 +333,7 @@ tfoot tr {
 
     .lvTotal{
       width: 100%;
+      display: block;
     }
     .lvAA{
       display: flex;
