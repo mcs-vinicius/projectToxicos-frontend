@@ -121,7 +121,7 @@ const ProfilePage = ({ currentUser }) => {
                 onChange={handleInputChange}
                 readOnly={!isEditing}
                 className="form-input"
-                step={isDecimal ? "0.01" : "1"} // Permite decimais
+                step={isDecimal ? "1" : "1"} // Permite decimais
             />
         </div>
     );
@@ -199,12 +199,23 @@ const ProfilePage = ({ currentUser }) => {
 
                     {activeTab === 'status' && (
                         <div className="profile-body">
-                            {/* ... seções de status ... */}
+                            <h3>Status do Sobrevivente</h3>
                             {/* Os campos numéricos com decimais no backend usam isDecimal=true */}
-                            {renderField('Bônus ATQ', 'survivor_bonus_atk', 'number', true)}
-                            {renderField('Bônus HP', 'survivor_bonus_hp', 'number', true)}
+                            {renderField('ATQ Base', 'survivor_base_atk', 'number', false)}
+                            {renderField('HP Base', 'survivor_base_hp', 'number', false)}
+                            {renderField('Bônus ATQ', 'survivor_bonus_atk','number', true, label=" %")}
+                            {renderField('Bônus HP', 'survivor_bonus_hp', 'number', true, label=" %")}
+                            {renderField('ATQ Final', 'survivor_final_atk', 'number', false)}
+                            {renderField('HP Final', 'survivor_final_hp', 'number', false)}
+                            {renderField('Taxa Crit.', 'survivor_crit_rate', 'number', true, label=" %")}
+                            {renderField('Dano Crit.', 'survivor_crit_damage', 'number', true, label=" %")}
+                            {renderField('Dano de Habilidade', 'survivor_skill_damage', 'number', true, label=" %")}
+                            {renderField('Boost Dano Escudo', 'survivor_shield_boost', 'number', true, label=" %")}
+                            {renderField('Envenenamento', 'survivor_poison_targets', 'number', true, label=" %")}
+                            {renderField('Enfraquecimento', 'survivor_weak_targets', 'number', true, label=" %")}
+                            {renderField('Congelamento', 'survivor_frozen_targets', 'number', true, label=" %")}
                             {/* etc... */}
-                        </div>
+                        </div>                
                     )}
                     
                     {activeTab === 'history' && (

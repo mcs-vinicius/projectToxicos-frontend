@@ -20,7 +20,6 @@ const Home = ({ userRole }) => {
   const fetchHomeData = async () => {
     setLoading(true);
     try {
-      // Faz as chamadas em paralelo
       const [seasonsRes, contentRes] = await Promise.all([
         axios.get(`${import.meta.env.VITE_API_URL}/seasons`),
         axios.get(`${import.meta.env.VITE_API_URL}/home-content`)
@@ -60,16 +59,9 @@ const Home = ({ userRole }) => {
 
   const handleSaveChanges = async () => {
     try {
-      // O backend espera 'requirements' como uma string separada por ';'.
-      const payload = {
-        ...homeContent,
-        requirements: homeContent.requirements.join(';')
-      };
-      await axios.put(`${import.meta.env.VITE_API_URL}/home-content`, payload);
+      await axios.put(`${import.meta.env.VITE_API_URL}/home-content`, homeContent);
       alert("Conteúdo salvo com sucesso!");
       setIsEditing(false);
-      // Recarrega os dados para garantir consistência
-      fetchHomeData(); 
     } catch (error) {
       console.error("Erro ao salvar conteúdo:", error);
       alert("Falha ao salvar o conteúdo.");
@@ -80,6 +72,7 @@ const Home = ({ userRole }) => {
     <>
       <Cta/>
       <div className="home-container">
+        
         
         {userRole === 'admin' && (
           <div className="admin-controls">
@@ -101,16 +94,16 @@ const Home = ({ userRole }) => {
               <h3>Informações do Clã</h3>
               {isEditing ? (
                 <div className="edit-fields">
-                  <input type="text" name="leader" value={homeContent.leader} onChange={handleInputChange} placeholder="Líder"/>
-                  <input type="text" name="focus" value={homeContent.focus} onChange={handleInputChange} placeholder="Foco"/>
-                  <input type="text" name="league" value={homeContent.league} onChange={handleInputChange} placeholder="Liga"/>
+                  <input type="text" name="leader" value={homeContent.leader} onChange={handleInputChange} />
+                  <input type="text" name="focus" value={homeContent.focus} onChange={handleInputChange} />
+                  <input type="text" name="league" value={homeContent.league} onChange={handleInputChange} />
                 </div>
               ) : (
                 <ul className="info-list">
-                  <li>Líder: {homeContent.leader || '...'}</li>
+                  <li>Líder: {homeContent.leader}</li>
                   <li>Membros: {memberCount} / 40</li>
-                  <li>Foco: {homeContent.focus || '...'}</li>
-                  <li>Liga Atual: {homeContent.league || '...'}</li>
+                  <li>Foco: {homeContent.focus}</li>
+                  <li>Liga Atual: {homeContent.league}</li>
                 </ul>
               )}
             </div>
@@ -140,15 +133,14 @@ const Home = ({ userRole }) => {
             <p style={{textAlign: 'center'}}>Analisando dados...</p>
           ) : (
             <div className="mini-ranking">
-              {[1, 0, 2].map((playerIndex) => {
-                const player = topPlayers[playerIndex];
-                const rank = playerIndex === 0 ? 1 : (playerIndex === 1 ? 2 : 3);
-                if (!player) return <div key={playerIndex} className={`rank-podium rank-${rank}`}></div>;
+              {[1, 0, 2].map((index, podiumPos) => {
+                const player = topPlayers[index];
+                if (!player) return <div key={podiumPos} className={`rank-podium rank-${podiumPos + 1}`}></div>;
                 return (
-                  <div key={player.habby_id || player.name} className={`rank-podium rank-${rank}`}>
+                  <div key={player.name} className={`rank-podium rank-${index === 0 ? 1 : (index === 1 ? 2 : 3)}`}>
                     <div className="podium-bar"></div>
                     <p className="player-name">{player.name}</p>
-                    <p className="player-score">{player.fase.toLocaleString('pt-BR')} de Dano</p>
+                    <p className="player-score">{player.fase.toLocaleString('pt-BR')} ATK</p>
                   </div>
                 )
               })}
@@ -176,7 +168,7 @@ const Home = ({ userRole }) => {
 
         <footer className="footer">
           <p>© 2025 Tóxicøs. Todos os direitos reservados. </p>
-          <p>Desenvolvido por: <a href="https://mcs-vinicius.github.io/portifolio/" target="_blank" rel="noopener noreferrer">IzanagI</a></p>
+          <p>Desenvolvido por: <a href="https://mcs-vinicius.github.io/portifolio/">IzanagI</a></p>
         </footer>
       </div>
     </>
@@ -184,3 +176,13 @@ const Home = ({ userRole }) => {
 };
 
 export default Home;
+
+
+
+
+
+
+
+
+
+
