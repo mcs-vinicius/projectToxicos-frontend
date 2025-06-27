@@ -294,8 +294,8 @@ tfoot tr {
     tr {
         border: 1px solid rgba(0, 255, 255, 0.2);
         border-radius: 6px;
-        margin-bottom: 20px;
-        padding: 10px;
+        margin-bottom: 14px;
+        padding: 7px;
         background-color: rgba(10, 25, 47, 0.5);
     }
     
@@ -308,7 +308,7 @@ tfoot tr {
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        min-height: 40px;
+        min-height: 35px;
     }
 
     td:last-child {
