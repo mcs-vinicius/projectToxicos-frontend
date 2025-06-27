@@ -137,8 +137,8 @@ const ResultsPage = () => {
                 </tbody>
                 <tfoot>
                     <tr className="lvTotal">
-                        <td colSpan="2">Total (Top 30)</td>
-                        <td colSpan="2"><span className="txtcenter">{rankingData.sumFase.toLocaleString('pt-BR')}</span></td>
+                        <td className="lvtt" colSpan="2">Total (Top 30)</td>
+                        <td className="lvtt" colSpan="2"><span className="txtcenter">{rankingData.sumFase.toLocaleString('pt-BR')}</span></td>
                     </tr>
                 </tfoot>
               </table>

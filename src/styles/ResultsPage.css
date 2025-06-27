@@ -333,6 +333,10 @@ tfoot tr {
     .lvTotal{
       display: flex;
       width: 100%;
+      justify-content: center;
       
+    }
+    .lvtt{
+      width: 50%;
     }
 }
