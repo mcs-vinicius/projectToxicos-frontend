@@ -119,17 +119,17 @@ const ResultsPage = () => {
                   {/* Top 30 Ativos */}
                   {rankingData.top30Fase.map((p, i) => (
                     <tr key={p.id || i}>
-                      <td>{i + 1}º</td>
-                      <td className="leftlabel" data-label="Nome">{p.name}</td>
-                      <td data-label="Fase">{p.fase}</td>
+                      <td data-label="Posição">{i + 1}º</td>
+                      <td data-label="Nome" className="leftlabel">{p.name}</td>
+                      <td data-label="Fase de Acesso">{p.fase}</td>
                       {renderEvolution(p.name)}
                     </tr>
                   ))}
                   {/* Restante Inativo (com evolução) */}
                   {rankingData.remainingFase.map((p, i) => (
                       <tr key={p.id || i} className="inactive-participant">
-                          <td>{30 + i + 1}º</td>
-                          <td className="leftlabel" data-label="Nome">{p.name}</td>
+                          <td data-label="Posição">{30 + i + 1}º</td>
+                          <td  className="leftlabel" data-label="Nome">{p.name}</td>
                           <td data-label="Fase">{p.fase}</td>
                           {renderEvolution(p.name)}
                       </tr>
@@ -161,23 +161,23 @@ const ResultsPage = () => {
                   {/* Top 30 Ativos */}
                   {rankingData.top30Total.map((p, i) => (
                     <tr key={p.id || i}>
-                      <td >{i + 1}º</td>
-                      <td className="leftlabel">{p.name}</td>
-                      <td>{p.r1}</td>
-                      <td>{p.r2}</td>
-                      <td>{p.r3}</td>
-                      <td>{p.total}</td>
+                      <td data-label="Posição">{i + 1}º</td>
+                      <td data-label="Nome" className="leftlabel">{p.name}</td>
+                      <td data-label="1ª Rodada">{p.r1}</td>
+                      <td data-label="2ª Rodada">{p.r2}</td>
+                      <td data-label="3ª Rodada">{p.r3}</td>
+                      <td data-label="Total">{p.total}</td>
                     </tr>
                   ))}
                   {/* Restante Inativo (com pontuação) */}
                   {rankingData.remainingTotal.map((p, i) => (
                       <tr key={p.id || i} className="inactive-participant">
-                          <td>{30 + i + 1}º</td>
-                          <td className="leftlabel">{p.name}</td>
-                          <td>{p.r1}</td>
-                          <td>{p.r2}</td>
-                          <td>{p.r3}</td>
-                          <td>{p.total}</td>
+                          <td data-label="Posição">{i + 1}º</td>
+                          <td data-label="Nome" className="leftlabel">{p.name}</td>
+                          <td data-label="1ª Rodada">{p.r1}</td>
+                          <td data-label="2ª Rodada">{p.r2}</td>
+                          <td data-label="3ª Rodada">{p.r3}</td>
+                          <td data-label="Total">{p.total}</td>
                       </tr>
                   ))}
                 </tbody>
