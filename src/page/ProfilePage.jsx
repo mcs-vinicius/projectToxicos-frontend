@@ -110,18 +110,17 @@ const ProfilePage = ({ currentUser }) => {
         }
     };
     
-
-    // Helper para renderizar campos, agora com lógica para porcentagens
+    // Helper para renderizar campos, com distinção entre texto, número e porcentagens
     const renderField = (label, name, type = 'number', isPercentage = false) => {
         const rawValue = profile[name];
-        
+
         // Função auxiliar para garantir que o valor seja um inteiro arredondado
         const getIntValue = (value) => {
             const parsed = parseFloat(value);
             return isNaN(parsed) ? 0 : Math.round(parsed);
         };
 
-       if (isEditing) {
+        if (isEditing) {
             return (
                 <div className="form-group">
                     <label>{label}</label>
@@ -235,21 +234,20 @@ const ProfilePage = ({ currentUser }) => {
                         <div className="profile-body">
                             <div className="status-section">
                                 <h2>Dados Gerais</h2>
-                                {renderField('Link da Foto de Perfil', 'profile_pic_url')}
-                                {renderField('Nick', 'nick')}
+                                {renderField('Link da Foto de Perfil', 'profile_pic_url', 'text')}
+                                {renderField('Nick', 'nick', 'text')}
                                 {renderField('ATK Total', 'atk', 'number')}
                                 {renderField('HP Total', 'hp', 'number')}
                             </div>                
                              <div className="status-grid">
                                 <div className="status-section">   
                                     <h3>Status do Sobrevivente</h3>
-                                    {/* Campos numéricos normais */}
-                                    {renderField('ATQ Base', 'survivor_base_atk')}
-                                    {renderField('HP Base', 'survivor_base_hp')}
+                                    {renderField('ATQ Base', 'survivor_base_atk', 'number')}
+                                    {renderField('HP Base', 'survivor_base_hp', 'number')}
                                     {renderField('Bônus ATQ', 'survivor_bonus_atk', 'number', true)}
                                     {renderField('Bônus HP', 'survivor_bonus_hp', 'number', true)}
-                                    {renderField('ATQ Final', 'survivor_final_atk')}
-                                    {renderField('HP Final', 'survivor_final_hp')}
+                                    {renderField('ATQ Final', 'survivor_final_atk', 'number')}
+                                    {renderField('HP Final', 'survivor_final_hp', 'number')}
                                     {renderField('Taxa Crit.', 'survivor_crit_rate', 'number', true)}
                                     {renderField('Dano Crit.', 'survivor_crit_damage', 'number', true)}
                                     {renderField('Dano de Habilidade', 'survivor_skill_damage', 'number', true)}
@@ -260,15 +258,15 @@ const ProfilePage = ({ currentUser }) => {
                                 </div>
                                  <div className="status-section">
                                     <h3>Status do Bichinho</h3>
-                                    {renderField('ATQ Base', 'pet_base_atk')}
-                                    {renderField('HP Base', 'pet_base_hp')}
+                                    {renderField('ATQ Base', 'pet_base_atk', 'number')}
+                                    {renderField('HP Base', 'pet_base_hp', 'number')}
                                     {renderField('Dano Crit.', 'pet_crit_damage', 'number', true)}
                                     {renderField('Dano Habilidade.', 'pet_skill_damage', 'number', true)}
                                 </div>
                                 <div className="status-section">
                                     <h3>Coletáveis</h3>
-                                    {renderField('ATQ Final', 'collect_final_atk')}
-                                    {renderField('HP Final', 'collect_final_hp')}
+                                    {renderField('ATQ Final', 'collect_final_atk', 'number')}
+                                    {renderField('HP Final', 'collect_final_hp', 'number')}
                                     {renderField('Taxa Crit.', 'collect_crit_rate', 'number', true)}
                                     {renderField('Dano Crit.', 'collect_crit_damage', 'number', true)}
                                     {renderField('Dano de Habilidade', 'collect_skill_damage', 'number', true)}
