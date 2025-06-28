@@ -13,6 +13,7 @@ const ProfilePage = ({ currentUser }) => {
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
     const [activeTab, setActiveTab] = useState('status');
+    const [isHistoryLoading, setIsHistoryLoading] = useState(false);
 
     // States da Busca
     const [searchQuery, setSearchQuery] = useState('');
@@ -43,10 +44,20 @@ const ProfilePage = ({ currentUser }) => {
     }, [fetchProfileData]);
 
     useEffect(() => {
-        if (activeTab === 'history' && habby_id && !history) {
+        if (activeTab === 'history' && habby_id) {
+            setIsHistoryLoading(true);
             axios.get(`${import.meta.env.VITE_API_URL}/history/${habby_id}`)
-                .then(res => setHistory(res.data))
-                .catch(err => console.error("Erro ao buscar histórico:", err));
+                .then(res => {
+                    console.log("Dados do histórico recebidos:", res.data);
+                    setHistory(res.data);
+                })
+                .catch(err => {
+                    console.error("Erro ao buscar histórico:", err);
+                    setHistory(null);
+                })
+                .finally(() => {
+                    setIsHistoryLoading(false);
+                });
         }
     }, [activeTab, habby_id]);
 
@@ -114,7 +125,6 @@ const ProfilePage = ({ currentUser }) => {
     const renderField = (label, name, type = 'number', isPercentage = false) => {
         const rawValue = profile[name];
 
-        // Função auxiliar para garantir que o valor seja um inteiro arredondado
         const getIntValue = (value) => {
             const parsed = parseFloat(value);
             return isNaN(parsed) ? 0 : Math.round(parsed);
@@ -127,7 +137,6 @@ const ProfilePage = ({ currentUser }) => {
                     <input
                         type={type}
                         name={name}
-                        // Para texto, usa o valor direto. Para número, o valor inteiro.
                         value={type === 'text' ? (rawValue || '') : (rawValue != null ? getIntValue(rawValue) : '')}
                         onChange={handleInputChange}
                         className="form-input"
@@ -136,168 +145,5 @@ const ProfilePage = ({ currentUser }) => {
                 </div>
             );
         } else {
-            // No modo de visualização
             let displayValue;
-            if (type === 'text') {
-                displayValue = rawValue || 'N/A';
-            } else { // type === 'number'
-                if (isPercentage) {
-                    displayValue = `${getIntValue(rawValue)} %`;
-                } else {
-                  displayValue = getIntValue(rawValue).toLocaleString('pt-BR');
-                }
-            }
-
-            return (
-                <div className="form-group">
-                    <label>{label}</label>
-                    <div className="form-input-static">
-                        {displayValue}
-                    </div>
-                </div>
-            );
-        }
-    };
-    
-    if (loading) return <div className="loader">Carregando...</div>;
-
-    return (
-        <div className="profile-page-wrapper">
-            {/* Seção de Busca */}
-            <div className="profile-search-container">
-                <h2>Buscar Outro Usuário</h2>
-                <div className="search-wrapper" ref={searchWrapperRef}>
-                    <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Buscar por Nick ou Habby ID..."
-                        className="search-input"
-                        autoComplete="off"
-                    />
-                    {isSearchLoading && <div className="loader-small"></div>}
-                    {searchResults.length > 0 && (
-                        <div className="search-results-dropdown">
-                            {searchResults.map(user => (
-                                <div 
-                                    key={user.habby_id} 
-                                    className="search-result-item"
-                                    onClick={() => handleResultClick(user.habby_id)}
-                                >
-                                    <p className="result-nick">{user.nick}</p>
-                                    <p className="result-habby-id">{user.habby_id}</p>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            {selectedHabbyId && (
-                <SearchedUserProfile 
-                    habbyId={selectedHabbyId} 
-                    onClose={closeSearchedProfile} 
-                />
-            )}
-
-            {/* Perfil Principal */}
-            {!profile ? (
-                <div className="profile-container error-message">Perfil não encontrado.</div>
-            ) : (
-                <>
-                    <div className="profile-header">
-                        <img src={profile.profile_pic_url || 'https://via.placeholder.com/150'} alt="Perfil" className="profile-picture" />
-                        <div className="profile-titles">
-                            <h1>{profile.nick || 'Nome não definido'}</h1>
-                            <p>ID Habby: {profile.habby_id}</p>
-                        </div>
-                        {isOwner && (
-                            <div className="profile-actions">
-                                {isEditing ? (
-                                    <>
-                                        <button onClick={handleSave} className="btn btn-save">Salvar</button>
-                                        <button onClick={handleCancelEdit} className="btn btn-cancel">Cancelar</button>
-                                    </>
-                                ) : (
-                                    <button onClick={() => setIsEditing(true)} className="btn btn-edit">Editar Perfil</button>
-                                )}
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="profile-tabs">
-                        <button onClick={() => setActiveTab('status')} className={activeTab === 'status' ? 'active' : ''}>Status</button>
-                        <button onClick={() => setActiveTab('history')} className={activeTab === 'history' ? 'active' : ''}>Histórico</button>
-                    </div>
-
-                    {activeTab === 'status' && (
-                        <div className="profile-body">
-                            <div className="status-section">
-                                <h2>Dados Gerais</h2>
-                                {renderField('Link da Foto de Perfil', 'profile_pic_url', 'text')}
-                                {renderField('Nick', 'nick', 'text')}
-                                {renderField('ATK Total', 'atk', 'number')}
-                                {renderField('HP Total', 'hp', 'number')}
-                            </div>                
-                             <div className="status-grid">
-                                <div className="status-section">   
-                                    <h3>Status do Sobrevivente</h3>
-                                    {renderField('ATQ Base', 'survivor_base_atk', 'number')}
-                                    {renderField('HP Base', 'survivor_base_hp', 'number')}
-                                    {renderField('Bônus ATQ', 'survivor_bonus_atk', 'number', true)}
-                                    {renderField('Bônus HP', 'survivor_bonus_hp', 'number', true)}
-                                    {renderField('ATQ Final', 'survivor_final_atk', 'number')}
-                                    {renderField('HP Final', 'survivor_final_hp', 'number')}
-                                    {renderField('Taxa Crit.', 'survivor_crit_rate', 'number', true)}
-                                    {renderField('Dano Crit.', 'survivor_crit_damage', 'number', true)}
-                                    {renderField('Dano de Habilidade', 'survivor_skill_damage', 'number', true)}
-                                    {renderField('Boost Dano Escudo', 'survivor_shield_boost', 'number', true)}
-                                    {renderField('Envenenamento', 'survivor_poison_targets', 'number', true)}
-                                    {renderField('Enfraquecimento', 'survivor_weak_targets', 'number', true)}
-                                    {renderField('Congelamento', 'survivor_frozen_targets', 'number', true)}
-                                </div>
-                                 <div className="status-section">
-                                    <h3>Status do Bichinho</h3>
-                                    {renderField('ATQ Base', 'pet_base_atk', 'number')}
-                                    {renderField('HP Base', 'pet_base_hp', 'number')}
-                                    {renderField('Dano Crit.', 'pet_crit_damage', 'number', true)}
-                                    {renderField('Dano Habilidade.', 'pet_skill_damage', 'number', true)}
-                                </div>
-                                <div className="status-section">
-                                    <h3>Coletáveis</h3>
-                                    {renderField('ATQ Final', 'collect_final_atk', 'number')}
-                                    {renderField('HP Final', 'collect_final_hp', 'number')}
-                                    {renderField('Taxa Crit.', 'collect_crit_rate', 'number', true)}
-                                    {renderField('Dano Crit.', 'collect_crit_damage', 'number', true)}
-                                    {renderField('Dano de Habilidade', 'collect_skill_damage', 'number', true)}
-                                    {renderField('Envenenamento', 'collect_poison_targets', 'number', true)}
-                                    {renderField('Enfraquecimento', 'collect_weak_targets', 'number', true)}
-                                    {renderField('Congelamento', 'collect_frozen_targets', 'number', true)}                        
-                                </div>
-                            </div>
-                        </div>                          
-                    )}
-                    
-                    
-                        {activeTab === 'history' && (
-                            <div className="history-tab">
-                                <h2>Histórico de Participação (Última Temporada)</h2>
-                                {history ? (
-                                    <div className="history-card">
-                                        <p><strong>Posição no Ranking de Acesso:</strong> {history.position || 'N/A'}º</p>
-                                        <p><strong>Pontuação (Fase de Acesso):</strong> {history.fase_acesso || 'N/A'}</p>
-                                        <p><strong>Evolução vs Temporada Anterior:</strong> {history.evolution || '-'}</p>
-                                    </div>
-                            
-                            ) : (
-                                <p>Nenhum histórico encontrado para este membro.</p>
-                            )}
-                        </div>
-                    )}
-                </>
-            )}
-        </div>
-    );
-};
-
-export default ProfilePage;
+            if (
