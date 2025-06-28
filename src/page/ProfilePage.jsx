@@ -100,7 +100,13 @@ const ProfilePage = ({ currentUser }) => {
     };
     
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value, type } = e.target;
+
+        // Limita os campos numéricos a 5 caracteres
+        if (type === 'number' && value.length > 5) {
+            return;
+        }
+        
         setProfile({ ...profile, [name]: value });
     };
     
@@ -121,13 +127,13 @@ const ProfilePage = ({ currentUser }) => {
         }
     };
     
-    // Helper para renderizar campos, com distinção entre texto, número e porcentagens
+    // Helper para renderizar campos, agora com lógica para inteiros de até 5 dígitos
     const renderField = (label, name, type = 'number', isPercentage = false) => {
         const rawValue = profile[name];
 
         const getIntValue = (value) => {
-            const parsed = parseFloat(value);
-            return isNaN(parsed) ? 0 : Math.round(parsed);
+            const parsed = Math.round(parseFloat(value));
+            return isNaN(parsed) ? 0 : parsed;
         };
 
         if (isEditing) {
@@ -137,10 +143,10 @@ const ProfilePage = ({ currentUser }) => {
                     <input
                         type={type}
                         name={name}
-                        value={type === 'text' ? (rawValue || '') : (rawValue != null ? getIntValue(rawValue) : '')}
+                        value={rawValue || ''}
                         onChange={handleInputChange}
                         className="form-input"
-                        step={type === 'number' ? "1" : undefined}
+                        step={type === 'number' ? '1' : undefined}
                     />
                 </div>
             );
@@ -148,11 +154,12 @@ const ProfilePage = ({ currentUser }) => {
             let displayValue;
             if (type === 'text') {
                 displayValue = rawValue || 'N/A';
-            } else {
+            } else { // type === 'number'
+                const intValue = getIntValue(rawValue);
                 if (isPercentage) {
-                    displayValue = `${getIntValue(rawValue)} %`;
+                    displayValue = `${intValue} %`;
                 } else {
-                  displayValue = getIntValue(rawValue).toLocaleString('pt-BR');
+                    displayValue = intValue.toLocaleString('pt-BR');
                 }
             }
 
