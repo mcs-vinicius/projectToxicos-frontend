@@ -44,11 +44,11 @@ const ProfilePage = ({ currentUser }) => {
 
     useEffect(() => {
         if (activeTab === 'history' && habby_id && !history) {
-            axios.get(`${import.meta.env.VITE_API_URL}/history/${habby_id}`,{ withCredentials: true } )
+            axios.get(`${import.meta.env.VITE_API_URL}/history/${habby_id}`)
                 .then(res => setHistory(res.data))
                 .catch(err => console.error("Erro ao buscar histórico:", err));
         }
-    }, [activeTab, habby_id, history]);
+    }, [activeTab, habby_id]);
 
     // Lógica de busca com debounce
     useEffect(() => {
@@ -58,7 +58,7 @@ const ProfilePage = ({ currentUser }) => {
         }
         const debounceTimer = setTimeout(() => {
             setIsSearchLoading(true);
-            axios.get(`${import.meta.env.VITE_API_URL}/search-users?query=${searchQuery}`,{ withCredentials: true } )
+            axios.get(`${import.meta.env.VITE_API_URL}/search-users?query=${searchQuery}` )
                 .then(res => setSearchResults(res.data))
                 .catch(() => setSearchResults([]))
                 .finally(() => setIsSearchLoading(false));
@@ -110,7 +110,7 @@ const ProfilePage = ({ currentUser }) => {
         }
     };
     
-    // --- MODIFICAÇÃO PRINCIPAL ---
+
     // Helper para renderizar campos, agora com lógica para porcentagens
     const renderField = (label, name, type = 'number', isPercentage = false) => {
         const rawValue = profile[name];
@@ -228,35 +228,64 @@ const ProfilePage = ({ currentUser }) => {
 
                     {activeTab === 'status' && (
                         <div className="profile-body">
-                            <h3>Status do Sobrevivente</h3>
-                            {/* Campos numéricos normais */}
-                            {renderField('ATQ Base', 'survivor_base_atk')}
-                            {renderField('HP Base', 'survivor_base_hp')}
-                            {renderField('ATQ Final', 'survivor_final_atk')}
-                            {renderField('HP Final', 'survivor_final_hp')}
-                            
-                            {/* Campos de porcentagem com isPercentage=true */}
-                            {renderField('Bônus ATQ', 'survivor_bonus_atk', 'number', true)}
-                            {renderField('Bônus HP', 'survivor_bonus_hp', 'number', true)}
-                            {renderField('Taxa Crit.', 'survivor_crit_rate', 'number', true)}
-                            {renderField('Dano Crit.', 'survivor_crit_damage', 'number', true)}
-                            {renderField('Dano de Habilidade', 'survivor_skill_damage', 'number', true)}
-                            {renderField('Boost Dano Escudo', 'survivor_shield_boost', 'number', true)}
-                            {renderField('Envenenamento', 'survivor_poison_targets', 'number', true)}
-                            {renderField('Enfraquecimento', 'survivor_weak_targets', 'number', true)}
-                            {renderField('Congelamento', 'survivor_frozen_targets', 'number', true)}
+                            <div className="status-section">
+                                <h2>Dados Gerais</h2>
+                                {renderField('Link da Foto de Perfil', 'profile_pic_url')}
+                                {renderField('Nick', 'nick')}
+                                {renderField('ATK Total', 'atk', 'number')}
+                                {renderField('HP Total', 'hp', 'number')}
+                            </div>                
+                             <div className="status-grid">
+                                <div className="status-section">   
+                                    <h3>Status do Sobrevivente</h3>
+                                    {/* Campos numéricos normais */}
+                                    {renderField('ATQ Base', 'survivor_base_atk')}
+                                    {renderField('HP Base', 'survivor_base_hp')}
+                                    {renderField('Bônus ATQ', 'survivor_bonus_atk', 'number', true)}
+                                    {renderField('Bônus HP', 'survivor_bonus_hp', 'number', true)}
+                                    {renderField('ATQ Final', 'survivor_final_atk')}
+                                    {renderField('HP Final', 'survivor_final_hp')}
+                                    {renderField('Taxa Crit.', 'survivor_crit_rate', 'number', true)}
+                                    {renderField('Dano Crit.', 'survivor_crit_damage', 'number', true)}
+                                    {renderField('Dano de Habilidade', 'survivor_skill_damage', 'number', true)}
+                                    {renderField('Boost Dano Escudo', 'survivor_shield_boost', 'number', true)}
+                                    {renderField('Envenenamento', 'survivor_poison_targets', 'number', true)}
+                                    {renderField('Enfraquecimento', 'survivor_weak_targets', 'number', true)}
+                                    {renderField('Congelamento', 'survivor_frozen_targets', 'number', true)}
+                                </div>
+                                 <div className="status-section">
+                                    <h3>Status do Bichinho</h3>
+                                    {renderField('ATQ Base', 'pet_base_atk')}
+                                    {renderField('HP Base', 'pet_base_hp')}
+                                    {renderField('Dano Crit.', 'pet_crit_damage', 'number', true)}
+                                    {renderField('Dano Habilidade.', 'pet_skill_damage', 'number', true)}
+                                </div>
+                                <div className="status-section">
+                                    <h3>Coletáveis</h3>
+                                    {renderField('ATQ Final', 'collect_final_atk')}
+                                    {renderField('HP Final', 'collect_final_hp')}
+                                    {renderField('Taxa Crit.', 'collect_crit_rate', 'number', true)}
+                                    {renderField('Dano Crit.', 'collect_crit_damage', 'number', true)}
+                                    {renderField('Dano de Habilidade', 'collect_skill_damage', 'number', true)}
+                                    {renderField('Envenenamento', 'collect_poison_targets', 'number', true)}
+                                    {renderField('Enfraquecimento', 'collect_weak_targets', 'number', true)}
+                                    {renderField('Congelamento', 'collect_frozen_targets', 'number', true)}                        
+                                </div>
+                            </div>
                         </div>                          
                     )}
                     
-                    {activeTab === 'history' && (
-                        <div className="history-tab">
-                            <h2>Histórico de Participação (Última Temporada)</h2>
-                            {history && history.position ? (
-                                <div className="history-card">
-                                    <p><strong>Posição no Ranking de Acesso:</strong> {history.position}º</p>
-                                    <p><strong>Pontuação (Fase de Acesso):</strong> {history.fase_acesso}</p>
-                                    <p><strong>Evolução vs Temporada Anterior:</strong> {history.evolution}</p>
-                                </div>
+                    
+                        {activeTab === 'history' && (
+                            <div className="history-tab">
+                                <h2>Histórico de Participação (Última Temporada)</h2>
+                                {history ? (
+                                    <div className="history-card">
+                                        <p><strong>Posição no Ranking de Acesso:</strong> {history.position || 'N/A'}º</p>
+                                        <p><strong>Pontuação (Fase de Acesso):</strong> {history.fase_acesso || 'N/A'}</p>
+                                        <p><strong>Evolução vs Temporada Anterior:</strong> {history.evolution || '-'}</p>
+                                    </div>
+                            
                             ) : (
                                 <p>Nenhum histórico encontrado para este membro.</p>
                             )}
