@@ -121,27 +121,32 @@ const ProfilePage = ({ currentUser }) => {
             return isNaN(parsed) ? 0 : Math.round(parsed);
         };
 
-        if (isEditing) {
+       if (isEditing) {
             return (
                 <div className="form-group">
                     <label>{label}</label>
                     <input
                         type={type}
                         name={name}
-                        // No modo de edição, mostramos o valor inteiro
-                        value={rawValue != null ? getIntValue(rawValue) : ''}
+                        // Para texto, usa o valor direto. Para número, o valor inteiro.
+                        value={type === 'text' ? (rawValue || '') : (rawValue != null ? getIntValue(rawValue) : '')}
                         onChange={handleInputChange}
                         className="form-input"
-                        step="1" // Apenas números inteiros
+                        step={type === 'number' ? "1" : undefined}
                     />
                 </div>
             );
         } else {
             // No modo de visualização
-            let displayValue = rawValue || (type === 'number' ? '0' : '');
-            if (isPercentage) {
-                // Para porcentagens, formatamos como "XX %"
-                displayValue = `${getIntValue(rawValue)} %`;
+            let displayValue;
+            if (type === 'text') {
+                displayValue = rawValue || 'N/A';
+            } else { // type === 'number'
+                if (isPercentage) {
+                    displayValue = `${getIntValue(rawValue)} %`;
+                } else {
+                  displayValue = getIntValue(rawValue).toLocaleString('pt-BR');
+                }
             }
 
             return (
