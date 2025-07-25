@@ -1,0 +1,284 @@
+/* src/styles/ProfilePage.css - CÓDIGO ORIGINAL RESTAURADO */
+
+.profile-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: rgba(10, 25, 47, 0.85);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-radius: 8px;
+    font-family: 'Chakra Petch', sans-serif;
+    color: #e0fbfc;
+    transition: all 0.4s ease-in-out;
+}
+
+.profile-main-info {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding-bottom: 25px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.profile-pic-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.profile-pic {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid #00ffff;
+    object-fit: cover;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+}
+
+.profile-details h1 {
+    margin: 0 0 10px 0;
+    font-size: 2.5rem;
+    color: #ffffff;
+    text-shadow: 0 0 10px #ff00ff;
+}
+
+.profile-details p {
+    margin: 0 0 15px 0;
+    font-size: 1.1rem;
+    color: rgba(224, 251, 252, 0.7);
+}
+
+.main-stats {
+    display: flex;
+    gap: 20px;
+}
+
+.stat-item {
+    background: rgba(0,0,0,0.2);
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #00ffff;
+}
+
+.stat-item span {
+    color: #fff;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+.stats-section {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.stats-group {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 6px;
+    flex: 1;
+    border-left: 3px solid #00ffff;
+}
+
+.stats-group h3 {
+    margin-top: 0;
+    color: #00ffff;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.stats-group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.stats-group li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 1rem;
+}
+
+.stats-group li span {
+    font-weight: bold;
+    color: #ffffff;
+}
+
+/* Estilos para os inputs no modo de edição */
+.stats-group li input, .nick-edit-input {
+    width: 80px;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #00ffff;
+    border-radius: 4px;
+    color: #fff;
+    text-align: right;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.nick-edit-input {
+    width: 100%;
+    text-align: left;
+    font-size: 2.5rem;
+}
+
+.profile-edit-cta {
+    text-align: center;
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.profile-edit-cta button {
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    font-family: 'Chakra Petch', sans-serif;
+    background: transparent;
+    color: #00ffff;
+    border: 2px solid #00ffff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.profile-edit-cta button:hover {
+    background: #00ffff;
+    color: #02040a;
+    box-shadow: 0 0 15px #00ffff;
+}
+.profile-edit-cta .btn-cancel {
+    color: #ff4d4d;
+    border-color: #ff4d4d;
+}
+.profile-edit-cta .btn-cancel:hover {
+    background: #ff4d4d;
+    color: #fff;
+}
+.profile-edit-cta .btn-save {
+    color: #28a745;
+    border-color: #28a745;
+}
+.profile-edit-cta .btn-save:hover {
+    background: #28a745;
+    color: #fff;
+}
+
+
+/* --- ESTILIZAÇÃO PARA MEMBROS DE HONRA (ADICIONADO) --- */
+
+.gloria-profile {
+    border-color: #ffd700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 174, 0, 0.5);
+}
+.gloria-profile .profile-pic {
+    border-color: #ffd700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+}
+.gloria-profile .profile-pic-wrapper::after {
+    content: '👑';
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 32px;
+    color: #ffd700;
+    text-shadow: 0 0 5px #ffd700, 0 0 10px #ffd700, 0 0 15px #ffae00, 0 0 20px #ffae00;
+    animation: flicker 1.5s infinite alternate;
+}
+@keyframes flicker {
+  0%, 100% { opacity: 1; text-shadow: 0 0 5px #ffd700, 0 0 10px #ffd700, 0 0 15px #ffae00, 0 0 20px #ffae00; }
+  50% { opacity: 0.8; text-shadow: 0 0 5px #ffd700, 0 0 8px #ffd700, 0 0 12px #ffae00; }
+}
+
+@media (max-width: 768px) {
+    .stats-section { flex-direction: column; }
+    .profile-main-info { flex-direction: column; text-align: center; }
+}
+
+
+
+/* Adicione este código no final do seu arquivo ProfilePage.css */
+
+.profile-details {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column; /* Organiza nome/id e histórico verticalmente */
+    gap: 10px; /* Espaçamento entre nome/id e histórico */
+}
+
+.profile-history {
+    display: flex;
+    gap: 10px; /* Reduzindo o gap entre os itens de histórico */
+    background: rgba(0, 0, 0, 0.25);
+    padding: 10px; /* Reduzindo o padding interno */
+    border-radius: 6px;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+    align-items: center; /* Alinha os itens verticalmente */
+    justify-content: space-around; /* Distribui o espaço entre os itens */
+}
+
+.history-item {
+    text-align: center;
+    flex: 1;
+    min-width: 0;
+}
+
+.history-item h4 {
+    margin: 0 0 3px 0; /* Reduzindo a margem abaixo do título */
+    font-size: 0.8rem; /* Reduzindo o tamanho da fonte do título */
+    color: #00ffff;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.history-item p {
+    margin: 0;
+    font-size: 1.2rem; /* Reduzindo o tamanho da fonte do valor */
+    font-weight: bold;
+    color: #fff;
+}
+
+.history-item p.positive {
+    color: #28a745;
+    text-shadow: 0 0 5px #28a745;
+}
+.history-item p.positive::before {
+    content: '▲ ';
+}
+
+.history-item p.negative {
+    color: #dc3545;
+    text-shadow: 0 0 5px #dc3545;
+}
+.history-item p.negative::before {
+    content: '▼ ';
+}
+
+.profile-history-empty {
+    background: rgba(0, 0, 0, 0.25);
+    padding: 10px;
+    border-radius: 6px;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(224, 251, 252, 0.7);
+}
+
+.pic-url-edit-input {
+    width: 100%;
+    padding: 5px 8px;
+    margin-top: 5px; /* Espaçamento abaixo do input do nick */
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #00ffff;
+    border-radius: 4px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
