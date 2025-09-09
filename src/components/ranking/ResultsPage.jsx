@@ -120,8 +120,8 @@ const ResultsPage = ({ currentUser }) => {
 
   const getTier = (fase) => {
     if (fase >= 0 && fase <= 500) return { name: "Coimbra", emblem: "1" };
-    if (fase >= 501 && fase <= 520) return { name: "Digno de Pena", emblem: "2" };
-    if (fase >= 521 && fase <= 550) return { name: "Descartavel", emblem: "3" };
+    if (fase >= 501 && fase <= 530) return { name: "Petista", emblem: "2" };
+    if (fase >= 531 && fase <= 550) return { name: "Descartavel", emblem: "3" };
     if (fase >= 551 && fase <= 575) return { name: "Deprimente", emblem: "4" };
     if (fase >= 576 && fase <= 599) return { name: "Vascaino", emblem: "5" };
     if (fase >= 600 && fase <= 625) return { name: "Inutil", emblem: "6" };
