@@ -119,24 +119,21 @@ const ResultsPage = ({ currentUser }) => {
   };
 
   const getTier = (fase) => {
-    if (fase >= 0 && fase <= 300) return { name: "Coimbra", emblem: "1" };
-    if (fase >= 301 && fase <= 340)
-      return { name: "Digno de Pena", emblem: "2" };
-    if (fase >= 341 && fase <= 350) return { name: "Descartavel", emblem: "3" };
-    if (fase >= 351 && fase <= 360) return { name: "Inutil", emblem: "4" };
-    if (fase >= 361 && fase <= 375)
-      return { name: "Desqualificado", emblem: "5" };
-    if (fase >= 376 && fase <= 390) return { name: "Fraco", emblem: "6" };
-    if (fase >= 391 && fase <= 410) return { name: "Meia Boca", emblem: "7" };
-    if (fase >= 411 && fase <= 435) return { name: "Mediocre", emblem: "8" };
-    if (fase >= 436 && fase <= 450) return { name: "Razoavel", emblem: "9" };
-    if (fase >= 451 && fase <= 475) return { name: "Bom", emblem: "10" };
-    if (fase >= 476 && fase <= 499) return { name: "Ilustre", emblem: "11" };
-    if (fase >= 499 && fase <= 520) return { name: "Elite", emblem: "12" };
-    if (fase >= 521 && fase <= 540)
-      return { name: "Aristocrata", emblem: "13" };
-    if (fase >= 541 && fase <= 575) return { name: "Nobreza", emblem: "14" };
-    if (fase >= 576) return { name: "Baleia", emblem: "15" };
+    if (fase >= 0 && fase <= 500) return { name: "Coimbra", emblem: "1" };
+    if (fase >= 501 && fase <= 520) return { name: "Digno de Pena", emblem: "2" };
+    if (fase >= 521 && fase <= 550) return { name: "Descartavel", emblem: "3" };
+    if (fase >= 551 && fase <= 575) return { name: "Deprimente", emblem: "4" };
+    if (fase >= 576 && fase <= 599) return { name: "Vascaino", emblem: "5" };
+    if (fase >= 600 && fase <= 625) return { name: "Inutil", emblem: "6" };
+    if (fase >= 626 && fase <= 650) return { name: "Fraco", emblem: "7" };
+    if (fase >= 651 && fase <= 670) return { name: "Meia Boca", emblem: "8" };
+    if (fase >= 671 && fase <= 699) return { name: "Razoavel", emblem: "9" };
+    if (fase >= 700 && fase <= 750) return { name: "Bom", emblem: "10" };
+    if (fase >= 751 && fase <= 800) return { name: "Elite", emblem: "11" };
+    if (fase >= 801 && fase <= 899) return { name: "Burguês Safado", emblem: "12" };
+    if (fase >= 900 && fase <= 999) return { name: "Aristocrata", emblem: "13" };
+    if (fase >= 1000 && fase <= 1500) return { name: "Nobreza", emblem: "14" };
+    if (fase >= 1500) return { name: "Baleia", emblem: "15" };
     return { name: "", emblem: "1" }; // Retorna um emblema padrão caso não encontre
   };
 
