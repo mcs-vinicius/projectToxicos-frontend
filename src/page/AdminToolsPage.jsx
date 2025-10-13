@@ -1,11 +1,10 @@
-// Em: src/page/AdminToolsPage.jsx
-
 import React from 'react';
 import axios from 'axios';
-import BackupRestore from '../components/admin/BackupRestore'; // Supondo que você tenha este componente
 import { useNavigate } from 'react-router-dom';
+import BackupRestore from '../components/admin/BackupRestore'; // Mantenha este import se você usa o componente
 
-// Estilos básicos para o container
+// --- ESTILOS ---
+// Você pode manter estes estilos ou usar os seus próprios de um arquivo .css
 const adminContainerStyle = {
     padding: '2rem',
     maxWidth: '800px',
@@ -13,34 +12,69 @@ const adminContainerStyle = {
     backgroundColor: '#2c2c2c',
     borderRadius: '8px',
     color: 'white',
+    fontFamily: 'Arial, sans-serif'
 };
+
+const emergencyBoxStyle = {
+    border: '2px solid #e74c3c',
+    padding: '1.5rem',
+    marginTop: '2rem',
+    borderRadius: '8px',
+    backgroundColor: '#343a40'
+};
+
+const buttonStyleBase = {
+    color: 'white',
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '16px',
+    marginRight: '10px',
+    marginTop: '10px'
+};
+
+// --- COMPONENTE ---
 
 const AdminToolsPage = () => {
     const navigate = useNavigate();
 
-    // Função que chama a rota de correção no backend
-    const handleResetSequence = async () => {
-        const isConfirmed = window.confirm(
-            "ATENÇÃO: Esta ação corrigirá o contador de IDs da tabela 'participants' no banco de dados. Use apenas se estiver enfrentando o erro de 'chave duplicada' ao criar temporadas. Deseja continuar?"
-        );
+    // Função genérica para chamar a API, evitando repetição de código
+    const callResetApi = async (endpoint, confirmationMessage) => {
+        const isConfirmed = window.confirm(confirmationMessage);
 
         if (isConfirmed) {
             try {
-                // Certifique-se que a URL da sua API está correta
-                const backendUrl = import.meta.env.VITE_API_URL || 'https://seu-backend-url.onrender.com';
+                // Pega a URL do backend do ambiente ou usa um valor padrão
+                const backendUrl = import.meta.env.VITE_API_URL;
+                if (!backendUrl) {
+                    alert("Erro: A URL da API não está configurada. Verifique o arquivo .env do frontend.");
+                    return;
+                }
                 
-                // Faz a chamada POST para a rota, enviando as credenciais (cookies de sessão)
-                const response = await axios.post(`${backendUrl}/admin/reset-participant-sequence`, {}, {
+                const response = await axios.post(`${backendUrl}${endpoint}`, {}, {
                     withCredentials: true,
                 });
 
-                alert(response.data.message || 'Sequência de IDs corrigida com sucesso!');
+                alert(response.data.message || 'Operação concluída com sucesso!');
             } catch (error) {
-                console.error('Erro ao resetar a sequência:', error);
+                console.error(`Erro ao chamar ${endpoint}:`, error);
                 const errorMessage = error.response?.data?.error || 'Ocorreu um erro desconhecido.';
-                alert(`Falha ao resetar a sequência: ${errorMessage}`);
+                alert(`Falha na operação: ${errorMessage}`);
             }
         }
+    };
+
+    // Função para corrigir a sequência da tabela 'participants' (Ranking)
+    const handleResetSequence = () => {
+        const message = "ATENÇÃO: Esta ação corrigirá o contador de IDs da tabela do RANKING. Use apenas se estiver enfrentando o erro de 'chave duplicada' ao criar temporadas. Deseja continuar?";
+        callResetApi('/admin/reset-participant-sequence', message);
+    };
+
+    // Função para corrigir a sequência da tabela 'honor_participants' (Honra)
+    const handleResetHonorSequence = () => {
+        const message = "ATENÇÃO: Esta ação corrigirá o contador de IDs da tabela de HONRA. Use apenas se estiver enfrentando o erro de 'chave duplicada' ao gerenciar a lista de Honra. Deseja continuar?";
+        callResetApi('/admin/reset-honor-participant-sequence', message);
     };
 
     return (
@@ -48,34 +82,39 @@ const AdminToolsPage = () => {
             <h1>Painel de Administração</h1>
             <p>Ferramentas disponíveis para gerenciamento do sistema.</p>
             
-            {/* Componente de Backup/Restore que você já deve ter */}
+            {/* Componente de Backup e Restauração */}
             <BackupRestore />
             
-            <hr style={{ margin: '2rem 0' }} />
+            <hr style={{ margin: '2rem 0', borderColor: '#444' }} />
 
             {/* Seção de Ferramentas de Emergência */}
-            <div style={{ border: '2px solid #e74c3c', padding: '1.5rem', borderRadius: '8px', backgroundColor: '#343a40' }}>
+            <div style={emergencyBoxStyle}>
                 <h2>Ferramentas de Emergência</h2>
                 <p>
-                    Use o botão abaixo para resolver o erro de "chave duplicada" (participants_pkey) que ocorre ao tentar criar uma nova temporada após uma restauração ou importação de dados.
+                    Use estes botões para resolver erros de "chave duplicada" (pkey) que ocorrem após uma restauração de backup. Cada botão corrige uma tabela específica.
                 </p>
+                
+                {/* Botão para corrigir a tabela do Ranking */}
                 <button 
                     onClick={handleResetSequence} 
-                    style={{ 
-                        backgroundColor: '#e67e22', 
-                        color: 'white', 
-                        padding: '10px 20px', 
-                        border: 'none', 
-                        borderRadius: '5px', 
-                        cursor: 'pointer',
-                        fontSize: '16px'
-                    }}
+                    style={{ ...buttonStyleBase, backgroundColor: '#e67e22' }}
                 >
-                    Corrigir Contador de ID dos Participantes
+                    Corrigir IDs do Ranking
+                </button>
+
+                {/* Botão para corrigir a tabela de Honra */}
+                <button 
+                    onClick={handleResetHonorSequence} 
+                    style={{ ...buttonStyleBase, backgroundColor: '#9b59b6' }}
+                >
+                    Corrigir IDs da Honra
                 </button>
             </div>
             
-            <button onClick={() => navigate('/manage-users')} style={{marginTop: '20px'}}>
+            <button 
+                onClick={() => navigate('/manage-users')} 
+                style={{ ...buttonStyleBase, backgroundColor: '#3498db', marginTop: '20px' }}
+            >
                 Gerenciar Usuários
             </button>
         </div>
