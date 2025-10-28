@@ -1,37 +1,37 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
-import Stats from 'stats.js'; // Make sure stats.js is installed
+// import Stats from 'stats.js'; // REMOVIDO: Importação do stats.js
 import './Cta.css'; // Import the updated CSS
 import logoTextureUrl from "../../assets/logo/logoFE.png"; // Import the logo
 
 const Cta = () => {
   const mountRef = useRef(null);
-  const statsRef = useRef(null); // Ref for stats panel
+  // const statsRef = useRef(null); // REMOVIDO: Ref para stats
 
   useEffect(() => {
     // --- Basic setup ---
-    let camera, scene, renderer, geometry, material, mesh, clock, stats, delta;
+    // REMOVIDO: Variável stats
+    let camera, scene, renderer, geometry, material, mesh, clock, delta;
     let textGeo, textTexture, textMaterial, text;
     let smokeTexture, smokeMaterial, smokeGeo, smokeParticles = [];
     let light;
-    let cubeSineDriver = 0;
+    // let cubeSineDriver = 0; // Removido pois o cubo foi removido
     let animationFrameId;
 
     const currentMount = mountRef.current; // Capture mountRef.current
 
     function init() {
-      // --- Stats Panel ---
-      stats = new Stats();
-      stats.setMode(0); // 0: fps, 1: ms
-      stats.domElement.style.position = 'absolute';
-      stats.domElement.style.left = '0px';
-      stats.domElement.style.top = '0px';
-      // Append stats to the specific mount point, not document.body
-      if (currentMount) {
-        currentMount.appendChild(stats.domElement);
-        statsRef.current = stats.domElement; // Store ref for cleanup
-      }
-
+      // --- Stats Panel --- REMOVIDO
+      // stats = new Stats();
+      // stats.setMode(0); // 0: fps, 1: ms
+      // stats.domElement.style.position = 'absolute';
+      // stats.domElement.style.left = '0px';
+      // stats.domElement.style.top = '0px';
+      // // Append stats to the specific mount point, not document.body
+      // if (currentMount) {
+      //   currentMount.appendChild(stats.domElement);
+      //   statsRef.current = stats.domElement; // Store ref for cleanup
+      // }
 
       //--- Set new clock ---
       clock = new THREE.Clock();
@@ -71,7 +71,8 @@ const Cta = () => {
         depthWrite: false // Often needed for transparency layering
       });
       text = new THREE.Mesh(textGeo, textMaterial);
-      text.position.z = 800; // Position in front of smoke
+      // AJUSTADO: Posição Z ligeiramente aumentada para garantir que fique na frente
+      text.position.z = 850;
       scene.add(text);
 
       // --- Lighting ---
@@ -98,7 +99,8 @@ const Cta = () => {
       //--- Set particle texture ---
       for (let p = 0; p < 150; p++) { // Use 'let' instead of implicit global
         var particle = new THREE.Mesh(smokeGeo, smokeMaterial);
-        particle.position.set(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 1000 - 100);
+        // AJUSTADO: Range Z da fumaça para ficar mais atrás da logo
+        particle.position.set(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 800 - 100);
         particle.rotation.z = Math.random() * 360;
 
         //--- Add particles to the scene ---
@@ -108,12 +110,14 @@ const Cta = () => {
     }
 
     function animate() {
-      if (stats) stats.begin(); // Check if stats exists
+      // REMOVIDO: stats.begin()
+      // if (stats) stats.begin();
       delta = clock.getDelta();
       animationFrameId = requestAnimationFrame(animate);
       evolveSmoke();
       render();
-      if (stats) stats.end(); // Check if stats exists
+      // REMOVIDO: stats.end()
+      // if (stats) stats.end();
     }
 
     function evolveSmoke() {
@@ -151,9 +155,10 @@ const Cta = () => {
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', onWindowResize);
-      if (statsRef.current && currentMount.contains(statsRef.current)) {
-          currentMount.removeChild(statsRef.current); // Remove stats panel
-      }
+      // REMOVIDO: Limpeza do statsRef
+      // if (statsRef.current && currentMount.contains(statsRef.current)) {
+      //     currentMount.removeChild(statsRef.current); // Remove stats panel
+      // }
       if (renderer.domElement && currentMount.contains(renderer.domElement)) {
         currentMount.removeChild(renderer.domElement); // Remove canvas
       }
@@ -174,7 +179,7 @@ const Cta = () => {
        if (smokeTexture) smokeTexture.dispose();
        scene.remove(text);
        scene.remove(light);
-       scene.remove(ambientLight);
+       scene.remove(ambientLight); // Adicionado para limpar a luz ambiente também
        renderer.dispose();
     };
   }, []); // Empty dependency array ensures this runs only once on mount
