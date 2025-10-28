@@ -70,7 +70,7 @@
     padding: 8px 0;
 }
 
-/* --- Estilização do Pódio da Temporada (MODIFICADA COM BORDAS ALINHADAS) --- */
+/* --- Estilização do Pódio da Temporada (FILTRO APLICADO APENAS AO main-card) --- */
 .podium-container {
     display: flex;
     justify-content: center;
@@ -79,6 +79,7 @@
     flex-wrap: wrap;
     min-height: 250px;
     margin-top: 40px;
+    position: relative; /* Needed for absolute positioned SVG */
 }
 
 /* --- REGRAS CSS PARA A MOLDURA ANIMADA (BASE) --- */
@@ -105,20 +106,21 @@
   position: relative;
 }
 
-/* SVG positioning */
+/* SVG positioning - Make sure it doesn't take up space */
 .svg-container {
   position: absolute;
   width: 0;
   height: 0;
-  pointer-events: none; /* Prevent SVG from interfering */
+  overflow: hidden;
+  pointer-events: none;
 }
 
 /* Card container - Applies gradient border */
 .card-container {
-  padding: 2px;
+  padding: 2px; /* Espaço para o gradiente de fundo */
   border-radius: 24px;
   position: relative;
-  /* Default to rank 2 colors, will be overridden */
+  /* Default to rank 2 colors */
   background: linear-gradient(
       -30deg,
       var(--gradient-color-rank-2),
@@ -138,49 +140,52 @@
   background: linear-gradient(-30deg, var(--gradient-color-rank-3), transparent, var(--gradient-color-rank-3)), linear-gradient(to bottom, var(--color-neutral-900), var(--color-neutral-900));
 }
 
-
+/* Container interno para posicionar brilhos */
 .inner-container {
   position: relative;
 }
 
-/* Outer border (slightly transparent) - REMOVED PADDING */
+/* Outer border (slightly transparent) - Borda ESTÁVEL */
 .border-outer {
   border: 2px solid rgba(180, 220, 255, 0.5); /* Default Silver */
-  border-radius: 24px;
-  /* padding-right: 4px; */ /* REMOVIDO */
-  /* padding-bottom: 4px; */ /* REMOVIDO */
+  border-radius: 24px; /* Raio ligeiramente menor que o card-container para encaixar */
+  /* Sem padding aqui */
+  box-sizing: border-box; /* Garante que a borda esteja dentro das dimensões */
+  /* Adiciona um fundo para evitar vazamento do gradiente do pai */
+  background-color: rgba(10, 25, 47, 0.85); /* Mesmo fundo do main-card */
 }
 .rank-1 .border-outer { border-color: rgba(255, 215, 0, 0.5); } /* Gold */
 .rank-3 .border-outer { border-color: rgba(205, 127, 50, 0.5); } /* Bronze */
 
-/* Main card - holds content, applies filter - REMOVED MARGINS */
+/* Main card - APLICA O FILTRO AQUI, SEM MARGENS */
 .main-card {
-  width: 200px;  /* Adjusted size */
-  height: 180px; /* Adjusted size */
-  border-radius: 24px;
+  width: 200px;
+  height: 180px;
+  border-radius: 22px; /* Raio deve encaixar dentro do border-outer */
   border: 2px solid var(--electric-border-color-rank-2); /* Default Silver */
-  /* margin-top: -4px; */  /* REMOVIDO */
-  /* margin-left: -4px; */ /* REMOVIDO */
-  filter: url(#turbulent-displace);
-  position: relative;
+  filter: url(#turbulent-displace); /* APLICA FILTRO AQUI */
+  position: relative; /* Para o content-container absoluto */
   overflow: hidden;
-  background-color: rgba(10, 25, 47, 0.85); /* Match section background */
-  display: flex; /* Added for centering content */
-  align-items: center; /* Added for centering content */
-  justify-content: center; /* Added for centering content */
+  background-color: rgba(10, 25, 47, 0.85); /* Mesmo fundo do border-outer */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box; /* Garante que a borda esteja dentro */
+  /* Margens removidas para alinhar com border-outer */
 }
 .rank-1 .main-card { border-color: var(--electric-border-color-rank-1); height: 210px; } /* Gold + Taller */
 .rank-3 .main-card { border-color: var(--electric-border-color-rank-3); height: 160px; } /* Bronze + Shorter */
 
 
-/* Glow layers */
+/* Glow layers - Posicionado em relação ao inner-container (que agora tem border-outer e main-card) */
 .glow-layer-1, .glow-layer-2 {
-  border-radius: 24px;
+  border-radius: 24px; /* Raio maior para cobrir tudo */
   width: 100%;
   height: 100%;
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   pointer-events: none;
+  box-sizing: border-box;
 }
 .glow-layer-1 {
   border: 2px solid rgba(180, 220, 255, 0.6); /* Default Silver */
@@ -196,7 +201,7 @@
 .rank-1 .glow-layer-2 { border-color: var(--electric-light-color-rank-1); } /* Gold */
 .rank-3 .glow-layer-2 { border-color: var(--electric-light-color-rank-3); } /* Bronze */
 
-/* Overlay effects (keep generic white) */
+/* Overlay effects - Posicionado em relação ao card-container */
 .overlay-1, .overlay-2 {
   position: absolute;
   width: 100%; height: 100%;
@@ -211,7 +216,7 @@
 .overlay-1 { opacity: 1; }
 .overlay-2 { opacity: 0.5; }
 
-/* Background glow */
+/* Background glow - Posicionado em relação ao card-container */
 .background-glow {
   position: absolute;
   width: 100%; height: 100%;
@@ -227,9 +232,9 @@
 .rank-1 .background-glow { background: linear-gradient(-30deg, var(--electric-light-color-rank-1), transparent, var(--electric-border-color-rank-1)); } /* Gold */
 .rank-3 .background-glow { background: linear-gradient(-30deg, var(--electric-light-color-rank-3), transparent, var(--electric-border-color-rank-3)); } /* Bronze */
 
-/* Content Container - Centered */
+/* Content Container - Centered DENTRO do main-card */
 .content-container {
-    position: absolute; /* Position over the card background */
+    position: absolute; /* Posição relativa ao main-card */
     top: 0; left: 0; right: 0; bottom: 0;
     display: flex;
     flex-direction: column;
@@ -238,7 +243,8 @@
     padding: 20px;
     text-align: center;
     color: #fff; /* Default text color */
-    z-index: 5; /* Ensure content is above background/overlays */
+    z-index: 5;
+    pointer-events: none;
 }
 
 /* Styles for rank, name, score inside content-container */
@@ -246,8 +252,7 @@
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 10px;
-    /* Default Silver colors */
-    color: #c0c0c0;
+    color: #c0c0c0; /* Default Silver colors */
     text-shadow: 0 0 10px #c0c0c0;
 }
 .content-container .podium-name {
@@ -257,7 +262,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 90%; /* Prevent long names from breaking layout */
+    max-width: 90%;
     color: #f0f0f0; /* Default Silverish text */
 }
 .content-container .podium-score {
@@ -295,20 +300,41 @@
 }
 
 .honor-member-card {
-  padding: 20px 30px;
-  background-color: rgba(255, 215, 0, 0.1);
-  border: 1px solid #ffd700;
-  border-radius: 6px;
-  min-width: 200px;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+  padding: 20px;
+  min-width: 220px; /* Slightly wider */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px; /* Reduced gap */
+   background-color: rgba(255, 215, 0, 0.1);
+   border: 1px solid #ffd700;
+   border-radius: 6px;
+   box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 
+.honor-member-card .profile-pic-wrapper {
+  position: relative;
+}
+
+.honor-member-card .profile-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ffd700; /* Ensure border is present */
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* Ensure shadow is present */
+}
+
+/* Re-include crown if gloria-profile is not used globally */
+/* .honor-member-card .profile-pic-wrapper::after { ... } */
+
 .honor-member-name {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: bold;
   color: #ffd700;
   text-shadow: 0 0 8px #ffd700;
   margin: 0;
+  text-align: center; /* Ensure name is centered */
 }
 
 .honor-period {
@@ -377,43 +403,4 @@
 .footer a:hover {
   color: #ff00ff;
   text-shadow: 0 0 5px #ff00ff;
-}
-
-/* Estilos para Membros de Honra na Home */
-.honor-member-card {
-  padding: 20px;
-  min-width: 220px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  /* Bordas e sombras vêm da classe global .gloria-profile */
-}
-
-.honor-member-card .profile-pic-wrapper {
-  position: relative;
-}
-
-.honor-member-card .profile-pic {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  /* Bordas vêm da classe global .gloria-profile */
-}
-
-.honor-member-name {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #ffd700;
-  text-shadow: 0 0 8px #ffd700;
-  margin: 0;
-}
-
-.season-period {
-  text-align: center;
-  margin-top: 25px;
-  font-size: 1rem;
-  color: rgba(224, 251, 252, 0.7);
-  font-weight: 500;
 }
