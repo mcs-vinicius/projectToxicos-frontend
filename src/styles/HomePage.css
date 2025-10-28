@@ -68,17 +68,80 @@
     padding: 8px 0;
 }
 
-/* --- Estilização do Pódio da Temporada (Corrigida) --- */
+/* --- Estilização do Pódio da Temporada (MODIFICADA) --- */
 .podium-container {
     display: flex;
     justify-content: center;
-    align-items: flex-end; /* Alinha os cards na base */
+    /* align-items: flex-end; /* REMOVIDO para alinhar com a nova estrutura */
+    align-items: center; /* Centraliza verticalmente para melhor visualização */
     gap: 15px;
     flex-wrap: wrap;
-    min-height: 220px; /* Garante espaço para o efeito de altura */
+    min-height: 550px; /* Aumentado para acomodar a nova altura do rank 1 */
+    margin-top: 40px; /* Espaço acima do pódio */
 }
 
-.podium-card {
+/* MODIFICAÇÕES PARA RANK-1 */
+.rank-1-wrapper { /* Novo wrapper para o rank 1 */
+  order: 2; /* Mantém no centro */
+  position: relative; /* Necessário para posicionar o conteúdo interno */
+  z-index: 10; /* Garante que fique acima dos outros */
+  transform: translateY(-20px); /* Leve elevação */
+}
+
+/* Remover altura fixa e estilos de card direto do .rank-1 */
+.rank-1 {
+    /* REMOVER background-color, border-color, box-shadow, height */
+}
+.rank-1 .podium-rank { color: #ffd700; }
+.rank-1 .podium-name { color: #fff; }
+
+/* Posicionar conteúdo dentro do novo card Rank 1 */
+.podium-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5; /* Acima do efeito de filtro */
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    color: #fff; /* Cor padrão do texto dentro do card */
+}
+
+/* Estilos originais para .podium-card, .podium-rank, .podium-name, .podium-score DENTRO de .podium-content */
+.podium-content .podium-rank {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-shadow: 0 0 10px #ffd700; /* Sombra específica do rank 1 */
+    margin-bottom: 10px;
+    color: #ffd700; /* Cor específica do rank 1 */
+}
+
+.podium-content .podium-name {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #fff; /* Cor específica do rank 1 */
+}
+
+.podium-content .podium-score {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+
+/* Ajustes nos ranks 2 e 3 */
+.rank-2 {
+    order: 1; /* Segundo lugar à esquerda */
+    height: 150px;
+    background-color: rgba(192, 192, 192, 0.1);
+    border-color: #c0c0c0; /* Prata */
+    box-shadow: 0 0 15px rgba(192, 192, 192, 0.4);
+    align-self: flex-end; /* Alinha na base */
+    /* Estilos de .podium-card aplicados aqui */
     width: 200px;
     padding: 20px;
     border-radius: 8px;
@@ -87,48 +150,9 @@
     border: 1px solid;
     position: relative;
 }
-
-.podium-rank {
-    font-size: 2.5rem;
-    font-weight: 700;
-    text-shadow: 0 0 10px;
-    margin-bottom: 10px;
-}
-
-.podium-name {
-    font-size: 1.3rem;
-    font-weight: 500;
-    margin-bottom: 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.podium-score {
-    font-size: 1rem;
-    opacity: 0.8;
-}
-
-/* Cores e elevação para cada posição do pódio */
-.rank-1 {
-    order: 2; /* Centraliza o primeiro lugar */
-    height: 180px;
-    background-color: rgba(255, 215, 0, 0.1);
-    border-color: #ffd700; /* Ouro */
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-}
-.rank-1 .podium-rank { color: #ffd700; }
-.rank-1 .podium-name { color: #fff; }
-
-.rank-2 {
-    order: 1; /* Segundo lugar à esquerda */
-    height: 150px;
-    background-color: rgba(192, 192, 192, 0.1);
-    border-color: #c0c0c0; /* Prata */
-    box-shadow: 0 0 15px rgba(192, 192, 192, 0.4);
-}
-.rank-2 .podium-rank { color: #c0c0c0; }
-.rank-2 .podium-name { color: #f0f0f0; }
+.rank-2 .podium-rank { color: #c0c0c0; font-size: 2.5rem; font-weight: 700; text-shadow: 0 0 10px #c0c0c0; margin-bottom: 10px; }
+.rank-2 .podium-name { color: #f0f0f0; font-size: 1.3rem; font-weight: 500; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rank-2 .podium-score { font-size: 1rem; opacity: 0.8; }
 
 
 .rank-3 {
@@ -137,9 +161,19 @@
     background-color: rgba(205, 127, 50, 0.1);
     border-color: #cd7f32; /* Bronze */
     box-shadow: 0 0 12px rgba(205, 127, 50, 0.4);
+    align-self: flex-end; /* Alinha na base */
+     /* Estilos de .podium-card aplicados aqui */
+    width: 200px;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid;
+    position: relative;
 }
-.rank-3 .podium-rank { color: #cd7f32; }
-.rank-3 .podium-name { color: #e0e0e0; }
+.rank-3 .podium-rank { color: #cd7f32; font-size: 2.5rem; font-weight: 700; text-shadow: 0 0 10px #cd7f32; margin-bottom: 10px; }
+.rank-3 .podium-name { color: #e0e0e0; font-size: 1.3rem; font-weight: 500; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rank-3 .podium-score { font-size: 1rem; opacity: 0.8; }
 
 
 /* --- Seção Membros de Honra --- */
@@ -192,6 +226,7 @@
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s;
+    margin-left: 10px; /* Espaçamento entre botões */
 }
 .btn-edit-mode:hover, .btn-save:hover, .btn-cancel:hover {
     background: #00ffff;
@@ -280,70 +315,6 @@
   color: rgba(224, 251, 252, 0.7);
   font-weight: 500;
 }
-
-/* --- Estilização do Pódio da Temporada (MODIFICADA) --- */
-.podium-container {
-    display: flex;
-    justify-content: center;
-    /* align-items: flex-end; /* REMOVIDO para alinhar com a nova estrutura */
-    align-items: center; /* Centraliza verticalmente para melhor visualização */
-    gap: 15px;
-    flex-wrap: wrap;
-    min-height: 550px; /* Aumentado para acomodar a nova altura do rank 1 */
-    margin-top: 40px; /* Espaço acima do pódio */
-}
-
-/* MODIFICAÇÕES PARA RANK-1 */
-.rank-1-wrapper { /* Novo wrapper para o rank 1 */
-  order: 2; /* Mantém no centro */
-  position: relative; /* Necessário para posicionar o conteúdo interno */
-  z-index: 10; /* Garante que fique acima dos outros */
-  transform: translateY(-20px); /* Leve elevação */
-}
-
-/* Remover altura fixa e estilos de card direto do .rank-1 */
-.rank-1 {
-    /* REMOVER background-color, border-color, box-shadow, height */
-}
-.rank-1 .podium-rank { color: #ffd700; }
-.rank-1 .podium-name { color: #fff; }
-
-/* Posicionar conteúdo dentro do novo card Rank 1 */
-.podium-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 5; /* Acima do efeito de filtro */
-    width: 100%;
-    padding: 20px;
-    text-align: center;
-    color: #fff; /* Cor padrão do texto dentro do card */
-}
-
-/* Ajustes nos ranks 2 e 3 */
-.rank-2 {
-    order: 1; /* Segundo lugar à esquerda */
-    height: 150px;
-    background-color: rgba(192, 192, 192, 0.1);
-    border-color: #c0c0c0; /* Prata */
-    box-shadow: 0 0 15px rgba(192, 192, 192, 0.4);
-    align-self: flex-end; /* Alinha na base */
-}
-.rank-2 .podium-rank { color: #c0c0c0; }
-.rank-2 .podium-name { color: #f0f0f0; }
-
-
-.rank-3 {
-    order: 3; /* Terceiro lugar à direita */
-    height: 130px;
-    background-color: rgba(205, 127, 50, 0.1);
-    border-color: #cd7f32; /* Bronze */
-    box-shadow: 0 0 12px rgba(205, 127, 50, 0.4);
-    align-self: flex-end; /* Alinha na base */
-}
-.rank-3 .podium-rank { color: #cd7f32; }
-.rank-3 .podium-name { color: #e0e0e0; }
 
 /* --- NOVAS REGRAS CSS ADICIONADAS ABAIXO --- */
 
