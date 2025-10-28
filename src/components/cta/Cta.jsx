@@ -1,163 +1,144 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
-import Stats from 'stats.js'; // Make sure stats.js is installed
-import './Cta.css'; // Import the updated CSS
-import logoTextureUrl from "../../assets/logo/logoFE.png"; // Import the logo
+// import Stats from 'stats.js'; // REMOVIDO: Não importamos mais Stats
+import './Cta.css';
+import logoTextureUrl from "../../assets/logo/logoFE.png";
 
 const Cta = () => {
   const mountRef = useRef(null);
-  const statsRef = useRef(null); // Ref for stats panel
 
   useEffect(() => {
-    // --- Basic setup ---
-    let camera, scene, renderer, geometry, material, mesh, clock, stats, delta;
+    let camera, scene, renderer, clock, delta;
     let textGeo, textTexture, textMaterial, text;
     let smokeTexture, smokeMaterial, smokeGeo, smokeParticles = [];
-    let light;
-    let cubeSineDriver = 0;
+    let light, ambientLight; // Declare ambientLight here
     let animationFrameId;
 
-    const currentMount = mountRef.current; // Capture mountRef.current
+    const currentMount = mountRef.current;
 
     function init() {
-      // --- Stats Panel ---
-      stats = new Stats();
-      stats.setMode(0); // 0: fps, 1: ms
-      stats.domElement.style.position = 'absolute';
-      stats.domElement.style.left = '0px';
-      stats.domElement.style.top = '0px';
-      // Append stats to the specific mount point, not document.body
-      if (currentMount) {
-        currentMount.appendChild(stats.domElement);
-        statsRef.current = stats.domElement; // Store ref for cleanup
-      }
+      // --- REMOVIDO: Stats Panel ---
+      // stats = new Stats();
+      // stats.setMode(0);
+      // stats.domElement.style.position = 'absolute';
+      // stats.domElement.style.left = '0px';
+      // stats.domElement.style.top = '0px';
+      // if (currentMount) {
+      //   currentMount.appendChild(stats.domElement);
+      //   statsRef.current = stats.domElement;
+      // }
 
-
-      //--- Set new clock ---
       clock = new THREE.Clock();
 
-      //--- Setup render and set scene size ---
-      renderer = new THREE.WebGLRenderer({ alpha: true }); // Enable transparency
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); // antialias for smoother edges
       renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
       currentMount.appendChild(renderer.domElement);
 
-      //--- Set up scene ---
       scene = new THREE.Scene();
 
-      //--- Set up camera ---
       camera = new THREE.PerspectiveCamera(75, currentMount.clientWidth / currentMount.clientHeight, 1, 10000);
       camera.position.z = 1000;
       scene.add(camera);
 
-      //--- Set up geometry (removed the spinning cube) ---
-      // geometry = new THREE.BoxGeometry(200, 200, 200);
-      // material = new THREE.MeshLambertMaterial({ color: 0xaa444, wireframe: false });
-      // mesh = new THREE.Mesh(geometry, material);
-      // cubeSineDriver = 0;
-
       //--- Set up geometry for the logo ---
-      textGeo = new THREE.PlaneGeometry(300, 300); // Adjust size as needed
+      textGeo = new THREE.PlaneGeometry(300, 300);
 
-      // --- Load logo texture ---
       const textureLoader = new THREE.TextureLoader();
-      textTexture = textureLoader.load(logoTextureUrl); // Use imported logo URL
+      textTexture = textureLoader.load(logoTextureUrl);
 
       textMaterial = new THREE.MeshLambertMaterial({
-        // color: 0x00ffff, // Color tint (optional)
-        opacity: 1,
         map: textTexture,
         transparent: true,
-        blending: THREE.AdditiveBlending, // Or THREE.NormalBlending
-        depthWrite: false // Often needed for transparency layering
+        blending: THREE.NormalBlending, // NormalBlending is usually better for logos with transparency
+        depthWrite: false, // Prevents Z-fighting issues with transparency
+        depthTest: true, // Ensures proper depth sorting against other objects
       });
       text = new THREE.Mesh(textGeo, textMaterial);
-      text.position.z = 800; // Position in front of smoke
+      text.position.z = 150; // Ajustado para ficar mais à frente que a fumaça. (Antes estava 800)
       scene.add(text);
 
       // --- Lighting ---
       light = new THREE.DirectionalLight(0xffffff, 0.7);
       light.position.set(-1, 0, 1);
       scene.add(light);
-      const ambientLight = new THREE.AmbientLight(0x555555); // So smoke isn't black
+      ambientLight = new THREE.AmbientLight(0x555555);
       scene.add(ambientLight);
 
-
-      //--- Pull in the smoke texture and set it up ---
+      //--- Smoke setup ---
       smokeTexture = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/95637/Smoke-Element.png');
       smokeMaterial = new THREE.MeshLambertMaterial({
         color: 0x39FF14, // Toxic Green Color
         map: smokeTexture,
         transparent: true,
-        opacity: 0.6, // Adjust opacity as needed
-        blending: THREE.AdditiveBlending, // Experiment with blending modes
-        depthWrite: false // Important for transparency
+        opacity: 0.6,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false, // Still good for smoke to prevent Z-fighting between particles
+        side: THREE.DoubleSide // Ensures smoke is visible from both sides
       });
       smokeGeo = new THREE.PlaneGeometry(300, 300);
       smokeParticles = [];
 
-      //--- Set particle texture ---
-      for (let p = 0; p < 150; p++) { // Use 'let' instead of implicit global
-        var particle = new THREE.Mesh(smokeGeo, smokeMaterial);
-        particle.position.set(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 1000 - 100);
+      for (let p = 0; p < 150; p++) {
+        const particle = new THREE.Mesh(smokeGeo, smokeMaterial);
+        // Ajuste o range Z para que algumas partículas fiquem mais para trás e outras mais para frente,
+        // mas todas atrás do logo (que está em z=150).
+        particle.position.set(
+          Math.random() * 500 - 250,
+          Math.random() * 500 - 250,
+          Math.random() * 500 - 350 // Z-range from -350 to 150 (max)
+        );
         particle.rotation.z = Math.random() * 360;
-
-        //--- Add particles to the scene ---
         scene.add(particle);
         smokeParticles.push(particle);
       }
     }
 
     function animate() {
-      if (stats) stats.begin(); // Check if stats exists
+      // --- REMOVIDO: stats.begin() e stats.end() ---
       delta = clock.getDelta();
       animationFrameId = requestAnimationFrame(animate);
       evolveSmoke();
       render();
-      if (stats) stats.end(); // Check if stats exists
     }
 
     function evolveSmoke() {
-      var sp = smokeParticles.length;
+      let sp = smokeParticles.length;
       while (sp--) {
         smokeParticles[sp].rotation.z += (delta * 0.2);
+        // Opcional: fazer a fumaça "subir" ou "se mover" para dar mais dinamismo
+        // smokeParticles[sp].position.y += delta * 10;
+        // if (smokeParticles[sp].position.y > 250) { // Reset position if too high
+        //   smokeParticles[sp].position.y = -250;
+        // }
       }
     }
 
     function render() {
-      // mesh.rotation.x += 0.005; // Cube rotation removed
-      // mesh.rotation.y += 0.01;
-      // cubeSineDriver += .01;
-      // mesh.position.z = 100 + (Math.sin(cubeSineDriver) * 500);
-
       renderer.render(scene, camera);
     }
 
     function onWindowResize() {
-      if (currentMount) { // Check if mount point exists
-         camera.aspect = currentMount.clientWidth / currentMount.clientHeight;
-         camera.updateProjectionMatrix();
-         renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
+      if (currentMount) {
+        camera.aspect = currentMount.clientWidth / currentMount.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
       }
     }
 
-    // --- Initialize and add resize listener ---
     init();
     window.addEventListener('resize', onWindowResize, false);
-
-    // --- Start animation ---
     animate();
 
-    // --- Cleanup function ---
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', onWindowResize);
-      if (statsRef.current && currentMount.contains(statsRef.current)) {
-          currentMount.removeChild(statsRef.current); // Remove stats panel
-      }
+
+      // --- REMOVIDO: statsRef.current cleanup ---
+
       if (renderer.domElement && currentMount.contains(renderer.domElement)) {
-        currentMount.removeChild(renderer.domElement); // Remove canvas
+        currentMount.removeChild(renderer.domElement);
       }
-      // Optional: Dispose Three.js objects if necessary for memory management
+      // Dispose Three.js objects
        smokeParticles.forEach(p => {
          if (p.geometry) p.geometry.dispose();
          if (p.material) {
@@ -177,9 +158,9 @@ const Cta = () => {
        scene.remove(ambientLight);
        renderer.dispose();
     };
-  }, []); // Empty dependency array ensures this runs only once on mount
+  }, []);
 
-  return <div ref={mountRef} style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden' }} />; // Container for Three.js
+  return <div ref={mountRef} style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden' }} />;
 };
 
 export default Cta;
