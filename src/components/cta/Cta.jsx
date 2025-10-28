@@ -11,10 +11,10 @@ const Cta = () => {
   useEffect(() => {
     // --- Basic setup ---
     // REMOVIDO: Variável stats
-    // CORRIGIDO: Removido 'light', adicionado 'ambientLight'
-    let camera, scene, renderer, clock, delta, ambientLight;
+    let camera, scene, renderer, clock, delta;
     let textGeo, textTexture, textMaterial, text;
     let smokeTexture, smokeMaterial, smokeGeo, smokeParticles = [];
+    let light; // Luz ainda pode ser útil para a fumaça, mesmo que não afete a logo com MeshBasicMaterial
     let animationFrameId;
 
     const currentMount = mountRef.current;
@@ -32,36 +32,38 @@ const Cta = () => {
       scene.add(camera);
 
       //--- Geometry for the logo ---
-      // AJUSTADO: Tamanho da logo ligeiramente aumentado novamente
-      textGeo = new THREE.PlaneGeometry(180, 180); // <<< Aumentado de 150x150 para 180x180
+      // Mantido o tamanho reduzido
+      textGeo = new THREE.PlaneGeometry(150, 150);
 
       const textureLoader = new THREE.TextureLoader();
       textTexture = textureLoader.load(logoTextureUrl); //
+      // Opcional: Garantir filtros padrão (geralmente bom para nitidez)
       textTexture.minFilter = THREE.LinearFilter;
       textTexture.magFilter = THREE.LinearFilter;
-      // textTexture.encoding = THREE.sRGBEncoding; // Pode descomentar se as cores parecerem erradas
 
-      // Mantido: MeshBasicMaterial
-      textMaterial = new THREE.MeshBasicMaterial({
+      // AJUSTADO: Usar MeshBasicMaterial para ignorar iluminação e aumentar nitidez
+      textMaterial = new THREE.MeshBasicMaterial({ // <<< Alterado de MeshLambertMaterial
         map: textTexture,
-        transparent: true, // Necessário para a transparência do PNG
-        // blending: THREE.NormalBlending, // Default para MeshBasicMaterial
-        depthWrite: false, // Mantido para evitar problemas de ordenação com a fumaça
-        opacity: 1,
-        // alphaTest: 0.5, // <<< REMOVIDO alphaTest
+        transparent: true,
+        blending: THREE.NormalBlending, // Mantido
+        depthWrite: false, // Mantido
+        opacity: 1, // Mantido
       });
       text = new THREE.Mesh(textGeo, textMaterial);
       text.position.z = 901; // Mantém ligeiramente à frente da fumaça
       text.renderOrder = 1; // Mantido
       scene.add(text);
 
-      // --- Lighting ---
-      ambientLight = new THREE.AmbientLight(0xCCCCCC); // Mantido um pouco mais claro
+      // --- Lighting --- (Mantido para a fumaça, se necessário)
+      // light = new THREE.DirectionalLight(0xffffff, 0.7);
+      // light.position.set(-1, 0, 1);
+      // scene.add(light);
+      const ambientLight = new THREE.AmbientLight(0xCCCCCC); // Aumentar um pouco a luz ambiente pode ajudar na visibilidade geral
       scene.add(ambientLight);
 
       //--- Smoke texture setup ---
       smokeTexture = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/95637/Smoke-Element.png'); //
-      smokeMaterial = new THREE.MeshLambertMaterial({ // Fumaça ainda usa Lambert
+      smokeMaterial = new THREE.MeshLambertMaterial({ // Fumaça ainda usa Lambert para reagir à luz ambiente
         color: 0x39FF14, // Toxic Green Color
         map: smokeTexture,
         transparent: true,
@@ -83,10 +85,12 @@ const Cta = () => {
     }
 
     function animate() {
+      // REMOVIDO: stats.begin()
       delta = clock.getDelta();
       animationFrameId = requestAnimationFrame(animate);
       evolveSmoke();
       render();
+      // REMOVIDO: stats.end()
     }
 
     function evolveSmoke() {
@@ -112,10 +116,10 @@ const Cta = () => {
     window.addEventListener('resize', onWindowResize, false);
     animate();
 
-    // --- Cleanup function ---
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', onWindowResize);
+      // REMOVIDO: Limpeza do statsRef
       if (renderer.domElement && currentMount.contains(renderer.domElement)) {
         currentMount.removeChild(renderer.domElement);
       }
@@ -134,6 +138,7 @@ const Cta = () => {
        }
        if (smokeTexture) smokeTexture.dispose();
        scene.remove(text);
+       // scene.remove(light); // Removido se a luz direcional não for mais necessária
        scene.remove(ambientLight);
        renderer.dispose();
     };
