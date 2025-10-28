@@ -1,148 +1,194 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
-// import Stats from 'stats.js'; // REMOVIDO
-import './Cta.css';
-import logoTextureUrl from "../../assets/logo/logoFE.png"; // Importado
+// REMOVED: import Stats from 'stats.js';
+import './Cta.css'; // Import CSS
+import logoTextureUrl from "../../assets/logo/logoFE.png"; // Import the logo
 
 const Cta = () => {
-  const mountRef = useRef(null);
-  // const statsRef = useRef(null); // REMOVIDO
+  const mountRef = useRef(null); // Ref for the container div
 
   useEffect(() => {
-    // --- Basic setup ---
-    // REMOVIDO: Variável stats
+    // --- Three.js Variables ---
+    // Declare variables needed in cleanup here, initialize to null
+    // REMOVED 'light' from this list, ADDED 'ambientLight'
     let camera, scene, renderer, clock, delta;
-    let textGeo, textTexture, textMaterial, text;
-    let smokeTexture, smokeMaterial, smokeGeo, smokeParticles = [];
-    let light; // Luz ainda pode ser útil para a fumaça, mesmo que não afete a logo com MeshBasicMaterial
+    let logoPlaneGeo = null, logoTexture = null, logoMaterial = null, logoMesh = null;
+    let smokeTexture = null, smokeMaterial = null, smokeGeo = null, smokeParticles = [];
+    let directionalLight = null, ambientLight = null; // ambientLight declared here
     let animationFrameId;
 
-    const currentMount = mountRef.current;
+    const currentMount = mountRef.current; // Store the current ref
 
+    // --- Initialization Function ---
     function init() {
-      // --- Stats Panel --- REMOVIDO
-
+      // --- Clock ---
       clock = new THREE.Clock();
-      renderer = new THREE.WebGLRenderer({ alpha: true });
+
+      // --- Renderer ---
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
       renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       currentMount.appendChild(renderer.domElement);
+
+      // --- Scene ---
       scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(75, currentMount.clientWidth / currentMount.clientHeight, 1, 10000);
-      camera.position.z = 1000;
+
+      // --- Camera ---
+      camera = new THREE.PerspectiveCamera(
+        75,
+        currentMount.clientWidth / currentMount.clientHeight,
+        1,
+        10000
+      );
+      camera.position.z = 600;
       scene.add(camera);
 
-      //--- Geometry for the logo ---
-      // Mantido o tamanho reduzido
-      textGeo = new THREE.PlaneGeometry(150, 150);
-
+      // --- Logo ---
       const textureLoader = new THREE.TextureLoader();
-      textTexture = textureLoader.load(logoTextureUrl); //
-      // Opcional: Garantir filtros padrão (geralmente bom para nitidez)
-      textTexture.minFilter = THREE.LinearFilter;
-      textTexture.magFilter = THREE.LinearFilter;
+      logoTexture = textureLoader.load(logoTextureUrl);
+      logoPlaneGeo = new THREE.PlaneGeometry(300, 300); // Assign to outer scope var
 
-      // AJUSTADO: Usar MeshBasicMaterial para ignorar iluminação e aumentar nitidez
-      textMaterial = new THREE.MeshBasicMaterial({ // <<< Alterado de MeshLambertMaterial
-        map: textTexture,
+      logoMaterial = new THREE.MeshLambertMaterial({ // Assign to outer scope var
+        map: logoTexture,
         transparent: true,
-        blending: THREE.NormalBlending, // Mantido
-        depthWrite: false, // Mantido
-        opacity: 1, // Mantido
+        alphaTest: 0.1,
+        side: THREE.DoubleSide,
+        depthWrite: false,
+        depthTest: true,
       });
-      text = new THREE.Mesh(textGeo, textMaterial);
-      text.position.z = 901; // Mantém ligeiramente à frente da fumaça
-      text.renderOrder = 1; // Mantido
-      scene.add(text);
 
-      // --- Lighting --- (Mantido para a fumaça, se necessário)
-      // light = new THREE.DirectionalLight(0xffffff, 0.7);
-      // light.position.set(-1, 0, 1);
-      // scene.add(light);
-      const ambientLight = new THREE.AmbientLight(0xCCCCCC); // Aumentar um pouco a luz ambiente pode ajudar na visibilidade geral
-      scene.add(ambientLight);
+      logoMesh = new THREE.Mesh(logoPlaneGeo, logoMaterial); // Assign to outer scope var
+      logoMesh.position.z = 150;
+      scene.add(logoMesh);
 
-      //--- Smoke texture setup ---
-      smokeTexture = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/95637/Smoke-Element.png'); //
-      smokeMaterial = new THREE.MeshLambertMaterial({ // Fumaça ainda usa Lambert para reagir à luz ambiente
-        color: 0x39FF14, // Toxic Green Color
+      // --- Lighting ---
+      directionalLight = new THREE.DirectionalLight(0xffffff, 0.8); // Assign to outer scope var
+      directionalLight.position.set(-1, 0.5, 1);
+      scene.add(directionalLight);
+      ambientLight = new THREE.AmbientLight(0x666666); // Assign to outer scope var
+      scene.add(ambientLight); // Make sure ambientLight is added
+
+      // --- Smoke ---
+      smokeTexture = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/95637/Smoke-Element.png'); // Assign to outer scope var
+      smokeMaterial = new THREE.MeshLambertMaterial({ // Assign to outer scope var
+        color: 0x39FF14,
         map: smokeTexture,
         transparent: true,
-        opacity: 0.6,
+        opacity: 0.5,
         blending: THREE.AdditiveBlending,
-        depthWrite: false
+        depthWrite: false,
+        side: THREE.DoubleSide,
       });
-      smokeGeo = new THREE.PlaneGeometry(300, 300);
-      smokeParticles = [];
+      smokeGeo = new THREE.PlaneGeometry(400, 400); // Assign to outer scope var, particles larger
+      smokeParticles = []; // Reset array
 
-      for (let p = 0; p < 150; p++) {
-        var particle = new THREE.Mesh(smokeGeo, smokeMaterial);
-        particle.position.set(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 1000 - 100);
-        particle.rotation.z = Math.random() * 360;
-        particle.renderOrder = 0;
+       // Calculate visible width/height at smoke's average depth for better distribution
+       const smokeAvgZ = -150; // Average depth where smoke will be
+       const vFOV = THREE.MathUtils.degToRad(camera.fov); // Vertical FOV in radians
+       const height = 2 * Math.tan(vFOV / 2) * Math.abs(smokeAvgZ - camera.position.z);
+       const width = height * camera.aspect;
+
+
+      for (let p = 0; p < 100; p++) { // Fewer particles
+        const particleMat = smokeMaterial.clone();
+        const particle = new THREE.Mesh(smokeGeo, particleMat);
+        particle.position.set(
+            (Math.random() - 0.5) * (width * 1.2), // Spread slightly wider than visible
+            (Math.random() - 0.5) * (height * 1.2), // Spread slightly taller than visible
+            (Math.random() - 1) * 500              // Position behind the logo
+        );
+        particle.rotation.z = Math.random() * Math.PI * 2;
+        particle.material.opacity = Math.random() * 0.2 + 0.2;
         scene.add(particle);
-        smokeParticles.push(particle);
+        smokeParticles.push(particle); // Add to outer scope array
       }
     }
 
+    // --- Animation Loop ---
     function animate() {
-      // REMOVIDO: stats.begin()
       delta = clock.getDelta();
       animationFrameId = requestAnimationFrame(animate);
       evolveSmoke();
       render();
-      // REMOVIDO: stats.end()
     }
 
+    // --- Update Smoke ---
     function evolveSmoke() {
-      var sp = smokeParticles.length;
-      while (sp--) {
-        smokeParticles[sp].rotation.z += (delta * 0.2);
-      }
+      smokeParticles.forEach(particle => {
+        particle.rotation.z += (delta * 0.15);
+      });
     }
 
+    // --- Render Scene ---
     function render() {
       renderer.render(scene, camera);
     }
 
+    // --- Handle Window Resize ---
     function onWindowResize() {
       if (currentMount) {
-         camera.aspect = currentMount.clientWidth / currentMount.clientHeight;
-         camera.updateProjectionMatrix();
-         renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
+        const width = currentMount.clientWidth;
+        const height = currentMount.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
       }
     }
 
+    // --- Run Initialization and Start Animation ---
     init();
     window.addEventListener('resize', onWindowResize, false);
     animate();
 
+    // --- Cleanup on Unmount ---
     return () => {
+      console.log("Cleaning up Three.js scene...");
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', onWindowResize);
-      // REMOVIDO: Limpeza do statsRef
-      if (renderer.domElement && currentMount.contains(renderer.domElement)) {
+
+      if (renderer && renderer.domElement && currentMount.contains(renderer.domElement)) {
         currentMount.removeChild(renderer.domElement);
       }
-       smokeParticles.forEach(p => {
-         if (p.geometry) p.geometry.dispose();
-         if (p.material) {
-           if (p.material.map) p.material.map.dispose();
-           p.material.dispose();
-         }
-         scene.remove(p);
-       });
-       if (textGeo) textGeo.dispose();
-       if (textMaterial) {
-         if (textMaterial.map) textMaterial.map.dispose();
-         textMaterial.dispose();
-       }
-       if (smokeTexture) smokeTexture.dispose();
-       scene.remove(text);
-       // scene.remove(light); // Removido se a luz direcional não for mais necessária
-       scene.remove(ambientLight);
-       renderer.dispose();
+
+      // Dispose Three.js objects safely
+      smokeParticles.forEach(p => {
+        try {
+          p.geometry?.dispose(); // Optional chaining
+          p.material?.map?.dispose();
+          p.material?.dispose();
+          scene?.remove(p);
+        } catch (e) { console.error("Error disposing particle:", e); }
+      });
+      smokeParticles = [];
+
+      try {
+        logoPlaneGeo?.dispose();
+        logoMaterial?.map?.dispose();
+        logoMaterial?.dispose();
+        smokeGeo?.dispose();
+        smokeMaterial?.map?.dispose();
+        smokeMaterial?.dispose(); // Dispose the original smoke material
+        smokeTexture?.dispose();
+        scene?.remove(logoMesh);
+        scene?.remove(directionalLight);
+        scene?.remove(ambientLight); // Ensure ambientLight is removed
+      } catch (e) { console.error("Error disposing core objects:", e); }
+
+      try {
+        if (scene) {
+          while(scene.children.length > 0){
+              scene.remove(scene.children[0]);
+          }
+        }
+      } catch (e) { console.error("Error clearing scene children:", e); }
+
+      try {
+        renderer?.dispose();
+      } catch (e) { console.error("Error disposing renderer:", e); }
+
+      console.log("Three.js cleanup finished.");
     };
-  }, []);
+  }, []); // Empty array ensures this runs only once
 
   return <div ref={mountRef} style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden' }} />;
 };

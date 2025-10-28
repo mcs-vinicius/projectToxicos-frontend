@@ -72,13 +72,13 @@
 .podium-container {
     display: flex;
     justify-content: center;
-    /* align-items: flex-end; /* REMOVIDO para alinhar com a nova estrutura */
-    align-items: center; /* Centraliza verticalmente para melhor visualização */
+    align-items: center; /* Mantém centralizado verticalmente */
     gap: 15px;
     flex-wrap: wrap;
-    min-height: 550px; /* Aumentado para acomodar a nova altura do rank 1 */
+    min-height: 250px; /* Reduzido, ajuste conforme necessário */
     margin-top: 40px; /* Espaço acima do pódio */
 }
+
 
 /* MODIFICAÇÕES PARA RANK-1 */
 .rank-1-wrapper { /* Novo wrapper para o rank 1 */
@@ -88,10 +88,8 @@
   transform: translateY(-20px); /* Leve elevação */
 }
 
-/* Remover altura fixa e estilos de card direto do .rank-1 */
-.rank-1 {
-    /* REMOVER background-color, border-color, box-shadow, height */
-}
+/* REMOVIDO: Regra vazia .rank-1 {} foi removida */
+
 .rank-1 .podium-rank { color: #ffd700; }
 .rank-1 .podium-name { color: #fff; }
 
@@ -108,7 +106,7 @@
     color: #fff; /* Cor padrão do texto dentro do card */
 }
 
-/* Estilos originais para .podium-card, .podium-rank, .podium-name, .podium-score DENTRO de .podium-content */
+/* Estilos originais para .podium-rank, .podium-name, .podium-score DENTRO de .podium-content */
 .podium-content .podium-rank {
     font-size: 2.5rem;
     font-weight: 700;
@@ -330,19 +328,12 @@
   --color-neutral-900: oklch(0.185 0 0);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 /* Main container (applied via .rank-1-wrapper > main) */
 .main-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* height: 100vh; /* REMOVIDO - altura será definida pelo conteúdo */
 }
 
 /* SVG positioning */
@@ -384,17 +375,20 @@
 }
 
 .main-card {
-  width: 250px; /* Ajustado para um tamanho mais adequado ao pódio */
-  height: 350px; /* Ajustado para um tamanho mais adequado ao pódio */
+  /* --- AJUSTE DE TAMANHO AQUI --- */
+  width: 200px;
+  height: 180px;
+  /* ------------------------------- */
   border-radius: 24px;
   border: 2px solid var(--electric-border-color);
   margin-top: -4px;
   margin-left: -4px;
   filter: url(#turbulent-displace);
-  position: relative; /* Para posicionar o conteúdo interno */
-  overflow: hidden; /* Garante que o conteúdo não vaze */
-  background-color: rgba(10, 25, 47, 0.7); /* Fundo similar ao original */
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(10, 25, 47, 0.7);
 }
+
 
 /* Glow effects */
 .glow-layer-1 {
@@ -408,7 +402,7 @@
   right: 0;
   bottom: 0;
   filter: blur(1px);
-  pointer-events: none; /* Impede interação */
+  pointer-events: none;
 }
 
 .glow-layer-2 {
@@ -422,7 +416,7 @@
   right: 0;
   bottom: 0;
   filter: blur(4px);
-  pointer-events: none; /* Impede interação */
+  pointer-events: none;
 }
 
 /* Overlay effects */
@@ -446,7 +440,7 @@
     transparent 70%,
     white
   );
-  pointer-events: none; /* Impede interação */
+  pointer-events: none;
 }
 
 .overlay-2 {
@@ -469,7 +463,7 @@
     transparent 70%,
     white
   );
-  pointer-events: none; /* Impede interação */
+  pointer-events: none;
 }
 
 /* Background glow */
@@ -492,8 +486,5 @@
     transparent,
     var(--electric-border-color)
   );
-  pointer-events: none; /* Impede interação */
+  pointer-events: none;
 }
-
-/* Remover estilos não utilizados */
-/* .content-container, .content-top, .content-bottom, .scrollbar-glass, .title, .description, .divider */
