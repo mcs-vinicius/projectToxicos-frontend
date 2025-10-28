@@ -280,3 +280,249 @@
   color: rgba(224, 251, 252, 0.7);
   font-weight: 500;
 }
+
+/* --- Estilização do Pódio da Temporada (MODIFICADA) --- */
+.podium-container {
+    display: flex;
+    justify-content: center;
+    /* align-items: flex-end; /* REMOVIDO para alinhar com a nova estrutura */
+    align-items: center; /* Centraliza verticalmente para melhor visualização */
+    gap: 15px;
+    flex-wrap: wrap;
+    min-height: 550px; /* Aumentado para acomodar a nova altura do rank 1 */
+    margin-top: 40px; /* Espaço acima do pódio */
+}
+
+/* MODIFICAÇÕES PARA RANK-1 */
+.rank-1-wrapper { /* Novo wrapper para o rank 1 */
+  order: 2; /* Mantém no centro */
+  position: relative; /* Necessário para posicionar o conteúdo interno */
+  z-index: 10; /* Garante que fique acima dos outros */
+  transform: translateY(-20px); /* Leve elevação */
+}
+
+/* Remover altura fixa e estilos de card direto do .rank-1 */
+.rank-1 {
+    /* REMOVER background-color, border-color, box-shadow, height */
+}
+.rank-1 .podium-rank { color: #ffd700; }
+.rank-1 .podium-name { color: #fff; }
+
+/* Posicionar conteúdo dentro do novo card Rank 1 */
+.podium-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5; /* Acima do efeito de filtro */
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    color: #fff; /* Cor padrão do texto dentro do card */
+}
+
+/* Ajustes nos ranks 2 e 3 */
+.rank-2 {
+    order: 1; /* Segundo lugar à esquerda */
+    height: 150px;
+    background-color: rgba(192, 192, 192, 0.1);
+    border-color: #c0c0c0; /* Prata */
+    box-shadow: 0 0 15px rgba(192, 192, 192, 0.4);
+    align-self: flex-end; /* Alinha na base */
+}
+.rank-2 .podium-rank { color: #c0c0c0; }
+.rank-2 .podium-name { color: #f0f0f0; }
+
+
+.rank-3 {
+    order: 3; /* Terceiro lugar à direita */
+    height: 130px;
+    background-color: rgba(205, 127, 50, 0.1);
+    border-color: #cd7f32; /* Bronze */
+    box-shadow: 0 0 12px rgba(205, 127, 50, 0.4);
+    align-self: flex-end; /* Alinha na base */
+}
+.rank-3 .podium-rank { color: #cd7f32; }
+.rank-3 .podium-name { color: #e0e0e0; }
+
+/* --- NOVAS REGRAS CSS ADICIONADAS ABAIXO --- */
+
+/* Reset and base styles */
+
+/* CSS Variables */
+:root {
+  --electric-border-color: #dd8448;
+  --electric-light-color: oklch(from var(--electric-border-color) l c h);
+  --gradient-color: oklch(
+    from var(--electric-border-color) 0.3 calc(c / 2) h / 0.4
+  );
+  --color-neutral-900: oklch(0.185 0 0);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Main container (applied via .rank-1-wrapper > main) */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* height: 100vh; /* REMOVIDO - altura será definida pelo conteúdo */
+}
+
+/* SVG positioning */
+.svg-container {
+  position: absolute;
+  width: 0; /* Oculta o SVG, apenas as definições são usadas */
+  height: 0;
+}
+
+/* Card container */
+.card-container {
+  padding: 2px;
+  border-radius: 24px;
+  position: relative;
+  background: linear-gradient(
+      -30deg,
+      var(--gradient-color),
+      transparent,
+      var(--gradient-color)
+    ),
+    linear-gradient(
+      to bottom,
+      var(--color-neutral-900),
+      var(--color-neutral-900)
+    );
+}
+
+/* Inner container */
+.inner-container {
+  position: relative;
+}
+
+/* Border layers */
+.border-outer {
+  border: 2px solid rgba(221, 132, 72, 0.5);
+  border-radius: 24px;
+  padding-right: 4px;
+  padding-bottom: 4px;
+}
+
+.main-card {
+  width: 250px; /* Ajustado para um tamanho mais adequado ao pódio */
+  height: 350px; /* Ajustado para um tamanho mais adequado ao pódio */
+  border-radius: 24px;
+  border: 2px solid var(--electric-border-color);
+  margin-top: -4px;
+  margin-left: -4px;
+  filter: url(#turbulent-displace);
+  position: relative; /* Para posicionar o conteúdo interno */
+  overflow: hidden; /* Garante que o conteúdo não vaze */
+  background-color: rgba(10, 25, 47, 0.7); /* Fundo similar ao original */
+}
+
+/* Glow effects */
+.glow-layer-1 {
+  border: 2px solid rgba(221, 132, 72, 0.6);
+  border-radius: 24px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  filter: blur(1px);
+  pointer-events: none; /* Impede interação */
+}
+
+.glow-layer-2 {
+  border: 2px solid var(--electric-light-color);
+  border-radius: 24px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  filter: blur(4px);
+  pointer-events: none; /* Impede interação */
+}
+
+/* Overlay effects */
+.overlay-1 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 24px;
+  opacity: 1;
+  mix-blend-mode: overlay;
+  transform: scale(1.1);
+  filter: blur(16px);
+  background: linear-gradient(
+    -30deg,
+    white,
+    transparent 30%,
+    transparent 70%,
+    white
+  );
+  pointer-events: none; /* Impede interação */
+}
+
+.overlay-2 {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 24px;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  transform: scale(1.1);
+  filter: blur(16px);
+  background: linear-gradient(
+    -30deg,
+    white,
+    transparent 30%,
+    transparent 70%,
+    white
+  );
+  pointer-events: none; /* Impede interação */
+}
+
+/* Background glow */
+.background-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 24px;
+  filter: blur(32px);
+  transform: scale(1.1);
+  opacity: 0.3;
+  z-index: -1;
+  background: linear-gradient(
+    -30deg,
+    var(--electric-light-color),
+    transparent,
+    var(--electric-border-color)
+  );
+  pointer-events: none; /* Impede interação */
+}
+
+/* Remover estilos não utilizados */
+/* .content-container, .content-top, .content-bottom, .scrollbar-glass, .title, .description, .divider */
