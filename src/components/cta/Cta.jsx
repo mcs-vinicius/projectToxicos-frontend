@@ -22,16 +22,6 @@ const Cta = () => {
 
     function init() {
       // --- Stats Panel --- REMOVIDO
-      // stats = new Stats();
-      // stats.setMode(0); // 0: fps, 1: ms
-      // stats.domElement.style.position = 'absolute';
-      // stats.domElement.style.left = '0px';
-      // stats.domElement.style.top = '0px';
-      // // Append stats to the specific mount point, not document.body
-      // if (currentMount) {
-      //   currentMount.appendChild(stats.domElement);
-      //   statsRef.current = stats.domElement; // Store ref for cleanup
-      // }
 
       //--- Set new clock ---
       clock = new THREE.Clock();
@@ -50,36 +40,31 @@ const Cta = () => {
       scene.add(camera);
 
       //--- Set up geometry (removed the spinning cube) ---
-      // geometry = new THREE.BoxGeometry(200, 200, 200);
-      // material = new THREE.MeshLambertMaterial({ color: 0xaa444, wireframe: false });
-      // mesh = new THREE.Mesh(geometry, material);
-      // cubeSineDriver = 0;
 
       //--- Set up geometry for the logo ---
-      textGeo = new THREE.PlaneGeometry(300, 300); // Adjust size as needed
+      textGeo = new THREE.PlaneGeometry(300, 300); // Tamanho da logo mantido
 
       // --- Load logo texture ---
       const textureLoader = new THREE.TextureLoader();
       textTexture = textureLoader.load(logoTextureUrl); // Use imported logo URL
 
       textMaterial = new THREE.MeshLambertMaterial({
-        // color: 0x00ffff, // Color tint (optional)
         opacity: 1,
         map: textTexture,
         transparent: true,
-        blending: THREE.AdditiveBlending, // Or THREE.NormalBlending
-        depthWrite: false // Often needed for transparency layering
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
       });
       text = new THREE.Mesh(textGeo, textMaterial);
-      // AJUSTADO: Posição Z ligeiramente aumentada para garantir que fique na frente
-      text.position.z = 850;
+      // AJUSTADO: Posição Z ligeiramente à frente do limite original da fumaça (900)
+      text.position.z = 901;
       scene.add(text);
 
       // --- Lighting ---
       light = new THREE.DirectionalLight(0xffffff, 0.7);
       light.position.set(-1, 0, 1);
       scene.add(light);
-      const ambientLight = new THREE.AmbientLight(0x555555); // So smoke isn't black
+      const ambientLight = new THREE.AmbientLight(0x555555);
       scene.add(ambientLight);
 
 
@@ -89,18 +74,18 @@ const Cta = () => {
         color: 0x39FF14, // Toxic Green Color
         map: smokeTexture,
         transparent: true,
-        opacity: 0.6, // Adjust opacity as needed
-        blending: THREE.AdditiveBlending, // Experiment with blending modes
-        depthWrite: false // Important for transparency
+        opacity: 0.6,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false // Mantido como false para o efeito de fumaça
       });
       smokeGeo = new THREE.PlaneGeometry(300, 300);
       smokeParticles = [];
 
       //--- Set particle texture ---
-      for (let p = 0; p < 150; p++) { // Use 'let' instead of implicit global
+      for (let p = 0; p < 150; p++) {
         var particle = new THREE.Mesh(smokeGeo, smokeMaterial);
-        // AJUSTADO: Range Z da fumaça para ficar mais atrás da logo
-        particle.position.set(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 800 - 100);
+        // REVERTIDO: Posição Z original da fumaça
+        particle.position.set(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 1000 - 100);
         particle.rotation.z = Math.random() * 360;
 
         //--- Add particles to the scene ---
@@ -111,13 +96,11 @@ const Cta = () => {
 
     function animate() {
       // REMOVIDO: stats.begin()
-      // if (stats) stats.begin();
       delta = clock.getDelta();
       animationFrameId = requestAnimationFrame(animate);
       evolveSmoke();
       render();
       // REMOVIDO: stats.end()
-      // if (stats) stats.end();
     }
 
     function evolveSmoke() {
@@ -128,16 +111,12 @@ const Cta = () => {
     }
 
     function render() {
-      // mesh.rotation.x += 0.005; // Cube rotation removed
-      // mesh.rotation.y += 0.01;
-      // cubeSineDriver += .01;
-      // mesh.position.z = 100 + (Math.sin(cubeSineDriver) * 500);
-
+      // Lógica de rotação do cubo removida
       renderer.render(scene, camera);
     }
 
     function onWindowResize() {
-      if (currentMount) { // Check if mount point exists
+      if (currentMount) {
          camera.aspect = currentMount.clientWidth / currentMount.clientHeight;
          camera.updateProjectionMatrix();
          renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
@@ -156,13 +135,10 @@ const Cta = () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', onWindowResize);
       // REMOVIDO: Limpeza do statsRef
-      // if (statsRef.current && currentMount.contains(statsRef.current)) {
-      //     currentMount.removeChild(statsRef.current); // Remove stats panel
-      // }
       if (renderer.domElement && currentMount.contains(renderer.domElement)) {
-        currentMount.removeChild(renderer.domElement); // Remove canvas
+        currentMount.removeChild(renderer.domElement);
       }
-      // Optional: Dispose Three.js objects if necessary for memory management
+      // Limpeza dos objetos Three.js
        smokeParticles.forEach(p => {
          if (p.geometry) p.geometry.dispose();
          if (p.material) {
@@ -179,12 +155,12 @@ const Cta = () => {
        if (smokeTexture) smokeTexture.dispose();
        scene.remove(text);
        scene.remove(light);
-       scene.remove(ambientLight); // Adicionado para limpar a luz ambiente também
+       scene.remove(ambientLight);
        renderer.dispose();
     };
-  }, []); // Empty dependency array ensures this runs only once on mount
+  }, []);
 
-  return <div ref={mountRef} style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden' }} />; // Container for Three.js
+  return <div ref={mountRef} style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden' }} />;
 };
 
 export default Cta;
