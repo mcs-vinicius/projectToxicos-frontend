@@ -70,7 +70,7 @@
     padding: 8px 0;
 }
 
-/* --- Estilização do Pódio da Temporada (MODIFICADA COM ANIMATED BORDER) --- */
+/* --- Estilização do Pódio da Temporada (MODIFICADA COM BORDAS ALINHADAS) --- */
 .podium-container {
     display: flex;
     justify-content: center;
@@ -143,24 +143,24 @@
   position: relative;
 }
 
-/* Outer border (slightly transparent) */
+/* Outer border (slightly transparent) - REMOVED PADDING */
 .border-outer {
   border: 2px solid rgba(180, 220, 255, 0.5); /* Default Silver */
   border-radius: 24px;
-  padding-right: 4px;
-  padding-bottom: 4px;
+  /* padding-right: 4px; */ /* REMOVIDO */
+  /* padding-bottom: 4px; */ /* REMOVIDO */
 }
 .rank-1 .border-outer { border-color: rgba(255, 215, 0, 0.5); } /* Gold */
 .rank-3 .border-outer { border-color: rgba(205, 127, 50, 0.5); } /* Bronze */
 
-/* Main card - holds content, applies filter */
+/* Main card - holds content, applies filter - REMOVED MARGINS */
 .main-card {
   width: 200px;  /* Adjusted size */
   height: 180px; /* Adjusted size */
   border-radius: 24px;
   border: 2px solid var(--electric-border-color-rank-2); /* Default Silver */
-  margin-top: -4px;
-  margin-left: -4px;
+  /* margin-top: -4px; */  /* REMOVIDO */
+  /* margin-left: -4px; */ /* REMOVIDO */
   filter: url(#turbulent-displace);
   position: relative;
   overflow: hidden;
@@ -285,7 +285,6 @@
 .honor-section {
   text-align: center;
 }
-/* ... (rest of the styles for Honor Section, Admin Controls, Footer remain the same) ... */
 
 .honor-members-grid {
   display: flex;
