@@ -1,96 +1,84 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
-// import Stats from 'stats.js'; // REMOVIDO: Importação do stats.js
-import './Cta.css'; // Import the updated CSS
-import logoTextureUrl from "../../assets/logo/logoFE.png"; // Import the logo
+// import Stats from 'stats.js'; // REMOVIDO
+import './Cta.css';
+import logoTextureUrl from "../../assets/logo/logoFE.png"; // Importado
 
 const Cta = () => {
   const mountRef = useRef(null);
-  // const statsRef = useRef(null); // REMOVIDO: Ref para stats
+  // const statsRef = useRef(null); // REMOVIDO
 
   useEffect(() => {
     // --- Basic setup ---
     // REMOVIDO: Variável stats
-    // CORRIGIDO: Removidas variáveis não usadas (geometry, material, mesh)
-    // CORRIGIDO: ambientLight movida para fora do init
-    let camera, scene, renderer, clock, delta, ambientLight;
+    let camera, scene, renderer, clock, delta;
     let textGeo, textTexture, textMaterial, text;
     let smokeTexture, smokeMaterial, smokeGeo, smokeParticles = [];
     let light;
     let animationFrameId;
 
-    const currentMount = mountRef.current; // Capture mountRef.current
+    const currentMount = mountRef.current;
 
     function init() {
       // --- Stats Panel --- REMOVIDO
 
-      //--- Set new clock ---
       clock = new THREE.Clock();
-
-      //--- Setup render and set scene size ---
-      renderer = new THREE.WebGLRenderer({ alpha: true }); // Enable transparency
+      renderer = new THREE.WebGLRenderer({ alpha: true });
       renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
       currentMount.appendChild(renderer.domElement);
-
-      //--- Set up scene ---
       scene = new THREE.Scene();
-
-      //--- Set up camera ---
       camera = new THREE.PerspectiveCamera(75, currentMount.clientWidth / currentMount.clientHeight, 1, 10000);
       camera.position.z = 1000;
       scene.add(camera);
 
-      //--- Set up geometry (removed the spinning cube) ---
+      //--- Geometry for the logo ---
+      // AJUSTADO: Tamanho da logo reduzido
+      textGeo = new THREE.PlaneGeometry(200, 200); // <<< Reduzido de 300x300
 
-      //--- Set up geometry for the logo ---
-      textGeo = new THREE.PlaneGeometry(300, 300); // Tamanho da logo mantido
-
-      // --- Load logo texture ---
       const textureLoader = new THREE.TextureLoader();
-      textTexture = textureLoader.load(logoTextureUrl); // Use imported logo URL
+      textTexture = textureLoader.load(logoTextureUrl); //
 
       textMaterial = new THREE.MeshLambertMaterial({
-        opacity: 1,
         map: textTexture,
         transparent: true,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
+        // AJUSTADO: Blending normal para não misturar com a fumaça
+        blending: THREE.NormalBlending, // <<< Alterado de AdditiveBlending
+        depthWrite: false,
+        opacity: 1, // Garantir opacidade total
       });
       text = new THREE.Mesh(textGeo, textMaterial);
-      // AJUSTADO: Posição Z ligeiramente à frente do limite original da fumaça (900)
-      text.position.z = 901;
+      text.position.z = 901; // Mantém ligeiramente à frente da fumaça
+      // AJUSTADO: Definir renderOrder para garantir que renderize por último
+      text.renderOrder = 1; // <<< Adicionado
       scene.add(text);
 
       // --- Lighting ---
       light = new THREE.DirectionalLight(0xffffff, 0.7);
       light.position.set(-1, 0, 1);
       scene.add(light);
-      // CORRIGIDO: Inicialização de ambientLight que foi declarada fora
-      ambientLight = new THREE.AmbientLight(0x555555);
+      const ambientLight = new THREE.AmbientLight(0x555555);
       scene.add(ambientLight);
 
-
-      //--- Pull in the smoke texture and set it up ---
-      smokeTexture = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/95637/Smoke-Element.png');
+      //--- Smoke texture setup ---
+      smokeTexture = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/95637/Smoke-Element.png'); //
       smokeMaterial = new THREE.MeshLambertMaterial({
         color: 0x39FF14, // Toxic Green Color
         map: smokeTexture,
         transparent: true,
         opacity: 0.6,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false // Mantido como false para o efeito de fumaça
+        blending: THREE.AdditiveBlending, // Mantido como aditivo para o efeito de brilho da fumaça
+        depthWrite: false
       });
       smokeGeo = new THREE.PlaneGeometry(300, 300);
       smokeParticles = [];
 
-      //--- Set particle texture ---
       for (let p = 0; p < 150; p++) {
         var particle = new THREE.Mesh(smokeGeo, smokeMaterial);
-        // REVERTIDO: Posição Z original da fumaça
+        // Posição Z original da fumaça mantida
         particle.position.set(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 1000 - 100);
         particle.rotation.z = Math.random() * 360;
-
-        //--- Add particles to the scene ---
+        // RenderOrder padrão (0) para a fumaça
+        particle.renderOrder = 0; // <<< Garantir que seja menor que o da logo
         scene.add(particle);
         smokeParticles.push(particle);
       }
@@ -113,7 +101,6 @@ const Cta = () => {
     }
 
     function render() {
-      // Lógica de rotação do cubo removida
       renderer.render(scene, camera);
     }
 
@@ -125,42 +112,35 @@ const Cta = () => {
       }
     }
 
-    // --- Initialize and add resize listener ---
     init();
     window.addEventListener('resize', onWindowResize, false);
-
-    // --- Start animation ---
     animate();
 
-    // --- Cleanup function ---
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', onWindowResize);
       // REMOVIDO: Limpeza do statsRef
-      if (renderer && renderer.domElement && currentMount && currentMount.contains(renderer.domElement)) { // Added null checks
+      if (renderer.domElement && currentMount.contains(renderer.domElement)) {
         currentMount.removeChild(renderer.domElement);
       }
-      // Limpeza dos objetos Three.js
-      if (scene) { // Added null check for scene
-        smokeParticles.forEach(p => {
-          if (p.geometry) p.geometry.dispose();
-          if (p.material) {
-            if (p.material.map) p.material.map.dispose();
-            p.material.dispose();
-          }
-          scene.remove(p);
-        });
-        if (text) scene.remove(text); // Added null check
-        if (light) scene.remove(light); // Added null check
-        if (ambientLight) scene.remove(ambientLight); // ambientLight is now in scope
-      }
-      if (textGeo) textGeo.dispose();
-      if (textMaterial) {
-        if (textMaterial.map) textMaterial.map.dispose();
-        textMaterial.dispose();
-      }
-      if (smokeTexture) smokeTexture.dispose();
-      if (renderer) renderer.dispose(); // Added null check
+       smokeParticles.forEach(p => {
+         if (p.geometry) p.geometry.dispose();
+         if (p.material) {
+           if (p.material.map) p.material.map.dispose();
+           p.material.dispose();
+         }
+         scene.remove(p);
+       });
+       if (textGeo) textGeo.dispose();
+       if (textMaterial) {
+         if (textMaterial.map) textMaterial.map.dispose();
+         textMaterial.dispose();
+       }
+       if (smokeTexture) smokeTexture.dispose();
+       scene.remove(text);
+       scene.remove(light);
+       scene.remove(ambientLight);
+       renderer.dispose();
     };
   }, []);
 
