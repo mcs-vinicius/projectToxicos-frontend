@@ -70,7 +70,7 @@
     padding: 8px 0;
 }
 
-/* --- Estilização do Pódio da Temporada (MODIFICADA COM BORDAS ALINHADAS) --- */
+/* --- Estilização do Pódio da Temporada (FILTRO MOVIDO PARA card-container) --- */
 .podium-container {
     display: flex;
     justify-content: center;
@@ -79,6 +79,7 @@
     flex-wrap: wrap;
     min-height: 250px;
     margin-top: 40px;
+    position: relative; /* Needed for absolute positioned SVG */
 }
 
 /* --- REGRAS CSS PARA A MOLDURA ANIMADA (BASE) --- */
@@ -105,20 +106,22 @@
   position: relative;
 }
 
-/* SVG positioning */
+/* SVG positioning - Make sure it doesn't take up space */
 .svg-container {
   position: absolute;
   width: 0;
   height: 0;
-  pointer-events: none; /* Prevent SVG from interfering */
+  overflow: hidden;
+  pointer-events: none;
 }
 
-/* Card container - Applies gradient border */
+/* Card container - Applies gradient border and FILTER */
 .card-container {
   padding: 2px;
   border-radius: 24px;
   position: relative;
-  /* Default to rank 2 colors, will be overridden */
+  filter: url(#turbulent-displace); /* MOVED FILTER HERE */
+  /* Default to rank 2 colors */
   background: linear-gradient(
       -30deg,
       var(--gradient-color-rank-2),
@@ -138,42 +141,38 @@
   background: linear-gradient(-30deg, var(--gradient-color-rank-3), transparent, var(--gradient-color-rank-3)), linear-gradient(to bottom, var(--color-neutral-900), var(--color-neutral-900));
 }
 
-
 .inner-container {
   position: relative;
 }
 
-/* Outer border (slightly transparent) - REMOVED PADDING */
+/* Outer border (slightly transparent) - No padding needed */
 .border-outer {
   border: 2px solid rgba(180, 220, 255, 0.5); /* Default Silver */
   border-radius: 24px;
-  /* padding-right: 4px; */ /* REMOVIDO */
-  /* padding-bottom: 4px; */ /* REMOVIDO */
+  box-sizing: border-box;
 }
 .rank-1 .border-outer { border-color: rgba(255, 215, 0, 0.5); } /* Gold */
 .rank-3 .border-outer { border-color: rgba(205, 127, 50, 0.5); } /* Bronze */
 
-/* Main card - holds content, applies filter - REMOVED MARGINS */
+/* Main card - holds content - No filter, no margins needed */
 .main-card {
   width: 200px;  /* Adjusted size */
   height: 180px; /* Adjusted size */
-  border-radius: 24px;
+  border-radius: 24px; /* Should match parent radius visually */
   border: 2px solid var(--electric-border-color-rank-2); /* Default Silver */
-  /* margin-top: -4px; */  /* REMOVIDO */
-  /* margin-left: -4px; */ /* REMOVIDO */
-  filter: url(#turbulent-displace);
-  position: relative;
-  overflow: hidden;
+  position: relative; /* Keep for absolute positioning of content */
+  overflow: hidden; /* Keep */
   background-color: rgba(10, 25, 47, 0.85); /* Match section background */
-  display: flex; /* Added for centering content */
-  align-items: center; /* Added for centering content */
-  justify-content: center; /* Added for centering content */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box; /* Explicitly set */
 }
 .rank-1 .main-card { border-color: var(--electric-border-color-rank-1); height: 210px; } /* Gold + Taller */
 .rank-3 .main-card { border-color: var(--electric-border-color-rank-3); height: 160px; } /* Bronze + Shorter */
 
 
-/* Glow layers */
+/* Glow layers - Position relative to inner-container */
 .glow-layer-1, .glow-layer-2 {
   border-radius: 24px;
   width: 100%;
@@ -181,6 +180,7 @@
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   pointer-events: none;
+  box-sizing: border-box; /* Added */
 }
 .glow-layer-1 {
   border: 2px solid rgba(180, 220, 255, 0.6); /* Default Silver */
@@ -196,7 +196,7 @@
 .rank-1 .glow-layer-2 { border-color: var(--electric-light-color-rank-1); } /* Gold */
 .rank-3 .glow-layer-2 { border-color: var(--electric-light-color-rank-3); } /* Bronze */
 
-/* Overlay effects (keep generic white) */
+/* Overlay effects - Position relative to card-container */
 .overlay-1, .overlay-2 {
   position: absolute;
   width: 100%; height: 100%;
@@ -211,7 +211,7 @@
 .overlay-1 { opacity: 1; }
 .overlay-2 { opacity: 0.5; }
 
-/* Background glow */
+/* Background glow - Position relative to card-container */
 .background-glow {
   position: absolute;
   width: 100%; height: 100%;
@@ -239,6 +239,7 @@
     text-align: center;
     color: #fff; /* Default text color */
     z-index: 5; /* Ensure content is above background/overlays */
+    pointer-events: none; /* Make content non-interactive if needed */
 }
 
 /* Styles for rank, name, score inside content-container */
@@ -303,8 +304,30 @@
   box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 
+/* Re-apply gloria-profile specific styles if needed, or rely on global App.css */
+/* .gloria-profile { ... } */
+/* .gloria-profile .profile-pic-wrapper { ... } */
+/* .gloria-profile .profile-pic { ... } */
+/* .gloria-profile .profile-pic-wrapper::after { ... } */
+
+.honor-member-card .profile-pic-wrapper {
+  position: relative;
+  /* Add margin if needed */
+   margin-bottom: 10px;
+}
+
+.honor-member-card .profile-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  /* Border might come from .gloria-profile */
+  border: 2px solid #ffd700; /* Explicitly add if not using global */
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* Explicitly add if not using global */
+}
+
 .honor-member-name {
-  font-size: 1.4rem;
+  font-size: 1.4rem; /* Adjusted size */
   font-weight: bold;
   color: #ffd700;
   text-shadow: 0 0 8px #ffd700;
@@ -379,19 +402,25 @@
   text-shadow: 0 0 5px #ff00ff;
 }
 
-/* Estilos para Membros de Honra na Home */
+/* Estilos para Membros de Honra na Home - Revisado */
 .honor-member-card {
   padding: 20px;
-  min-width: 220px;
+  min-width: 220px; /* Slightly wider */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
-  /* Bordas e sombras vêm da classe global .gloria-profile */
+  gap: 10px; /* Reduced gap */
+  /* Bordas e sombras vêm da classe global .gloria-profile (if applied) */
+  /* Add specific styles if .gloria-profile is not always applied */
+   background-color: rgba(255, 215, 0, 0.1);
+   border: 1px solid #ffd700;
+   border-radius: 6px;
+   box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 
 .honor-member-card .profile-pic-wrapper {
   position: relative;
+  /* Removed margin-bottom, handled by gap */
 }
 
 .honor-member-card .profile-pic {
@@ -399,8 +428,12 @@
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  /* Bordas vêm da classe global .gloria-profile */
+  border: 2px solid #ffd700; /* Ensure border is present */
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); /* Ensure shadow is present */
 }
+
+/* Re-include crown if gloria-profile is not used globally */
+/* .honor-member-card .profile-pic-wrapper::after { ... } */
 
 .honor-member-name {
   font-size: 1.2rem;
@@ -408,6 +441,7 @@
   color: #ffd700;
   text-shadow: 0 0 8px #ffd700;
   margin: 0;
+  text-align: center; /* Ensure name is centered */
 }
 
 .season-period {
