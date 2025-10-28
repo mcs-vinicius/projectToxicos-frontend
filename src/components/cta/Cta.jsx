@@ -11,11 +11,12 @@ const Cta = () => {
   useEffect(() => {
     // --- Basic setup ---
     // REMOVIDO: Variável stats
-    let camera, scene, renderer, geometry, material, mesh, clock, delta;
+    // CORRIGIDO: Removidas variáveis não usadas (geometry, material, mesh)
+    // CORRIGIDO: ambientLight movida para fora do init
+    let camera, scene, renderer, clock, delta, ambientLight;
     let textGeo, textTexture, textMaterial, text;
     let smokeTexture, smokeMaterial, smokeGeo, smokeParticles = [];
     let light;
-    // let cubeSineDriver = 0; // Removido pois o cubo foi removido
     let animationFrameId;
 
     const currentMount = mountRef.current; // Capture mountRef.current
@@ -64,7 +65,8 @@ const Cta = () => {
       light = new THREE.DirectionalLight(0xffffff, 0.7);
       light.position.set(-1, 0, 1);
       scene.add(light);
-      const ambientLight = new THREE.AmbientLight(0x555555);
+      // CORRIGIDO: Inicialização de ambientLight que foi declarada fora
+      ambientLight = new THREE.AmbientLight(0x555555);
       scene.add(ambientLight);
 
 
@@ -135,28 +137,30 @@ const Cta = () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', onWindowResize);
       // REMOVIDO: Limpeza do statsRef
-      if (renderer.domElement && currentMount.contains(renderer.domElement)) {
+      if (renderer && renderer.domElement && currentMount && currentMount.contains(renderer.domElement)) { // Added null checks
         currentMount.removeChild(renderer.domElement);
       }
       // Limpeza dos objetos Three.js
-       smokeParticles.forEach(p => {
-         if (p.geometry) p.geometry.dispose();
-         if (p.material) {
-           if (p.material.map) p.material.map.dispose();
-           p.material.dispose();
-         }
-         scene.remove(p);
-       });
-       if (textGeo) textGeo.dispose();
-       if (textMaterial) {
-         if (textMaterial.map) textMaterial.map.dispose();
-         textMaterial.dispose();
-       }
-       if (smokeTexture) smokeTexture.dispose();
-       scene.remove(text);
-       scene.remove(light);
-       scene.remove(ambientLight);
-       renderer.dispose();
+      if (scene) { // Added null check for scene
+        smokeParticles.forEach(p => {
+          if (p.geometry) p.geometry.dispose();
+          if (p.material) {
+            if (p.material.map) p.material.map.dispose();
+            p.material.dispose();
+          }
+          scene.remove(p);
+        });
+        if (text) scene.remove(text); // Added null check
+        if (light) scene.remove(light); // Added null check
+        if (ambientLight) scene.remove(ambientLight); // ambientLight is now in scope
+      }
+      if (textGeo) textGeo.dispose();
+      if (textMaterial) {
+        if (textMaterial.map) textMaterial.map.dispose();
+        textMaterial.dispose();
+      }
+      if (smokeTexture) smokeTexture.dispose();
+      if (renderer) renderer.dispose(); // Added null check
     };
   }, []);
 
