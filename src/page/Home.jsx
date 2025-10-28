@@ -148,25 +148,24 @@ const Home = ({ userRole }) => {
               <svg className="svg-container" width="0" height="0" style={{ position: 'absolute', zIndex: -1 }}>
   <defs>
     <filter id="turbulent-displace" colorInterpolationFilters="sRGB" x="-50%" y="-50%" width="200%" height="200%">
-      {/* Reduzi numOctaves para um efeito mais 'ondulado' e menos 'granular' */}
-      <feTurbulence type="turbulence" baseFrequency="0.015" numOctaves="2" result="noise1" seed="1" />
+      {/* Pode experimentar voltar numOctaves para 3 ou mais se quiser mais detalhe no ruído */}
+      <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise1" seed="1" />
       <feOffset in="noise1" dx="0" dy="0" result="offsetNoise1">
-        {/* Animação Y contínua - move de -100 a 100 e repete */}
-        <animate attributeName="dy" values="-100; 100" dur="7s" repeatCount="indefinite" calcMode="linear" />
+        {/* Velocidade aumentada (duração menor - tente 4s) */}
+        <animate attributeName="dy" values="-150; 150" dur="4s" repeatCount="indefinite" calcMode="linear" />
       </feOffset>
 
-      {/* Usei outra seed para variar o padrão X */}
-      <feTurbulence type="turbulence" baseFrequency="0.015" numOctaves="2" result="noise2" seed="2" />
+      {/* Seed diferente e frequência levemente alterada para variar o padrão X */}
+      <feTurbulence type="turbulence" baseFrequency="0.022" numOctaves="3" result="noise2" seed="2" />
       <feOffset in="noise2" dx="0" dy="0" result="offsetNoise2">
-        {/* Animação X contínua - move de 100 a -100 e repete (duração diferente para desincronizar) */}
-        <animate attributeName="dx" values="100; -100" dur="6s" repeatCount="indefinite" calcMode="linear" />
+        {/* Velocidade aumentada (duração menor e diferente para desincronizar - tente 3.5s) */}
+        <animate attributeName="dx" values="150; -150" dur="3.5s" repeatCount="indefinite" calcMode="linear" />
       </feOffset>
 
-      {/* Manteve o blend mode */}
       <feBlend in="offsetNoise1" in2="offsetNoise2" mode="color-dodge" result="combinedNoise" />
 
-      {/* A escala controla a intensidade da distorção */}
-      <feDisplacementMap in="SourceGraphic" in2="combinedNoise" scale="30" xChannelSelector="R" yChannelSelector="B" />
+      {/* Aumentou a escala para mais "fluxo"/intensidade (tente 35 ou 40) */}
+      <feDisplacementMap in="SourceGraphic" in2="combinedNoise" scale="35" xChannelSelector="R" yChannelSelector="B" />
     </filter>
   </defs>
 </svg>
