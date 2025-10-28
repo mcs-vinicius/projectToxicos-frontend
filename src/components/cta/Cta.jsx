@@ -14,7 +14,7 @@ const Cta = () => {
     let camera, scene, renderer, clock, delta;
     let textGeo, textTexture, textMaterial, text;
     let smokeTexture, smokeMaterial, smokeGeo, smokeParticles = [];
-    let light;
+    let light, ambientLight; // <--- ambientLight declarado aqui
     let animationFrameId;
 
     const currentMount = mountRef.current;
@@ -23,6 +23,8 @@ const Cta = () => {
       // --- Stats Panel --- REMOVIDO
 
       clock = new THREE.Clock();
+      // Verifique se currentMount existe antes de acessar clientWidth/clientHeight
+      if (!currentMount) return;
       renderer = new THREE.WebGLRenderer({ alpha: true });
       renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
       currentMount.appendChild(renderer.domElement);
@@ -32,23 +34,20 @@ const Cta = () => {
       scene.add(camera);
 
       //--- Geometry for the logo ---
-      // AJUSTADO: Tamanho da logo reduzido AINDA MAIS
-      textGeo = new THREE.PlaneGeometry(150, 150); // <<< Reduzido de 200x200 para 150x150
+      textGeo = new THREE.PlaneGeometry(150, 150);
 
       const textureLoader = new THREE.TextureLoader();
-      textTexture = textureLoader.load(logoTextureUrl); //
+      textTexture = textureLoader.load(logoTextureUrl);
 
       textMaterial = new THREE.MeshLambertMaterial({
         map: textTexture,
         transparent: true,
-        // Mantido: Blending normal para não misturar com a fumaça
         blending: THREE.NormalBlending,
-        depthWrite: false, // Mantido
-        opacity: 1, // Garantir opacidade total
+        depthWrite: false,
+        opacity: 1,
       });
       text = new THREE.Mesh(textGeo, textMaterial);
-      text.position.z = 901; // Mantém ligeiramente à frente da fumaça
-      // Mantido: Definir renderOrder para garantir que renderize por último
+      text.position.z = 901;
       text.renderOrder = 1;
       scene.add(text);
 
@@ -56,11 +55,11 @@ const Cta = () => {
       light = new THREE.DirectionalLight(0xffffff, 0.7);
       light.position.set(-1, 0, 1);
       scene.add(light);
-      const ambientLight = new THREE.AmbientLight(0x555555);
+      ambientLight = new THREE.AmbientLight(0x555555); // <--- Atribuído aqui
       scene.add(ambientLight);
 
       //--- Smoke texture setup ---
-      smokeTexture = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/95637/Smoke-Element.png'); //
+      smokeTexture = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/95637/Smoke-Element.png');
       smokeMaterial = new THREE.MeshLambertMaterial({
         color: 0x39FF14, // Toxic Green Color
         map: smokeTexture,
@@ -74,10 +73,8 @@ const Cta = () => {
 
       for (let p = 0; p < 150; p++) {
         var particle = new THREE.Mesh(smokeGeo, smokeMaterial);
-        // Posição Z original da fumaça mantida
         particle.position.set(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 1000 - 100);
         particle.rotation.z = Math.random() * 360;
-        // RenderOrder padrão (0) para a fumaça
         particle.renderOrder = 0;
         scene.add(particle);
         smokeParticles.push(particle);
@@ -86,9 +83,12 @@ const Cta = () => {
 
     function animate() {
       // REMOVIDO: stats.begin()
-      delta = clock.getDelta();
+      // Verifica se o clock foi inicializado
+      if (clock) {
+        delta = clock.getDelta();
+        evolveSmoke();
+      }
       animationFrameId = requestAnimationFrame(animate);
-      evolveSmoke();
       render();
       // REMOVIDO: stats.end()
     }
@@ -96,53 +96,87 @@ const Cta = () => {
     function evolveSmoke() {
       var sp = smokeParticles.length;
       while (sp--) {
-        smokeParticles[sp].rotation.z += (delta * 0.2);
+        // Verifica se delta existe
+        if (delta !== undefined) {
+           smokeParticles[sp].rotation.z += (delta * 0.2);
+        }
       }
     }
 
     function render() {
-      renderer.render(scene, camera);
+      // Verifica se renderer e scene existem
+      if (renderer && scene && camera) {
+        renderer.render(scene, camera);
+      }
     }
 
     function onWindowResize() {
-      if (currentMount) {
+      if (currentMount && camera && renderer) {
          camera.aspect = currentMount.clientWidth / currentMount.clientHeight;
          camera.updateProjectionMatrix();
          renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
       }
     }
 
-    init();
-    window.addEventListener('resize', onWindowResize, false);
-    animate();
+    // Apenas inicialize e comece a animação se o mountRef estiver disponível
+    if (currentMount) {
+        init();
+        window.addEventListener('resize', onWindowResize, false);
+        animate();
+    }
 
+
+    // Função de Limpeza Reforçada
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', onWindowResize);
-      // REMOVIDO: Limpeza do statsRef
-      if (renderer.domElement && currentMount.contains(renderer.domElement)) {
+
+      // Dispose de geometrias, materiais e texturas
+      if (textGeo) textGeo.dispose();
+      if (textMaterial) {
+        if (textMaterial.map) textMaterial.map.dispose();
+        textMaterial.dispose();
+      }
+      if (smokeGeo) smokeGeo.dispose();
+      if (smokeMaterial) {
+        if (smokeMaterial.map) smokeMaterial.map.dispose();
+        smokeMaterial.dispose();
+      }
+      if (smokeTexture) smokeTexture.dispose();
+
+      // Remove objetos da cena
+      if (scene) {
+        if (text) scene.remove(text);
+        if (light) scene.remove(light);
+        if (ambientLight) scene.remove(ambientLight); // <--- Agora acessível
+        smokeParticles.forEach(p => scene.remove(p));
+      }
+      smokeParticles = []; // Limpa o array
+
+       // Remove o renderer do DOM se ele existir e ainda estiver montado
+       if (renderer && renderer.domElement && currentMount && currentMount.contains(renderer.domElement)) {
         currentMount.removeChild(renderer.domElement);
       }
-       smokeParticles.forEach(p => {
-         if (p.geometry) p.geometry.dispose();
-         if (p.material) {
-           if (p.material.map) p.material.map.dispose();
-           p.material.dispose();
-         }
-         scene.remove(p);
-       });
-       if (textGeo) textGeo.dispose();
-       if (textMaterial) {
-         if (textMaterial.map) textMaterial.map.dispose();
-         textMaterial.dispose();
-       }
-       if (smokeTexture) smokeTexture.dispose();
-       scene.remove(text);
-       scene.remove(light);
-       scene.remove(ambientLight);
-       renderer.dispose();
+
+      // Dispose do renderer
+      if (renderer) renderer.dispose();
+
+      // Limpa as referências principais para ajudar o GC (Garbage Collector)
+      camera = undefined;
+      scene = undefined;
+      renderer = undefined;
+      clock = undefined;
+      light = undefined;
+      ambientLight = undefined; // Limpa referência
+      text = undefined;
+      textGeo = undefined;
+      textMaterial = undefined;
+      textTexture = undefined;
+      smokeGeo = undefined;
+      smokeMaterial = undefined;
+      smokeTexture = undefined;
     };
-  }, []);
+  }, []); // Dependência vazia ainda é correta aqui
 
   return <div ref={mountRef} style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden' }} />;
 };

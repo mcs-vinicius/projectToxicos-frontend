@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../styles/HomePage.css'; // Certifique-se que este CSS está atualizado conforme a resposta anterior
+import '../styles/HomePage.css';
 import Cta from '../components/cta/Cta';
 
 const Home = ({ userRole }) => {
@@ -27,41 +27,42 @@ const Home = ({ userRole }) => {
     return new Date(date.getTime() + userTimezoneOffset).toLocaleDateString('pt-BR');
   };
 
-  const fetchHomeData = async () => {
-    setLoading(true);
-    try {
-      const [seasonsRes, contentRes, honorRes] = await Promise.all([
-        axios.get(`${import.meta.env.VITE_API_URL}/seasons`),
-        axios.get(`${import.meta.env.VITE_API_URL}/home-content`),
-        axios.get(`${import.meta.env.VITE_API_URL}/latest-honor-members`)
-      ]);
-
-      if (seasonsRes.data && seasonsRes.data.length > 0) {
-        const latestSeason = seasonsRes.data[seasonsRes.data.length - 1];
-        // Ordena por 'fase' descendente e pega os top 3
-        const sortedParticipants = [...latestSeason.participants].sort((a, b) => b.fase - a.fase);
-        setTopPlayers(sortedParticipants.slice(0, 3));
-        setMemberCount(latestSeason.participants.length);
-
-        setPodiumSeasonDates({
-          start: formatDate(latestSeason.start_date),
-          end: formatDate(latestSeason.end_date)
-        });
-      }
-
-      setHomeContent(contentRes.data);
-      setHonorInfo(honorRes.data);
-
-    } catch (error) {
-      console.error("Erro ao buscar dados para a Home:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Correção do ESLint: Mover fetchHomeData para dentro do useEffect
   useEffect(() => {
+    const fetchHomeData = async () => {
+        setLoading(true);
+        try {
+          const [seasonsRes, contentRes, honorRes] = await Promise.all([
+            axios.get(`${import.meta.env.VITE_API_URL}/seasons`),
+            axios.get(`${import.meta.env.VITE_API_URL}/home-content`),
+            axios.get(`${import.meta.env.VITE_API_URL}/latest-honor-members`)
+          ]);
+
+          if (seasonsRes.data && seasonsRes.data.length > 0) {
+            const latestSeason = seasonsRes.data[seasonsRes.data.length - 1];
+            const sortedParticipants = [...latestSeason.participants].sort((a, b) => b.fase - a.fase);
+            setTopPlayers(sortedParticipants.slice(0, 3));
+            setMemberCount(latestSeason.participants.length);
+
+            setPodiumSeasonDates({
+              start: formatDate(latestSeason.start_date),
+              end: formatDate(latestSeason.end_date)
+            });
+          }
+
+          setHomeContent(contentRes.data);
+          setHonorInfo(honorRes.data);
+
+        } catch (error) {
+          console.error("Erro ao buscar dados para a Home:", error);
+          // Adicionar tratamento de erro, se necessário
+        } finally {
+          setLoading(false);
+        }
+    };
+
     fetchHomeData();
-  }, []);
+  }, []); // Array de dependências vazio está correto agora
 
   const handleInputChange = (e) => setHomeContent(p => ({ ...p, [e.target.name]: e.target.value }));
   const handleRequirementChange = (index, value) => {
@@ -79,6 +80,25 @@ const Home = ({ userRole }) => {
     }
   };
 
+  // Função para recarregar os dados caso o botão cancelar seja clicado
+  const handleCancelEdit = () => {
+      setIsEditing(false);
+      // Re-busca os dados originais do servidor
+      const fetchOriginalData = async () => {
+          setLoading(true);
+          try {
+              const contentRes = await axios.get(`${import.meta.env.VITE_API_URL}/home-content`);
+              setHomeContent(contentRes.data);
+          } catch (error) {
+              console.error("Erro ao buscar dados originais:", error);
+          } finally {
+              setLoading(false);
+          }
+      };
+      fetchOriginalData();
+  };
+
+
   return (
     <>
       <Cta/>
@@ -89,7 +109,8 @@ const Home = ({ userRole }) => {
             {isEditing ? (
               <>
                 <button onClick={handleSaveChanges} className="btn-save">Salvar</button>
-                <button onClick={() => { setIsEditing(false); fetchHomeData(); }} className="btn-cancel">Cancelar</button>
+                {/* Usar a nova função handleCancelEdit */}
+                <button onClick={handleCancelEdit} className="btn-cancel">Cancelar</button>
               </>
             ) : (
               <button onClick={() => setIsEditing(true)} className="btn-edit-mode">Editar Página</button>
@@ -104,9 +125,10 @@ const Home = ({ userRole }) => {
                     <h3>Informações do Clã</h3>
                     {isEditing ? (
                         <div className="edit-fields">
-                            <input type="text" name="leader" value={homeContent.leader} onChange={handleInputChange} placeholder="Líder" />
-                            <input type="text" name="focus" value={homeContent.focus} onChange={handleInputChange} placeholder="Foco" />
-                            <input type="text" name="league" value={homeContent.league} onChange={handleInputChange} placeholder="Liga" />
+                            <input type="text" name="leader" value={homeContent.leader || ''} onChange={handleInputChange} placeholder="Líder" />
+                            <input type="text" name="focus" value={homeContent.focus || ''} onChange={handleInputChange} placeholder="Foco" />
+                            <input type="text" name="league" value={homeContent.league || ''} onChange={handleInputChange} placeholder="Liga" />
+                            {/* Input para Membros não é necessário, é calculado */}
                         </div>
                     ) : (
                         <ul className="info-list">
@@ -121,14 +143,15 @@ const Home = ({ userRole }) => {
                     <h3>Requisitos de Alistamento</h3>
                     {isEditing ? (
                         <div className="edit-fields">
-                            {homeContent.requirements.map((req, index) => (
-                                <input key={index} type="text" value={req} onChange={(e) => handleRequirementChange(index, e.target.value)} />
+                            {/* Garante que requirements seja um array antes de mapear */}
+                            {Array.isArray(homeContent.requirements) && homeContent.requirements.map((req, index) => (
+                                <input key={index} type="text" value={req || ''} onChange={(e) => handleRequirementChange(index, e.target.value)} />
                             ))}
-                            {/* Adicionar mais campos se necessário */}
+                            {/* Adicionar botão para adicionar novo requisito se necessário */}
                         </div>
                     ) : (
                         <ul className="requirements-list">
-                            {homeContent.requirements.map((req, index) => (
+                           {Array.isArray(homeContent.requirements) && homeContent.requirements.map((req, index) => (
                                 <li key={index}>{req}</li>
                             ))}
                         </ul>
@@ -144,45 +167,34 @@ const Home = ({ userRole }) => {
              <p style={{textAlign: 'center'}}>Carregando pódio...</p>
           ) : topPlayers.length > 0 ? (
             <>
-              {/* Definições SVG colocadas uma vez fora do loop */}
+              {/* Definições SVG */}
               <svg className="svg-container" width="0" height="0" style={{ position: 'absolute', zIndex: -1 }}>
                 <defs>
                   <filter id="turbulent-displace" colorInterpolationFilters="sRGB" x="-50%" y="-50%" width="200%" height="200%">
-                    {/* Pode experimentar voltar numOctaves para 3 ou mais se quiser mais detalhe no ruído */}
                     <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise1" seed="1" />
                     <feOffset in="noise1" dx="0" dy="0" result="offsetNoise1">
-                      {/* Velocidade aumentada (duração menor - tente 4s) */}
                       <animate attributeName="dy" values="-150; 150" dur="4s" repeatCount="indefinite" calcMode="linear" />
                     </feOffset>
-
-                    {/* Seed diferente e frequência levemente alterada para variar o padrão X */}
                     <feTurbulence type="turbulence" baseFrequency="0.022" numOctaves="3" result="noise2" seed="2" />
                     <feOffset in="noise2" dx="0" dy="0" result="offsetNoise2">
-                      {/* Velocidade aumentada (duração menor e diferente para desincronizar - tente 3.5s) */}
                       <animate attributeName="dx" values="150; -150" dur="3.5s" repeatCount="indefinite" calcMode="linear" />
                     </feOffset>
-
                     <feBlend in="offsetNoise1" in2="offsetNoise2" mode="color-dodge" result="combinedNoise" />
-
-                    {/* Aumentou a escala para mais "fluxo"/intensidade (tente 35 ou 40) */}
                     <feDisplacementMap in="SourceGraphic" in2="combinedNoise" scale="35" xChannelSelector="R" yChannelSelector="B" />
                   </filter>
                 </defs>
               </svg>
-
 
               <div className="podium-container">
                 {topPlayers.map((player, index) => {
                   const rank = index + 1;
                   return (
                     <div key={player.habby_id || index} className={`podium-wrapper rank-${rank}`}>
-                       {/* main-container pode ser opcional dependendo do seu layout geral */}
-                       {/* <main className="main-container"> */}
                          <div className="card-container">
                            <div className="inner-container">
                              <div className="border-outer">
                                <div className="main-card">
-                                 {/* O conteúdo agora está no content-container abaixo */}
+                                 {/* Conteúdo dentro de content-container */}
                                </div>
                              </div>
                              <div className="glow-layer-1"></div>
@@ -191,15 +203,12 @@ const Home = ({ userRole }) => {
                            <div className="overlay-1"></div>
                            <div className="overlay-2"></div>
                            <div className="background-glow"></div>
-
-                           {/* Conteúdo Centralizado */}
                            <div className="content-container">
                               <div className="podium-rank">{rank}º</div>
                               <div className="podium-name">{player.name}</div>
                               <div className="podium-score">Fase: {player.fase}</div>
                            </div>
                          </div>
-                       {/* </main> */}
                      </div>
                   );
                 })}
@@ -214,7 +223,6 @@ const Home = ({ userRole }) => {
         </div>
         {/* --- FIM DA SEÇÃO DO PÓDIO --- */}
 
-
         <div className="section honor-section">
             <h2 className="section-title">Membros de Honra</h2>
             {loading ? (
@@ -225,13 +233,15 @@ const Home = ({ userRole }) => {
                     {honorInfo.members.map(member => (
                     <div key={member.habby_id} className="honor-member-card gloria-profile">
                         <div className="profile-pic-wrapper">
-                        <img src={member.profile_pic_url} alt={member.name} className="profile-pic" />
+                        {/* Garante que profile_pic_url existe */}
+                        <img src={member.profile_pic_url || 'url/para/imagem/padrao.png'} alt={member.name} className="profile-pic" />
                         </div>
                         <p className="honor-member-name">{member.name}</p>
                     </div>
                     ))}
                 </div>
-                <p className="honor-period">{honorInfo.period}</p>
+                 {/* Garante que period existe */}
+                <p className="honor-period">{honorInfo.period || ''}</p>
                 </>
             ) : (
                 <p style={{textAlign: 'center'}}>Os membros de honra da temporada atual ainda não foram definidos.</p>
@@ -241,9 +251,10 @@ const Home = ({ userRole }) => {
         <div className="section">
           <h2 className="section-title">Conteúdo</h2>
           {isEditing ? (
-            <textarea name="content_section" value={homeContent.content_section} onChange={handleInputChange} className="edit-textarea"></textarea>
+            <textarea name="content_section" value={homeContent.content_section || ''} onChange={handleInputChange} className="edit-textarea"></textarea>
           ) : (
-            <p style={{textAlign: 'center', lineHeight: '1.6'}}>{homeContent.content_section}</p>
+             // Garante que content_section existe
+            <p style={{textAlign: 'center', lineHeight: '1.6'}}>{homeContent.content_section || ''}</p>
           )}
         </div>
 
