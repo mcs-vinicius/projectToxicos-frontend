@@ -1,32 +1,17 @@
 /*--- Basic reset ---*/
-
 * {
   margin: 0;
   padding: 0;
   outline: 0;
+  box-sizing: border-box; /* Good practice for layout */
 }
 
-/* Ensure container takes space */
-/* You might adjust height/width based on where Cta.jsx is used */
-/* The style is applied inline in Cta.jsx now, but you can keep general rules here if preferred */
-/*
-.cta-container {
-  width: 100%;
-  height: 400px; /* Example height */
-/* position: relative; /* Needed for absolute positioning of stats */
-/* overflow: hidden;
-}
-*/
+/* The container div (mountRef) gets its main styles inline in Cta.jsx.
+   You can add fallback styles or specific child styles here if needed. */
 
-/* If you want the canvas itself to fill the body (less common in component structure): */
-/*
-html, body {
+/* For example, ensure the canvas fills the container */
+[ref="mountRef"] > canvas {
+  display: block; /* Removes potential extra space below canvas */
   width: 100%;
   height: 100%;
-  overflow: hidden;
-  margin: 0; /* Ensure no default margin */
-/* padding: 0; /* Ensure no default padding */
-/*}
-
-/* Style for the mount div if needed */
-/* [ref=mountRef] { ... } */
+}
