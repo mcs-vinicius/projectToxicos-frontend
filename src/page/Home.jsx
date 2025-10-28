@@ -147,24 +147,22 @@ const Home = ({ userRole }) => {
               {/* Definições SVG colocadas uma vez fora do loop */}
               <svg className="svg-container" width="0" height="0" style={{ position: 'absolute', zIndex: -1 }}>
   <defs>
-    <filter id="turbulent-displace" colorInterpolationFilters="sRGB" x="-50%" y="-50%" width="200%" height="200%"> {/* Aumentei a área do filtro */}
-      <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise1" seed="1" /> {/* Octaves reduzidas para suavizar */}
+    <filter id="turbulent-displace" colorInterpolationFilters="sRGB" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise1" seed="1" />
       <feOffset in="noise1" dx="0" dy="0" result="offsetNoise1">
-        {/* Animação Y contínua para cima e para baixo */}
-        <animate attributeName="dy" values="0; 15; -15; 0" dur="8s" repeatCount="indefinite" calcMode="linear" />
+        {/* Duração reduzida para 5s para acelerar */}
+        <animate attributeName="dy" values="0; 15; -15; 0" dur="5s" repeatCount="indefinite" calcMode="linear" />
       </feOffset>
 
-      <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise2" seed="2" /> {/* Octaves reduzidas */}
+      <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise2" seed="2" />
       <feOffset in="noise2" dx="0" dy="0" result="offsetNoise2">
-        {/* Animação X contínua para esquerda e direita */}
-        <animate attributeName="dx" values="0; -15; 15; 0" dur="8s" repeatCount="indefinite" calcMode="linear" />
+        {/* Duração reduzida para 5s para acelerar */}
+        <animate attributeName="dx" values="0; -15; 15; 0" dur="5s" repeatCount="indefinite" calcMode="linear" />
       </feOffset>
 
-      {/* Combina os ruídos deslocados */}
       <feBlend in="offsetNoise1" in2="offsetNoise2" mode="color-dodge" result="combinedNoise" />
 
-      {/* Aplica o deslocamento à borda */}
-      <feDisplacementMap in="SourceGraphic" in2="combinedNoise" scale="25" xChannelSelector="R" yChannelSelector="B" /> {/* Escala ligeiramente reduzida */}
+      <feDisplacementMap in="SourceGraphic" in2="combinedNoise" scale="25" xChannelSelector="R" yChannelSelector="B" />
     </filter>
   </defs>
 </svg>
