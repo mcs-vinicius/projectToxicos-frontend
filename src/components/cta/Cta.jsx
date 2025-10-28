@@ -32,8 +32,8 @@ const Cta = () => {
       scene.add(camera);
 
       //--- Geometry for the logo ---
-      // AJUSTADO: Tamanho da logo reduzido
-      textGeo = new THREE.PlaneGeometry(200, 200); // <<< Reduzido de 300x300
+      // AJUSTADO: Tamanho da logo reduzido AINDA MAIS
+      textGeo = new THREE.PlaneGeometry(150, 150); // <<< Reduzido de 200x200 para 150x150
 
       const textureLoader = new THREE.TextureLoader();
       textTexture = textureLoader.load(logoTextureUrl); //
@@ -41,15 +41,15 @@ const Cta = () => {
       textMaterial = new THREE.MeshLambertMaterial({
         map: textTexture,
         transparent: true,
-        // AJUSTADO: Blending normal para não misturar com a fumaça
-        blending: THREE.NormalBlending, // <<< Alterado de AdditiveBlending
-        depthWrite: false,
+        // Mantido: Blending normal para não misturar com a fumaça
+        blending: THREE.NormalBlending,
+        depthWrite: false, // Mantido
         opacity: 1, // Garantir opacidade total
       });
       text = new THREE.Mesh(textGeo, textMaterial);
       text.position.z = 901; // Mantém ligeiramente à frente da fumaça
-      // AJUSTADO: Definir renderOrder para garantir que renderize por último
-      text.renderOrder = 1; // <<< Adicionado
+      // Mantido: Definir renderOrder para garantir que renderize por último
+      text.renderOrder = 1;
       scene.add(text);
 
       // --- Lighting ---
@@ -66,7 +66,7 @@ const Cta = () => {
         map: smokeTexture,
         transparent: true,
         opacity: 0.6,
-        blending: THREE.AdditiveBlending, // Mantido como aditivo para o efeito de brilho da fumaça
+        blending: THREE.AdditiveBlending,
         depthWrite: false
       });
       smokeGeo = new THREE.PlaneGeometry(300, 300);
@@ -78,7 +78,7 @@ const Cta = () => {
         particle.position.set(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 1000 - 100);
         particle.rotation.z = Math.random() * 360;
         // RenderOrder padrão (0) para a fumaça
-        particle.renderOrder = 0; // <<< Garantir que seja menor que o da logo
+        particle.renderOrder = 0;
         scene.add(particle);
         smokeParticles.push(particle);
       }
