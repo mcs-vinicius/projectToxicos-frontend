@@ -11,10 +11,10 @@ const Cta = () => {
   useEffect(() => {
     // --- Basic setup ---
     // REMOVIDO: Variável stats
-    let camera, scene, renderer, clock, delta;
+    // CORRIGIDO: Removido 'light', adicionado 'ambientLight'
+    let camera, scene, renderer, clock, delta, ambientLight;
     let textGeo, textTexture, textMaterial, text;
     let smokeTexture, smokeMaterial, smokeGeo, smokeParticles = [];
-    let light; // Luz ainda pode ser útil para a fumaça, mesmo que não afete a logo com MeshBasicMaterial
     let animationFrameId;
 
     const currentMount = mountRef.current;
@@ -37,33 +37,32 @@ const Cta = () => {
 
       const textureLoader = new THREE.TextureLoader();
       textTexture = textureLoader.load(logoTextureUrl); //
-      // Opcional: Garantir filtros padrão (geralmente bom para nitidez)
       textTexture.minFilter = THREE.LinearFilter;
       textTexture.magFilter = THREE.LinearFilter;
 
-      // AJUSTADO: Usar MeshBasicMaterial para ignorar iluminação e aumentar nitidez
-      textMaterial = new THREE.MeshBasicMaterial({ // <<< Alterado de MeshLambertMaterial
+      // Mantido: MeshBasicMaterial
+      textMaterial = new THREE.MeshBasicMaterial({
         map: textTexture,
         transparent: true,
-        blending: THREE.NormalBlending, // Mantido
-        depthWrite: false, // Mantido
-        opacity: 1, // Mantido
+        // blending: THREE.NormalBlending, // Removido (é o default)
+        depthWrite: false,
+        opacity: 1,
+        // AJUSTADO: Adicionado alphaTest para nitidez das bordas
+        alphaTest: 0.5, // <<< Adicionado
       });
       text = new THREE.Mesh(textGeo, textMaterial);
-      text.position.z = 901; // Mantém ligeiramente à frente da fumaça
-      text.renderOrder = 1; // Mantido
+      text.position.z = 901;
+      text.renderOrder = 1;
       scene.add(text);
 
-      // --- Lighting --- (Mantido para a fumaça, se necessário)
-      // light = new THREE.DirectionalLight(0xffffff, 0.7);
-      // light.position.set(-1, 0, 1);
-      // scene.add(light);
-      const ambientLight = new THREE.AmbientLight(0xCCCCCC); // Aumentar um pouco a luz ambiente pode ajudar na visibilidade geral
+      // --- Lighting ---
+      // Luz direcional removida completamente
+      ambientLight = new THREE.AmbientLight(0xCCCCCC); // Mantido um pouco mais claro
       scene.add(ambientLight);
 
       //--- Smoke texture setup ---
       smokeTexture = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/95637/Smoke-Element.png'); //
-      smokeMaterial = new THREE.MeshLambertMaterial({ // Fumaça ainda usa Lambert para reagir à luz ambiente
+      smokeMaterial = new THREE.MeshLambertMaterial({ // Fumaça ainda usa Lambert
         color: 0x39FF14, // Toxic Green Color
         map: smokeTexture,
         transparent: true,
@@ -85,12 +84,10 @@ const Cta = () => {
     }
 
     function animate() {
-      // REMOVIDO: stats.begin()
       delta = clock.getDelta();
       animationFrameId = requestAnimationFrame(animate);
       evolveSmoke();
       render();
-      // REMOVIDO: stats.end()
     }
 
     function evolveSmoke() {
@@ -116,10 +113,10 @@ const Cta = () => {
     window.addEventListener('resize', onWindowResize, false);
     animate();
 
+    // --- Cleanup function ---
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', onWindowResize);
-      // REMOVIDO: Limpeza do statsRef
       if (renderer.domElement && currentMount.contains(renderer.domElement)) {
         currentMount.removeChild(renderer.domElement);
       }
@@ -138,7 +135,8 @@ const Cta = () => {
        }
        if (smokeTexture) smokeTexture.dispose();
        scene.remove(text);
-       // scene.remove(light); // Removido se a luz direcional não for mais necessária
+       // Luz direcional já removida da cena e da declaração
+       // CORRIGIDO: Remover ambientLight da cena
        scene.remove(ambientLight);
        renderer.dispose();
     };
