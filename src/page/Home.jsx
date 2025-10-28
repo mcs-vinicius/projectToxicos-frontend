@@ -146,31 +146,28 @@ const Home = ({ userRole }) => {
             <>
               {/* Definições SVG colocadas uma vez fora do loop */}
               <svg className="svg-container" width="0" height="0" style={{ position: 'absolute', zIndex: -1 }}>
-                <defs>
-                  <filter id="turbulent-displace" colorInterpolationFilters="sRGB" x="-20%" y="-20%" width="140%" height="140%">
-                    <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise1" seed="1" />
-                    <feOffset in="noise1" dx="0" dy="0" result="offsetNoise1">
-                      <animate attributeName="dy" values="700; 0" dur="6s" repeatCount="indefinite" calcMode="linear" />
-                    </feOffset>
-                    <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise2" seed="1" />
-                    <feOffset in="noise2" dx="0" dy="0" result="offsetNoise2">
-                      <animate attributeName="dy" values="0; -700" dur="6s" repeatCount="indefinite" calcMode="linear" />
-                    </feOffset>
-                    <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise1" seed="2" />
-                    <feOffset in="noise1" dx="0" dy="0" result="offsetNoise3">
-                      <animate attributeName="dx" values="490; 0" dur="6s" repeatCount="indefinite" calcMode="linear" />
-                    </feOffset>
-                    <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise2" seed="2" />
-                    <feOffset in="noise2" dx="0" dy="0" result="offsetNoise4">
-                      <animate attributeName="dx" values="0; -490" dur="6s" repeatCount="indefinite" calcMode="linear" />
-                    </feOffset>
-                    <feComposite in="offsetNoise1" in2="offsetNoise2" result="part1" />
-                    <feComposite in="offsetNoise3" in2="offsetNoise4" result="part2" />
-                    <feBlend in="part1" in2="part2" mode="color-dodge" result="combinedNoise" />
-                    <feDisplacementMap in="SourceGraphic" in2="combinedNoise" scale="30" xChannelSelector="R" yChannelSelector="B" />
-                  </filter>
-                </defs>
-              </svg>
+  <defs>
+    <filter id="turbulent-displace" colorInterpolationFilters="sRGB" x="-50%" y="-50%" width="200%" height="200%"> {/* Aumentei a área do filtro */}
+      <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise1" seed="1" /> {/* Octaves reduzidas para suavizar */}
+      <feOffset in="noise1" dx="0" dy="0" result="offsetNoise1">
+        {/* Animação Y contínua para cima e para baixo */}
+        <animate attributeName="dy" values="0; 15; -15; 0" dur="8s" repeatCount="indefinite" calcMode="linear" />
+      </feOffset>
+
+      <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise2" seed="2" /> {/* Octaves reduzidas */}
+      <feOffset in="noise2" dx="0" dy="0" result="offsetNoise2">
+        {/* Animação X contínua para esquerda e direita */}
+        <animate attributeName="dx" values="0; -15; 15; 0" dur="8s" repeatCount="indefinite" calcMode="linear" />
+      </feOffset>
+
+      {/* Combina os ruídos deslocados */}
+      <feBlend in="offsetNoise1" in2="offsetNoise2" mode="color-dodge" result="combinedNoise" />
+
+      {/* Aplica o deslocamento à borda */}
+      <feDisplacementMap in="SourceGraphic" in2="combinedNoise" scale="25" xChannelSelector="R" yChannelSelector="B" /> {/* Escala ligeiramente reduzida */}
+    </filter>
+  </defs>
+</svg>
 
               <div className="podium-container">
                 {topPlayers.map((player, index) => {
