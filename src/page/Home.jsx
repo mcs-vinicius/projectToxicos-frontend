@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../styles/HomePage.css'; 
+import '../styles/HomePage.css';
 import Cta from '../components/cta/Cta';
 
 const Home = ({ userRole }) => {
@@ -8,7 +8,7 @@ const Home = ({ userRole }) => {
   const [memberCount, setMemberCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  
+
   const [podiumSeasonDates, setPodiumSeasonDates] = useState({ start: '', end: '' });
 
   const [homeContent, setHomeContent] = useState({
@@ -40,13 +40,13 @@ const Home = ({ userRole }) => {
         const latestSeason = seasonsRes.data[seasonsRes.data.length - 1];
         setTopPlayers([...latestSeason.participants].sort((a, b) => b.fase - a.fase).slice(0, 3));
         setMemberCount(latestSeason.participants.length);
-        
+
         setPodiumSeasonDates({
           start: formatDate(latestSeason.start_date),
           end: formatDate(latestSeason.end_date)
         });
       }
-      
+
       setHomeContent(contentRes.data);
       setHonorInfo(honorRes.data);
 
@@ -60,7 +60,7 @@ const Home = ({ userRole }) => {
   useEffect(() => {
     fetchHomeData();
   }, []);
-  
+
   const handleInputChange = (e) => setHomeContent(p => ({ ...p, [e.target.name]: e.target.value }));
   const handleRequirementChange = (index, value) => {
     const newRequirements = [...homeContent.requirements];
@@ -81,7 +81,7 @@ const Home = ({ userRole }) => {
     <>
       <Cta/>
       <div className="home-container">
-        
+
         {userRole === 'admin' && (
           <div className="admin-controls">
             {isEditing ? (
@@ -141,13 +141,72 @@ const Home = ({ userRole }) => {
           ) : topPlayers.length > 0 ? (
             <>
               <div className="podium-container">
-                {topPlayers.map((player, index) => (
-                  <div key={player.habby_id || index} className={`podium-card rank-${index + 1}`}>
-                    <div className="podium-rank">{index + 1}º</div>
-                    <div className="podium-name">{player.name}</div>
-                    <div className="podium-score">Fase: {player.fase}</div>
-                  </div>
-                ))}
+                {topPlayers.map((player, index) => {
+                  const rank = index + 1;
+                  if (rank === 1) {
+                    // New structure for Rank 1
+                    return (
+                      <div key={player.habby_id || index} className="rank-1-wrapper">
+                        <main className="main-container">
+                          <svg className="svg-container">
+                            <defs>
+                              <filter id="turbulent-displace" colorInterpolationFilters="sRGB" x="-20%" y="-20%" width="140%" height="140%">
+                                <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise1" seed="1" />
+                                <feOffset in="noise1" dx="0" dy="0" result="offsetNoise1">
+                                  <animate attributeName="dy" values="700; 0" dur="6s" repeatCount="indefinite" calcMode="linear" />
+                                </feOffset>
+                                <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise2" seed="1" />
+                                <feOffset in="noise2" dx="0" dy="0" result="offsetNoise2">
+                                  <animate attributeName="dy" values="0; -700" dur="6s" repeatCount="indefinite" calcMode="linear" />
+                                </feOffset>
+                                <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise1" seed="2" />
+                                <feOffset in="noise1" dx="0" dy="0" result="offsetNoise3">
+                                  <animate attributeName="dx" values="490; 0" dur="6s" repeatCount="indefinite" calcMode="linear" />
+                                </feOffset>
+                                <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="10" result="noise2" seed="2" />
+                                <feOffset in="noise2" dx="0" dy="0" result="offsetNoise4">
+                                  <animate attributeName="dx" values="0; -490" dur="6s" repeatCount="indefinite" calcMode="linear" />
+                                </feOffset>
+                                <feComposite in="offsetNoise1" in2="offsetNoise2" result="part1" />
+                                <feComposite in="offsetNoise3" in2="offsetNoise4" result="part2" />
+                                <feBlend in="part1" in2="part2" mode="color-dodge" result="combinedNoise" />
+                                <feDisplacementMap in="SourceGraphic" in2="combinedNoise" scale="30" xChannelSelector="R" yChannelSelector="B" />
+                              </filter>
+                            </defs>
+                          </svg>
+                          <div className="card-container">
+                            <div className="inner-container">
+                              <div className="border-outer">
+                                <div className="main-card">
+                                  {/* Content inside the first place card */}
+                                  <div className="podium-content">
+                                     <div className="podium-rank">{rank}º</div>
+                                     <div className="podium-name">{player.name}</div>
+                                     <div className="podium-score">Fase: {player.fase}</div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="glow-layer-1"></div>
+                              <div className="glow-layer-2"></div>
+                            </div>
+                            <div className="overlay-1"></div>
+                            <div className="overlay-2"></div>
+                            <div className="background-glow"></div>
+                          </div>
+                        </main>
+                      </div>
+                    );
+                  } else {
+                    // Existing structure for Rank 2 and 3
+                    return (
+                      <div key={player.habby_id || index} className={`podium-card rank-${rank}`}>
+                        <div className="podium-rank">{rank}º</div>
+                        <div className="podium-name">{player.name}</div>
+                        <div className="podium-score">Fase: {player.fase}</div>
+                      </div>
+                    );
+                  }
+                })}
               </div>
               <p className="season-period">
                 Temporada de {podiumSeasonDates.start} até {podiumSeasonDates.end}
@@ -157,7 +216,7 @@ const Home = ({ userRole }) => {
             <p style={{textAlign: 'center'}}>O pódio da temporada ainda não foi definido.</p>
           )}
         </div>
-     
+
         <div className="section honor-section">
             <h2 className="section-title">Membros de Honra</h2>
             {loading ? (
