@@ -146,29 +146,30 @@ const Home = ({ userRole }) => {
             <>
               {/* Definições SVG colocadas uma vez fora do loop */}
               <svg className="svg-container" width="0" height="0" style={{ position: 'absolute', zIndex: -1 }}>
-  <defs>
-    <filter id="turbulent-displace" colorInterpolationFilters="sRGB" x="-50%" y="-50%" width="200%" height="200%">
-      {/* Pode experimentar voltar numOctaves para 3 ou mais se quiser mais detalhe no ruído */}
-      <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise1" seed="1" />
-      <feOffset in="noise1" dx="0" dy="0" result="offsetNoise1">
-        {/* Velocidade aumentada (duração menor - tente 4s) */}
-        <animate attributeName="dy" values="-150; 150" dur="4s" repeatCount="indefinite" calcMode="linear" />
-      </feOffset>
+                <defs>
+                  <filter id="turbulent-displace" colorInterpolationFilters="sRGB" x="-50%" y="-50%" width="200%" height="200%">
+                    {/* Pode experimentar voltar numOctaves para 3 ou mais se quiser mais detalhe no ruído */}
+                    <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise1" seed="1" />
+                    <feOffset in="noise1" dx="0" dy="0" result="offsetNoise1">
+                      {/* Velocidade aumentada (duração menor - tente 4s) */}
+                      <animate attributeName="dy" values="-150; 150" dur="4s" repeatCount="indefinite" calcMode="linear" />
+                    </feOffset>
 
-      {/* Seed diferente e frequência levemente alterada para variar o padrão X */}
-      <feTurbulence type="turbulence" baseFrequency="0.022" numOctaves="3" result="noise2" seed="2" />
-      <feOffset in="noise2" dx="0" dy="0" result="offsetNoise2">
-        {/* Velocidade aumentada (duração menor e diferente para desincronizar - tente 3.5s) */}
-        <animate attributeName="dx" values="150; -150" dur="3.5s" repeatCount="indefinite" calcMode="linear" />
-      </feOffset>
+                    {/* Seed diferente e frequência levemente alterada para variar o padrão X */}
+                    <feTurbulence type="turbulence" baseFrequency="0.022" numOctaves="3" result="noise2" seed="2" />
+                    <feOffset in="noise2" dx="0" dy="0" result="offsetNoise2">
+                      {/* Velocidade aumentada (duração menor e diferente para desincronizar - tente 3.5s) */}
+                      <animate attributeName="dx" values="150; -150" dur="3.5s" repeatCount="indefinite" calcMode="linear" />
+                    </feOffset>
 
-      <feBlend in="offsetNoise1" in2="offsetNoise2" mode="color-dodge" result="combinedNoise" />
+                    <feBlend in="offsetNoise1" in2="offsetNoise2" mode="color-dodge" result="combinedNoise" />
 
-      {/* Aumentou a escala para mais "fluxo"/intensidade (tente 35 ou 40) */}
-      <feDisplacementMap in="SourceGraphic" in2="combinedNoise" scale="35" xChannelSelector="R" yChannelSelector="B" />
-    </filter>
-  </defs>
-</svg>
+                    {/* Aumentou a escala para mais "fluxo"/intensidade (tente 35 ou 40) */}
+                    <feDisplacementMap in="SourceGraphic" in2="combinedNoise" scale="35" xChannelSelector="R" yChannelSelector="B" />
+                  </filter>
+                </defs>
+              </svg>
+
 
               <div className="podium-container">
                 {topPlayers.map((player, index) => {
