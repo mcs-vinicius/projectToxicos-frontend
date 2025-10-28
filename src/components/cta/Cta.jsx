@@ -32,31 +32,30 @@ const Cta = () => {
       scene.add(camera);
 
       //--- Geometry for the logo ---
-      // Mantido o tamanho reduzido
-      textGeo = new THREE.PlaneGeometry(150, 150);
+      // AJUSTADO: Tamanho da logo ligeiramente aumentado novamente
+      textGeo = new THREE.PlaneGeometry(180, 180); // <<< Aumentado de 150x150 para 180x180
 
       const textureLoader = new THREE.TextureLoader();
       textTexture = textureLoader.load(logoTextureUrl); //
       textTexture.minFilter = THREE.LinearFilter;
       textTexture.magFilter = THREE.LinearFilter;
+      // textTexture.encoding = THREE.sRGBEncoding; // Pode descomentar se as cores parecerem erradas
 
       // Mantido: MeshBasicMaterial
       textMaterial = new THREE.MeshBasicMaterial({
         map: textTexture,
-        transparent: true,
-        // blending: THREE.NormalBlending, // Removido (é o default)
-        depthWrite: false,
+        transparent: true, // Necessário para a transparência do PNG
+        // blending: THREE.NormalBlending, // Default para MeshBasicMaterial
+        depthWrite: false, // Mantido para evitar problemas de ordenação com a fumaça
         opacity: 1,
-        // AJUSTADO: Adicionado alphaTest para nitidez das bordas
-        alphaTest: 0.5, // <<< Adicionado
+        // alphaTest: 0.5, // <<< REMOVIDO alphaTest
       });
       text = new THREE.Mesh(textGeo, textMaterial);
-      text.position.z = 901;
-      text.renderOrder = 1;
+      text.position.z = 901; // Mantém ligeiramente à frente da fumaça
+      text.renderOrder = 1; // Mantido
       scene.add(text);
 
       // --- Lighting ---
-      // Luz direcional removida completamente
       ambientLight = new THREE.AmbientLight(0xCCCCCC); // Mantido um pouco mais claro
       scene.add(ambientLight);
 
@@ -135,8 +134,6 @@ const Cta = () => {
        }
        if (smokeTexture) smokeTexture.dispose();
        scene.remove(text);
-       // Luz direcional já removida da cena e da declaração
-       // CORRIGIDO: Remover ambientLight da cena
        scene.remove(ambientLight);
        renderer.dispose();
     };
