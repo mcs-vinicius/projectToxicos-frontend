@@ -88,8 +88,7 @@
   transform: translateY(-20px); /* Leve elevação */
 }
 
-/* REMOVIDO: Regra vazia .rank-1 {} foi removida */
-
+/* Estilos de texto específicos para rank 1 */
 .rank-1 .podium-rank { color: #ffd700; }
 .rank-1 .podium-name { color: #fff; }
 
@@ -106,7 +105,7 @@
     color: #fff; /* Cor padrão do texto dentro do card */
 }
 
-/* Estilos originais para .podium-rank, .podium-name, .podium-score DENTRO de .podium-content */
+/* Estilos para rank, nome e score DENTRO de .podium-content (Rank 1) */
 .podium-content .podium-rank {
     font-size: 2.5rem;
     font-weight: 700;
@@ -131,7 +130,7 @@
 }
 
 
-/* Ajustes nos ranks 2 e 3 */
+/* Ajustes nos ranks 2 e 3 (Mantendo os estilos de card) */
 .rank-2 {
     order: 1; /* Segundo lugar à esquerda */
     height: 150px;
@@ -148,6 +147,7 @@
     border: 1px solid;
     position: relative;
 }
+/* Estilos internos do rank 2 */
 .rank-2 .podium-rank { color: #c0c0c0; font-size: 2.5rem; font-weight: 700; text-shadow: 0 0 10px #c0c0c0; margin-bottom: 10px; }
 .rank-2 .podium-name { color: #f0f0f0; font-size: 1.3rem; font-weight: 500; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rank-2 .podium-score { font-size: 1rem; opacity: 0.8; }
@@ -169,6 +169,7 @@
     border: 1px solid;
     position: relative;
 }
+/* Estilos internos do rank 3 */
 .rank-3 .podium-rank { color: #cd7f32; font-size: 2.5rem; font-weight: 700; text-shadow: 0 0 10px #cd7f32; margin-bottom: 10px; }
 .rank-3 .podium-name { color: #e0e0e0; font-size: 1.3rem; font-weight: 500; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rank-3 .podium-score { font-size: 1rem; opacity: 0.8; }
@@ -272,8 +273,7 @@
   text-shadow: 0 0 5px #ff00ff;
 }
 
-/* Adicione este código ao seu HomePage.css */
-
+/* Estilos para Membros de Honra na Home */
 .honor-member-card {
   padding: 20px;
   min-width: 220px;
@@ -281,21 +281,19 @@
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  /* A estilização da borda e sombra virá da classe global .gloria-profile */
+  /* Bordas e sombras vêm da classe global .gloria-profile */
 }
 
-/* Wrapper da foto para posicionar a coroa */
 .honor-member-card .profile-pic-wrapper {
   position: relative;
 }
 
-/* Estilo para a foto de perfil */
 .honor-member-card .profile-pic {
   width: 80px;
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  /* A estilização da borda virá da classe global .gloria-profile */
+  /* Bordas vêm da classe global .gloria-profile */
 }
 
 .honor-member-name {
@@ -308,15 +306,13 @@
 
 .season-period {
   text-align: center;
-  margin-top: 25px; /* Espaçamento acima da data */
+  margin-top: 25px;
   font-size: 1rem;
   color: rgba(224, 251, 252, 0.7);
   font-weight: 500;
 }
 
-/* --- NOVAS REGRAS CSS ADICIONADAS ABAIXO --- */
-
-/* Reset and base styles */
+/* --- REGRAS CSS PARA A MOLDURA ANIMADA (RANK 1) --- */
 
 /* CSS Variables */
 :root {
@@ -339,7 +335,7 @@
 /* SVG positioning */
 .svg-container {
   position: absolute;
-  width: 0; /* Oculta o SVG, apenas as definições são usadas */
+  width: 0;
   height: 0;
 }
 
@@ -375,10 +371,10 @@
 }
 
 .main-card {
-  /* --- AJUSTE DE TAMANHO AQUI --- */
+  /* --- AJUSTE DE TAMANHO --- */
   width: 200px;
   height: 180px;
-  /* ------------------------------- */
+  /* -------------------------- */
   border-radius: 24px;
   border: 2px solid var(--electric-border-color);
   margin-top: -4px;
