@@ -5,26 +5,41 @@ import { FaTrash } from "react-icons/fa"; // Importando o ícone
 
 // Helper para construir o URL da imagem dinamicamente, compatível com o Vite
 const getTierImageUrl = (emblem) => {
-  return new URL(`../../assets/tier/${emblem}.png`, import.meta.url).href;
+  // Garante que emblem seja uma string válida para URL
+  const validEmblem = String(emblem || '1'); // Usa '1' como fallback
+  try {
+    return new URL(`../../assets/tier/${validEmblem}.png`, import.meta.url).href;
+  } catch (error) {
+    console.error(`Erro ao criar URL para emblema: ${validEmblem}`, error);
+    // Retorna um fallback ou imagem de erro se necessário
+    return new URL(`../../assets/tier/1.png`, import.meta.url).href;
+  }
 };
 
 const ResultsPage = ({ currentUser }) => {
   const [seasons, setSeasons] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true); // Adicionado estado de loading
 
   async function fetchSeasons() {
+    setLoading(true); // Inicia o loading
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/seasons`
       );
       const data = response.data;
-      setSeasons(data);
+      // Ordena as temporadas pela data de início (ou ID, se preferir)
+      const sortedData = data.sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
+      setSeasons(sortedData);
 
-      if (data.length > 0) {
-        setCurrentPage(data.length);
+      if (sortedData.length > 0) {
+        // Define a página atual como a última temporada
+        setCurrentPage(sortedData.length);
       }
     } catch (error) {
       console.error("Erro ao buscar temporadas:", error);
+    } finally {
+        setLoading(false); // Finaliza o loading
     }
   }
 
@@ -34,6 +49,7 @@ const ResultsPage = ({ currentUser }) => {
 
   // Lógica para deletar a temporada
   const handleDeleteSeason = async (seasonId) => {
+    // A confirmação agora usa o número correto da temporada
     if (
       window.confirm(
         `Tem certeza que deseja excluir a Temporada ${currentPage}? Esta ação não pode ser desfeita.`
@@ -56,8 +72,10 @@ const ResultsPage = ({ currentUser }) => {
   };
 
   const totalPages = seasons.length;
+  // Acessa a temporada correta com base no currentPage (ajustado para índice 0)
   const season = seasons[currentPage - 1];
 
+  // Função getRankingData permanece a mesma
   const getRankingData = (participants) => {
     const sortedByFase = [...participants].sort((a, b) => b.fase - a.fase);
     const top30Fase = sortedByFase.slice(0, 30);
@@ -81,15 +99,18 @@ const ResultsPage = ({ currentUser }) => {
     };
   };
 
+  // Calcula os dados de ranking apenas se a temporada existir
   const rankingData = season ? getRankingData(season.participants) : null;
 
+  // Função calculateEvolution permanece a mesma
   const calculateEvolution = (participantName, currentSeasonIndex) => {
-    if (currentSeasonIndex <= 0 || seasons.length <= 1) {
-      return "-";
+    if (currentSeasonIndex < 0 || seasons.length <= 1) { // Checa se índice é válido
+        return "-";
     }
 
     const currentSeason = seasons[currentSeasonIndex];
-    const previousSeason = seasons[currentSeasonIndex - 1];
+    // Garante que a temporada anterior exista
+    const previousSeason = currentSeasonIndex > 0 ? seasons[currentSeasonIndex - 1] : null;
 
     if (!currentSeason || !previousSeason) return "-";
 
@@ -102,10 +123,11 @@ const ResultsPage = ({ currentUser }) => {
 
     if (currentParticipant && previousParticipant) {
       const evolution = currentParticipant.fase - previousParticipant.fase;
-      return evolution;
+      return evolution; // Retorna o número diretamente
     }
-    return "-";
+    return "-"; // Retorna "-" se não encontrar em ambas as temporadas
   };
+
 
   const formatDateBR = (dateString) => {
     if (!dateString) return "Data não definida";
@@ -113,10 +135,19 @@ const ResultsPage = ({ currentUser }) => {
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
-      timeZone: "UTC",
+      timeZone: "UTC", // Importante para evitar problemas de fuso horário
     };
-    return new Date(dateString).toLocaleDateString("pt-BR", options);
+    try {
+        const date = new Date(dateString);
+        // Adiciona um dia para corrigir potencial problema de fuso no backend/DB
+        // date.setUTCDate(date.getUTCDate() + 1);
+        return date.toLocaleDateString("pt-BR", options);
+    } catch (e) {
+        console.error("Erro ao formatar data:", dateString, e);
+        return "Data inválida";
+    }
   };
+
 
   const getTier = (fase) => {
     if (fase >= 0 && fase <= 500) return { name: "Coimbra", emblem: "1" };
@@ -133,33 +164,40 @@ const ResultsPage = ({ currentUser }) => {
     if (fase >= 801 && fase <= 899) return { name: "Burguês Safado", emblem: "12" };
     if (fase >= 900 && fase <= 999) return { name: "Aristocrata", emblem: "13" };
     if (fase >= 1000 && fase <= 1500) return { name: "Nobreza", emblem: "14" };
-    if (fase >= 1500) return { name: "Baleia", emblem: "15" };
-    return { name: "", emblem: "1" }; // Retorna um emblema padrão caso não encontre
+    if (fase > 1500) return { name: "Baleia", emblem: "15" }; // Corrigido para > 1500
+    return { name: "Coimbra", emblem: "1" }; // Retorna Coimbra como padrão
   };
 
-  const renderEvolution = (participantName) => {
-    const evolution = calculateEvolution(participantName, currentPage - 1);
+   const renderEvolution = (participantName, currentSeasonIndex) => { // Pass index
+    const evolution = calculateEvolution(participantName, currentSeasonIndex); // Use index
     const isNumeric = typeof evolution === "number";
-
     let evolutionClass = "evolution-neutral";
     if (isNumeric) {
       if (evolution > 0) evolutionClass = "evolution-positive";
       if (evolution < 0) evolutionClass = "evolution-negative";
     }
+    // Mostra '–' para evolução zero
+    const evolutionText = isNumeric && evolution > 0 ? `+${evolution}` : (isNumeric && evolution === 0 ? '–' : evolution);
 
-    const evolutionText =
-      isNumeric && evolution > 0 ? `+${evolution}` : evolution;
-
-    return <td className={evolutionClass}>{evolutionText}</td>;
+    // Retorna o TD completo com data-label
+    return <td data-label="Evolução" className={evolutionClass}>{evolutionText}</td>;
   };
+
+
+  // Verifica o estado de loading antes de tentar renderizar
+  if (loading) {
+      return <div className="container"><p style={{ textAlign: 'center', fontSize: '1.5rem', color: 'var(--glow-green)' }}>Carregando dados das temporadas...</p></div>;
+  }
 
   return (
     <div className="container">
       <h1 className="title">Expedição Lunar</h1>
+      {/* Verifica se existe season E rankingData antes de renderizar */}
       {season && rankingData ? (
         <>
           <div className="season-info-container">
-            <div className="season-info">
+             <div className="season-info">
+              {/* Usa currentPage para mostrar o número correto da temporada */}
               Temporada {currentPage} - {formatDateBR(season.start_date)} até{" "}
               {formatDateBR(season.end_date)}
             </div>
@@ -175,49 +213,31 @@ const ResultsPage = ({ currentUser }) => {
           </div>
 
           <div className="tables-container">
+            {/* Tabela Rank de Acesso */}
             <div className="table-wrapper">
               <div className="table-title">Rank de Acesso</div>
               <table>
                 <thead>
                   <tr>
-                    <th>Posição</th>
-                    <th>Nome</th>
-                    <th>Tier</th>
-                    <th>Fase de Acesso</th>
-                    <th>Evolução</th>
+                    {/* Adicionado data-label aos TH */}
+                    <th data-label="Posição">Posição</th>
+                    <th data-label="Nome">Nome</th>
+                    <th data-label="Tier">Tier</th>
+                    <th data-label="Fase de Acesso">Fase</th>
+                    <th data-label="Evolução">Evolução</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {rankingData.top30Fase.map((p, i) => {
+                  {/* Combina top 30 e restante para mapear uma vez */}
+                  {[...rankingData.top30Fase, ...rankingData.remainingFase].map((p, i) => {
                     const tier = getTier(p.fase);
+                    const isInactive = i >= 30; // Verifica se é inativo
                     return (
-                      <tr key={p.id || i}>
+                      <tr key={p.id || `fase-${i}`} className={isInactive ? 'inactive-participant' : ''}>
+                        {/* Adicionado data-label aos TD */}
                         <td data-label="Posição">{i + 1}º</td>
-                        <td data-label="Nome" className="leftlabel">
-                          {p.name}
-                        </td>
-                        <td data-label="Tier" className="emblem-cell">
-                          <img
-                            src={getTierImageUrl(tier.emblem)}
-                            alt={tier.name}
-                            className="tier-emblem"
-                          />
-                          <span>{tier.name}</span>
-                        </td>
-                        <td data-label="Fase de Acesso">{p.fase}</td>
-                        {renderEvolution(p.name)}
-                      </tr>
-                    );
-                  })}
-                  {rankingData.remainingFase.map((p, i) => {
-                    const tier = getTier(p.fase);
-                    return (
-                      <tr key={p.id || i} className="inactive-participant">
-                        <td data-label="Posição">{30 + i + 1}º</td>
-                        <td className="leftlabel" data-label="Nome">
-                          {p.name}
-                        </td>
-                        <td data-label="Tier" className="emblem-cell">
+                        <td data-label="Nome">{p.name}</td>
+                        <td data-label="Tier" className="emblem-cell-jsx"> {/* Classe diferente */}
                           <img
                             src={getTierImageUrl(tier.emblem)}
                             alt={tier.name}
@@ -226,17 +246,19 @@ const ResultsPage = ({ currentUser }) => {
                           <span>{tier.name}</span>
                         </td>
                         <td data-label="Fase">{p.fase}</td>
-                        {renderEvolution(p.name)}
+                        {/* Passa o índice atual da temporada (currentPage - 1) */}
+                        {renderEvolution(p.name, currentPage - 1)}
                       </tr>
                     );
                   })}
                 </tbody>
-                <tfoot className="lvTotal">
+                <tfoot>
                   <tr className="lvAA">
-                    <td className="lvtt" colSpan="3">
+                    {/* Ajustado colspan */}
+                    <td className="lvtt" colSpan="4">
                       Total (Top 30)
                     </td>
-                    <td className="lvtt" colSpan="2">
+                    <td className="lvtt" colSpan="1">
                       <span className="txtcenter">
                         {rankingData.sumFase.toLocaleString("pt-BR")}
                       </span>
@@ -246,53 +268,44 @@ const ResultsPage = ({ currentUser }) => {
               </table>
             </div>
 
+            {/* Tabela Expedição Lunar */}
             <div className="table-wrapper">
               <div className="table-title">Expedição Lunar</div>
               <table>
                 <thead>
                   <tr>
-                    <th>Posição</th>
-                    <th>Nome</th>
-                    <th>1ª Rodada</th>
-                    <th>2ª Rodada</th>
-                    <th>3ª Rodada</th>
-                    <th>Total</th>
+                    {/* Adicionado data-label aos TH */}
+                    <th data-label="Posição">Posição</th>
+                    <th data-label="Nome">Nome</th>
+                    <th data-label="1ª Rodada">1ª Rodada</th>
+                    <th data-label="2ª Rodada">2ª Rodada</th>
+                    <th data-label="3ª Rodada">3ª Rodada</th>
+                    <th data-label="Total">Total</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* Top 30 Ativos */}
-                  {rankingData.top30Total.map((p, i) => (
-                    <tr key={p.id || i}>
-                      <td data-label="Posição">{i + 1}º</td>
-                      <td data-label="Nome" className="leftlabel">
-                        {p.name}
-                      </td>
-                      <td data-label="1ª Rodada">{p.r1}</td>
-                      <td data-label="2ª Rodada">{p.r2}</td>
-                      <td data-label="3ª Rodada">{p.r3}</td>
-                      <td data-label="Total">{p.total}</td>
-                    </tr>
-                  ))}
-                  {/* Restante Inativo (com pontuação) */}
-                  {rankingData.remainingTotal.map((p, i) => (
-                    <tr key={p.id || i} className="inactive-participant">
-                      <td data-label="Posição">{30 + i + 1}º</td>
-                      <td data-label="Nome" className="leftlabel">
-                        {p.name}
-                      </td>
-                      <td data-label="1ª Rodada">{p.r1}</td>
-                      <td data-label="2ª Rodada">{p.r2}</td>
-                      <td data-label="3ª Rodada">{p.r3}</td>
-                      <td data-label="Total">{p.total}</td>
-                    </tr>
-                  ))}
+                  {[...rankingData.top30Total, ...rankingData.remainingTotal].map((p, i) => {
+                     const isInactive = i >= 30;
+                     return (
+                      <tr key={p.id || `total-${i}`} className={isInactive ? 'inactive-participant' : ''}>
+                        {/* Adicionado data-label aos TD */}
+                        <td data-label="Posição">{i + 1}º</td>
+                        <td data-label="Nome">{p.name}</td>
+                        <td data-label="1ª Rodada">{p.r1}</td>
+                        <td data-label="2ª Rodada">{p.r2}</td>
+                        <td data-label="3ª Rodada">{p.r3}</td>
+                        <td data-label="Total">{p.total}</td>
+                      </tr>
+                     );
+                  })}
                 </tbody>
-                <tfoot className="lvTotal">
+                 <tfoot>
                   <tr className="lvAA">
+                    {/* Ajustado colspan */}
                     <td className="lvtt" colSpan="5">
                       Total (Top 30)
                     </td>
-                    <td className="lvtt">
+                    <td className="lvtt" colSpan="1">
                       {rankingData.sumTotal.toLocaleString("pt-BR")}
                     </td>
                   </tr>
@@ -304,20 +317,26 @@ const ResultsPage = ({ currentUser }) => {
           <div className="pagination">
             <button
               onClick={() => setCurrentPage(currentPage - 1)}
-              disabled={currentPage === 1}
+              disabled={currentPage <= 1} // Corrigido para <= 1
             >
               &lt; Anterior
             </button>
+            <span style={{ alignSelf: 'center', color: 'var(--glow-green)' }}>
+                Pág {currentPage} de {totalPages}
+            </span> {/* Indicador de página */}
             <button
               onClick={() => setCurrentPage(currentPage + 1)}
-              disabled={currentPage === totalPages}
+              disabled={currentPage >= totalPages} // Corrigido para >= totalPages
             >
               Próximo &gt;
             </button>
           </div>
         </>
       ) : (
-        <p>Nenhuma temporada encontrada. Verificando dados...</p>
+        // Mensagem se não houver temporadas ou dados
+        <p style={{ textAlign: 'center', fontSize: '1.2rem', color: '#ffc107' }}>
+            Nenhuma temporada encontrada ou dados inválidos. Verifique o console ou adicione uma temporada.
+        </p>
       )}
     </div>
   );

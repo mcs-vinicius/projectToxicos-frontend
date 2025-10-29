@@ -4,32 +4,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&display=swap");
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
-
 @keyframes scanline {
-  0% {
-    transform: translateY(-10%);
-  }
-  100% {
-    transform: translateY(110%);
-  }
+  0% { transform: translateY(-10%); }
+  100% { transform: translateY(110%); }
 }
 
-/* --- Estilos Gerais e Tema Holo (Modificado para Verde-Tóxico) --- */
 /* Estilos do body agora estão principalmente no global.css */
 
 .container {
   max-width: 1200px;
-  /* top: 120px; Removido, margem superior será usada */
-  margin: 80px auto 20px auto; /* Adiciona margem superior para compensar navbar fixa */
+  margin: 80px auto 20px auto;
   padding: 30px;
   background-color: rgba(10, 25, 47, 0.8);
   border: 1px solid var(--glow-green);
@@ -44,352 +31,188 @@
 /* --- Cantoneiras Decorativas (verde) --- */
 .container::before,
 .container::after {
-  content: "";
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  border-color: var(--glow-green);
-  border-style: solid;
-  z-index: 2;
+  content: ""; position: absolute; width: 25px; height: 25px;
+  border-color: var(--glow-green); border-style: solid; z-index: 2;
 }
-.container::before {
-  top: -5px;
-  left: -5px;
-  border-width: 2px 0 0 2px;
-}
-.container::after {
-  bottom: -5px;
-  right: -5px;
-  border-width: 0 2px 2px 0;
-}
+.container::before { top: -5px; left: -5px; border-width: 2px 0 0 2px; }
+.container::after { bottom: -5px; right: -5px; border-width: 0 2px 2px 0; }
 
 /* --- Tipografia e Títulos (verde) --- */
 .title {
-  text-align: center;
-  font-size: 3rem;
-  font-weight: 700;
-  color: #ffffff;
-  text-transform: uppercase;
-  letter-spacing: 5px;
+  text-align: center; font-size: 3rem; font-weight: 700; color: #ffffff;
+  text-transform: uppercase; letter-spacing: 5px; margin-bottom: 20px;
   text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--glow-green), 0 0 30px var(--glow-green);
-  margin-bottom: 20px;
 }
 
-/* Container para info da temporada e botão deletar */
+/* Info da temporada e botão deletar */
 .season-info-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 40px;
-  flex-wrap: wrap;
+  display: flex; justify-content: center; align-items: center;
+  gap: 20px; margin-bottom: 40px; flex-wrap: wrap;
 }
-
 .season-info {
-  text-align: center;
-  font-size: 1.2rem;
-  color: var(--glow-green);
-  border: 1px dashed var(--border-color);
-  padding: 10px 20px;
-  border-radius: 4px;
-  margin-bottom: 0;
+  text-align: center; font-size: 1.2rem; color: var(--glow-green);
+  border: 1px dashed var(--border-color); padding: 10px 20px;
+  border-radius: 4px; margin-bottom: 0;
 }
-
 .btn-delete-season {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 15px;
-  font-size: 0.9rem;
-  font-weight: bold;
-  font-family: "Chakra Petch", sans-serif;
-  color: #ff2d55; /* Mantido vermelho para ação destrutiva */
-  background-color: transparent;
-  border: 2px solid #ff2d55;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
+  display: flex; align-items: center; gap: 8px; padding: 10px 15px;
+  font-size: 0.9rem; font-weight: bold; font-family: "Chakra Petch", sans-serif;
+  color: #ff2d55; background-color: transparent; border: 2px solid #ff2d55;
+  border-radius: 4px; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
 }
-
 .btn-delete-season:hover {
-  background-color: #ff2d55;
-  color: #fff;
-  box-shadow: 0 0 15px #ff2d55;
+  background-color: #ff2d55; color: #fff; box-shadow: 0 0 15px #ff2d55;
 }
 
-
-/* --- Tabelas (verde) --- */
+/* --- Tabelas (Desktop) --- */
 .tables-container {
-  display: flex;
-  justify-content: space-around;
-  gap: 30px;
-  flex-wrap: wrap; /* Mantém no desktop, mas será sobreposto no mobile */
+  display: flex; justify-content: space-around; gap: 30px; flex-wrap: wrap;
 }
-
 .table-wrapper {
-  flex: 1;
-  min-width: 400px; /* Ajuste conforme necessário */
-  background-color: transparent;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  overflow: hidden; /* Será modificado no mobile */
+  flex: 1; min-width: 400px; background-color: transparent;
+  border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden;
 }
-
 .table-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #ffffff;
-  background-color: var(--hover-bg-color);
-  padding: 15px;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  font-size: 1.5rem; font-weight: 600; color: #ffffff; background-color: var(--hover-bg-color);
+  padding: 15px; text-align: center; text-transform: uppercase; letter-spacing: 2px;
 }
+table { width: 100%; border-collapse: collapse; }
+th, td {
+  padding: 12px 15px; text-align: center; border-bottom: 1px solid var(--border-color);
+}
+thead tr { background-color: transparent; color: var(--glow-green); font-weight: 600; }
+th:nth-child(2), td:nth-child(2) { text-align: left; } /* Nome */
+th:nth-child(3), td:nth-child(3).emblem-cell-jsx { text-align: left; } /* Tier */
+tbody tr { transition: background-color 0.3s ease; }
+tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+/* Emblema (Desktop) */
+.emblem-cell-jsx {
+  display: flex; align-items: center; justify-content: flex-start; padding: 4px 10px;
 }
+.tier-emblem { width: 28px; height: auto; margin-right: 8px; vertical-align: middle; }
+.emblem-cell-jsx span { font-size: 0.9em; line-height: 1; white-space: nowrap; }
 
-th,
-td {
-  padding: 12px 15px;
-  text-align: center;
-  border-bottom: 1px solid var(--border-color);
-  white-space: nowrap; /* Evita que o texto quebre linha */
-}
+/* Coluna Evolução */
+.evolution-positive { color: #00ff00; font-weight: bold; text-shadow: 0 0 5px #00ff00; }
+.evolution-negative { color: #ff2d55; font-weight: bold; text-shadow: 0 0 5px #ff2d55; }
+.evolution-neutral { color: rgba(224, 251, 252, 0.6); }
 
-thead tr {
-  background-color: transparent;
-  color: var(--glow-green);
-  font-weight: 600;
-}
-
-/* Alinha a coluna do nome à esquerda */
-td:nth-child(2), th:nth-child(2) {
-  text-align: left;
-}
-/* Alinha emblema+nome à esquerda */
-td:nth-child(3).emblem-cell, th:nth-child(3).emblem-cell {
-  text-align: left;
-}
-
-tbody tr {
-  transition: background-color 0.3s ease;
-}
-tbody tr:hover {
-  background-color: var(--hover-bg-color);
-  color: #fff;
-}
-
-/* Emblema */
-.emblem-cell {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; /* Alinha à esquerda */
-  padding: 4px 10px;
-}
-
-.tier-emblem {
-  width: 28px;
-  height: auto;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-
-.emblem-cell span {
-  font-size: 0.9em;
-  line-height: 1;
-}
-
-/* --- Coluna Evolução Neon --- */
-.evolution-positive {
-  color: #00ff00;
-  font-weight: bold;
-  text-shadow: 0 0 5px #00ff00;
-}
-.evolution-negative {
-  color: #ff2d55;
-  font-weight: bold;
-  text-shadow: 0 0 5px #ff2d55;
-}
-.evolution-neutral {
-  color: rgba(224, 251, 252, 0.6);
-}
-
-/* --- Paginação (verde) --- */
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 40px;
-}
-
+/* Paginação */
+.pagination { display: flex; justify-content: center; gap: 15px; margin-top: 40px; }
 .pagination button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  font-weight: bold;
-  font-family: "Chakra Petch", sans-serif;
-  color: var(--glow-green);
-  background-color: transparent;
-  border: 2px solid var(--glow-green);
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
+  padding: 10px 20px; font-size: 1rem; font-weight: bold; font-family: "Chakra Petch", sans-serif;
+  color: var(--glow-green); background-color: transparent; border: 2px solid var(--glow-green);
+  border-radius: 4px; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
 }
-
 .pagination button:hover:not(:disabled) {
-  background-color: var(--glow-green);
-  color: #02040a;
-  box-shadow: 0 0 20px var(--glow-green);
+  background-color: var(--glow-green); color: #02040a; box-shadow: 0 0 20px var(--glow-green);
 }
-
 .pagination button:disabled {
-  color: rgba(57, 255, 20, 0.3);
-  border-color: rgba(57, 255, 20, 0.3);
-  cursor: not-allowed;
+  color: rgba(57, 255, 20, 0.3); border-color: rgba(57, 255, 20, 0.3); cursor: not-allowed;
 }
 
-/* --- Estilo para participantes inativos --- */
-.inactive-participant td {
-  color: rgba(224, 251, 252, 0.4);
-  font-style: italic;
-}
+/* Inativos */
+.inactive-participant td { color: rgba(224, 251, 252, 0.4); font-style: italic; }
 
-/* --- Estilo para o rodapé da tabela (Total) --- */
-tfoot tr {
-  background-color: var(--hover-bg-color);
-  color: #ffffff;
-  font-weight: bold;
-  text-transform: uppercase;
-  text-align: center;
-}
-.lvTotal { /* Garante visibilidade no mobile */
-  display: table-footer-group;
-}
-.lvAA { /* Garante visibilidade no mobile */
-  display: table-row;
-}
-.lvtt{ /* Garante visibilidade no mobile */
-  display: table-cell;
-}
-.txtcenter {
-  display: flex;
-  justify-content: center;
-}
+/* Rodapé Tabela */
+tfoot tr { background-color: var(--hover-bg-color); color: #ffffff; font-weight: bold; text-transform: uppercase; text-align: center; }
+tfoot .lvtt { display: table-cell; text-align: center; vertical-align: middle; }
+tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
+.txtcenter { display: flex; justify-content: center; }
 
 
-/* --- AJUSTES PARA MOBILE (Revisado) --- */
+/* --- AJUSTES PARA MOBILE (Layout de Cards Corrigido) --- */
 @media (max-width: 768px) {
-  .container {
-    padding: 20px 10px;
-    margin-top: 20px; /* Reduz margem superior se a navbar for menor no mobile */
-  }
+  .container { padding: 20px 10px; margin-top: 20px; }
+  .title { font-size: 1.8rem; margin-bottom: 15px; }
+  .season-info-container { flex-direction: column; gap: 10px; margin-bottom: 25px; }
+  .season-info { font-size: 1rem; }
 
-  .title {
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-  }
-
-  .season-info-container {
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 25px;
-  }
-  .season-info {
-    font-size: 1rem;
-  }
-
-  .tables-container {
-    flex-direction: column; /* Empilha as tabelas */
-    gap: 25px;
-  }
+  .tables-container { flex-direction: column; gap: 0; /* Remove gap entre wrappers */ }
 
   .table-wrapper {
-    min-width: unset;
-    width: 100%;
-    overflow-x: auto; /* Permite rolagem horizontal DENTRO do wrapper */
-    border-radius: 6px;
-    padding-bottom: 5px;
+    min-width: unset; width: 100%;
+    overflow: visible; /* Remove overflow do wrapper */
+    border: none; background: none; padding: 0; box-shadow: none;
+  }
+   .table-wrapper:not(:last-child) {
+     margin-bottom: 30px; /* Adiciona espaço ABAIXO de cada tabela */
+   }
+   .table-title { font-size: 1.3rem; /* Título menor no mobile */ }
 
-    /* Estilização da barra de rolagem horizontal */
-    scrollbar-width: thin;
-    scrollbar-color: var(--glow-green) rgba(10, 25, 47, 0.5);
-  }
-  .table-wrapper::-webkit-scrollbar {
-    height: 8px;
-  }
-  .table-wrapper::-webkit-scrollbar-track {
-    background: rgba(10, 25, 47, 0.5);
-    border-radius: 4px;
-  }
-  .table-wrapper::-webkit-scrollbar-thumb {
-    background-color: var(--glow-green);
-    border-radius: 4px;
-  }
-  .table-wrapper::-webkit-scrollbar-thumb:hover {
-    background-color: #2aaa0f;
-  }
 
-  /* Força a tabela a ter uma largura mínima para ativar a rolagem */
-  table {
-     min-width: 600px; /* Ajuste este valor se suas colunas forem mais largas/estreitas */
-  }
+  /* Transforma Tabela em Layout de Cards */
+  table, thead, tbody, tfoot, th, td, tr { display: block; }
+  thead tr { position: absolute; top: -9999px; left: -9999px; opacity: 0; pointer-events: none; }
 
-  /* Ajusta padding e fonte das células */
-  th,
+  /* Estilo de cada card (linha) */
+  tr {
+    border: 1px solid var(--border-color); border-radius: 6px;
+    margin-bottom: 15px; padding: 10px 15px;
+    background-color: rgba(10, 25, 47, 0.7);
+  }
+  tr:hover { background-color: rgba(10, 25, 47, 0.7); }
+
+  /* Estilo de cada item de dado (célula) */
   td {
-    padding: 8px 10px;
-    font-size: 0.85rem;
-    white-space: nowrap; /* Impede quebra de linha */
-    border-bottom: 1px solid var(--border-color);
+    border: none; border-bottom: 1px solid rgba(57, 255, 20, 0.1);
+    position: relative; padding: 10px 0 10px 45%;
+    text-align: right; min-height: 30px; display: flex;
+    align-items: center; justify-content: flex-end;
+    white-space: normal; font-size: 0.9rem;
   }
-  th {
-     font-size: 0.8rem;
+  td:last-child { border-bottom: none; }
+
+  /* Cria o label usando o data-label */
+  td:before {
+    content: attr(data-label); position: absolute; left: 0px; width: 40%;
+    padding-right: 10px; white-space: nowrap; text-align: left;
+    font-weight: bold; color: var(--glow-green); text-transform: uppercase;
+    font-size: 0.75rem;
   }
 
-  /* Ajustes específicos de células */
-  .emblem-cell {
-    padding: 4px 8px;
+  /* Ajustes específicos para a célula de Tier (emblem-cell-jsx) */
+  td.emblem-cell-jsx {
+    padding-left: 45%; /* Mantém espaço para label */
+    justify-content: flex-end; /* Alinha conteúdo à direita */
   }
-  .tier-emblem {
-    width: 22px;
-    margin-right: 5px;
-  }
-  .emblem-cell span {
-    font-size: 0.8em;
-  }
+  /* Força o label a ser "Tier" (caso o data-label não seja pego corretamente) */
+  td.emblem-cell-jsx:before { content: 'Tier'; }
 
-  /* Garante visibilidade do rodapé */
-  tfoot tr, tfoot td {
-     display: table-cell; /* Garante que funcione como célula de tabela */
-     font-size: 0.85rem;
-     padding: 8px 10px;
-     vertical-align: middle; /* Alinha verticalmente */
+  .emblem-cell-jsx { /* Estiliza o container interno da imagem e span */
+    padding: 0; display: flex; align-items: center;
+    justify-content: flex-end; /* Alinha img+span à direita */
+    width: 55%; /* Ocupa espaço restante */
   }
-   /* Corrige o colspan no mobile (cada td do tfoot agora é uma célula) */
-   tfoot .lvtt[colspan="2"], tfoot .lvtt[colspan="3"], tfoot .lvtt[colspan="5"] {
-    display: table-cell;
-    width: auto; /* Deixa a largura ser automática */
-    text-align: center; /* Centraliza o texto */
-  }
-  /* Estilo específico para a célula de total */
-  tfoot .lvtt:last-child {
-      text-align: center; /* Ou right se preferir */
-  }
+  .tier-emblem { width: 22px; margin-right: 5px; }
+  .emblem-cell-jsx span { font-size: 0.8em; text-align: right; }
 
+  /* Ajustes para o Rodapé (Total) no mobile */
+ tfoot {
+     display: block; margin-top: 15px; padding-top: 10px;
+     border-top: 1px solid var(--border-color);
+ }
+ /* Corrige a linha do rodapé para flex */
+ tfoot tr.lvAA {
+     border: none; padding: 0; margin-bottom: 0; background: none;
+     display: flex; justify-content: space-between; align-items: center;
+ }
+ tfoot td.lvtt {
+     border: none; padding: 5px 0; text-align: left;
+     min-height: unset; display: inline; font-size: 1rem;
+ }
+ tfoot td.lvtt:before { display: none; } /* Esconde pseudo-label */
+ /* Célula do texto "Total" */
+ tfoot .lvtt[colspan="4"], tfoot .lvtt[colspan="5"] {
+     text-align: left; font-weight: bold; color: var(--glow-green); width: auto; /* Reseta colspan */
+ }
+ /* Célula do valor total */
+ tfoot .lvtt[colspan="1"], tfoot .lvtt:last-child {
+     text-align: right; font-weight: bold; color: #fff; width: auto; /* Reseta colspan */
+ }
+ .txtcenter { display: inline; } /* Remove centralização */
 
-  .pagination {
-    margin-top: 25px;
-  }
-  .pagination button {
-    padding: 8px 15px;
-    font-size: 0.9rem;
-  }
-
-  /* GARANTIR QUE OS ESTILOS DE CARD NÃO ESTEJAM PRESENTES */
-  /* Se você tinha regras como `td { display: block; }` ou `td:before`, elas devem ser removidas */
-
+  .pagination { margin-top: 25px; }
+  .pagination button { padding: 8px 15px; font-size: 0.9rem; }
 }
