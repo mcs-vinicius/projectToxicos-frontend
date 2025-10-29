@@ -83,4 +83,22 @@
     text-shadow: 0 0 5px var(--glow-green), 0 0 10px var(--glow-green), 0 0 15px var(--glow-green), 0 0 20px var(--glow-green);
     animation: flicker 1.5s infinite alternate; z-index: 10;
 }
-@keyframes flicker { /* ... (sem alterações) ... */ }
+
+/* Animação de 'piscar' para o efeito neon */
+@keyframes flicker {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 
+        0 0 5px var(--glow-green),
+        0 0 10px var(--glow-green),
+        0 0 15px var(--glow-green),
+        0 0 20px var(--glow-green); /* MUDADO */
+  }
+  50% {
+    opacity: 0.8;
+    text-shadow: 
+        0 0 5px var(--glow-green),
+        0 0 8px var(--glow-green),
+        0 0 12px var(--glow-green); /* MUDADO */
+  }
+}
