@@ -15,7 +15,7 @@
 /* Container principal da página ResultsPage */
 .results-page-container {
   max-width: 1200px;
-  margin: 80px auto 20px auto;
+  margin: 80px auto 20px auto; /* Margem superior para compensar navbar fixa */
   padding: 30px;
   background-color: rgba(10, 25, 47, 0.8);
   border: 1px solid var(--glow-green);
@@ -68,7 +68,7 @@
 .table-wrapper {
   flex: 1; min-width: 400px; background-color: transparent;
   border: 1px solid var(--border-color); border-radius: 6px;
-  overflow: hidden; /* Mantém hidden para desktop */
+  /* overflow: hidden; /* Removido para mobile */
 }
 .table-title {
   font-size: 1.5rem; font-weight: 600; color: #ffffff; background-color: var(--hover-bg-color);
@@ -152,7 +152,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 
   .table-wrapper {
     min-width: unset; width: 100%;
-    overflow: hidden; /* Mantém hidden para cortar cantos arredondados, mas a tabela interna não deve transbordar */
+    overflow: hidden; /* Mantém hidden para cortar cantos arredondados */
     border: 1px solid var(--border-color);
     background-color: transparent;
   }
@@ -169,14 +169,14 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     white-space: normal; /* Permite quebra */
     overflow: hidden; /* Corta o excesso */
     text-overflow: ellipsis; /* Usa '...' */
-    word-wrap: break-word;
+    word-wrap: break-word; /* Força quebra de palavras */
     vertical-align: middle;
   }
   th {
-      font-size: 0.65rem;
+      font-size: 0.65rem; /* Cabeçalho minúsculo */
       padding: 6px 3px;
       white-space: normal;
-      overflow: hidden; /* Cabeçalho também pode cortar */
+      overflow: hidden;
       text-overflow: ellipsis;
   }
 
@@ -197,31 +197,31 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 
   /* *** AJUSTE CÉLULA TIER MOBILE CORRIGIDO *** */
   td.emblem-cell-jsx {
-    display: flex;           /* Continua flex */
-    flex-direction: column;  /* Empilha */
-    align-items: center;     /* Centraliza H */
-    justify-content: center; /* Centraliza V */
-    padding: 4px 2px;        /* Padding mínimo */
-    text-align: center;      /* Texto interno centralizado */
-    /* Remove overflow:hidden daqui para deixar o span controlar */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 2px;
+    text-align: center;
+    overflow: visible; /* Permite que o span cresça verticalmente */
   }
   .tier-emblem {
-    width: 18px;             /* Imagem pequena */
+    width: 18px;
     height: auto;
-    margin: 0 0 2px 0;       /* Margem apenas abaixo */
-    display: block;          /* Imagem como bloco */
+    margin: 0 0 2px 0;
+    display: block;
     flex-shrink: 0;
   }
   .emblem-cell-jsx span {
-    font-size: 0.8em;        /* Texto pequeno */
-    white-space: normal;     /* Permite quebrar linha */
-    line-height: 1.1;        /* Espaçamento se quebrar */
-    text-align: center;      /* Centraliza texto */
-    display: block;          /* Span como bloco */
-    width: 100%;             /* Ocupa largura da célula */
-    overflow: hidden;        /* Esconde overflow do span */
-    text-overflow: ellipsis; /* Usa "..." no span se o texto for muito longo */
-    max-height: 2.4em;       /* Limita altura a aprox. 2 linhas (ajuste 1.1 * 2) */
+    font-size: 0.8em;
+    white-space: normal;
+    line-height: 1.1;
+    text-align: center;
+    display: block;
+    width: 100%;
+    overflow: hidden;        /* Garante corte se ainda for muito longo */
+    text-overflow: ellipsis; /* Usa "..." */
+    max-height: 2.4em;       /* Limita a altura */
   }
   /* *** FIM AJUSTE TIER *** */
 
