@@ -24,62 +24,31 @@
 }
 
 /* --- Estilos Gerais e Tema Holo (Modificado para Verde-Tóxico) --- */
-body {
-  /* Fundo escuro com um grid sutil */
-  background-color: var(--dark-background); /* Usando variável global */
-  background-image: linear-gradient(
-      rgba(57, 255, 20, 0.07) 1px, /* Usando --glow-green como base */
-      transparent 1px
-    ),
-    linear-gradient(90deg, rgba(57, 255, 20, 0.07) 1px, transparent 1px);
-  background-size: 30px 30px;
-  color: var(--light-text); /* Usando variável global */
-  font-family: "Chakra Petch", sans-serif;
-  overflow-x: hidden; /* Previne scroll horizontal */
-}
-
-/* Efeito de scanline na tela inteira (agora verde) */
-body::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 10%;
-  background: linear-gradient(
-    to bottom,
-    rgba(57, 255, 20, 0) 0%, /* Usando --glow-green como base */
-    rgba(57, 255, 20, 0.1) 50%,
-    rgba(57, 255, 20, 0) 100%
-  );
-  animation: scanline 10s linear infinite;
-  pointer-events: none;
-  z-index: 999;
-}
+/* Estilos do body agora estão principalmente no global.css */
 
 .container {
   max-width: 1200px;
-  top: 120px; /* Ajustado para dar espaço à navbar */
-  margin: auto;
+  /* top: 120px; Removido, margem superior será usada */
+  margin: 80px auto 20px auto; /* Adiciona margem superior para compensar navbar fixa */
   padding: 30px;
-  background-color: rgba(10, 25, 47, 0.8); /* Fundo semi-transparente */
-  border: 1px solid var(--glow-green); /* MUDANÇA: Borda Verde Neon */
+  background-color: rgba(10, 25, 47, 0.8);
+  border: 1px solid var(--glow-green);
   border-radius: 8px;
-  box-shadow: 0 0 30px rgba(57, 255, 20, 0.3), /* MUDANÇA: Sombra Verde */
+  box-shadow: 0 0 30px var(--shadow-color),
     inset 0 0 20px rgba(57, 255, 20, 0.1);
-  backdrop-filter: blur(5px); /* Efeito de vidro fosco */
+  backdrop-filter: blur(5px);
   position: relative;
   animation: fadeIn 1s ease-out;
 }
 
-/* --- Cantoneiras Decorativas (agora verde) --- */
+/* --- Cantoneiras Decorativas (verde) --- */
 .container::before,
 .container::after {
   content: "";
   position: absolute;
   width: 25px;
   height: 25px;
-  border-color: var(--glow-green); /* MUDANÇA: Verde para destaque */
+  border-color: var(--glow-green);
   border-style: solid;
   z-index: 2;
 }
@@ -94,7 +63,7 @@ body::after {
   border-width: 0 2px 2px 0;
 }
 
-/* --- Tipografia e Títulos (agora verde) --- */
+/* --- Tipografia e Títulos (verde) --- */
 .title {
   text-align: center;
   font-size: 3rem;
@@ -102,7 +71,7 @@ body::after {
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 5px;
-  text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--glow-green), 0 0 30px var(--glow-green); /* MUDANÇA: Sombra Verde */
+  text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--glow-green), 0 0 30px var(--glow-green);
   margin-bottom: 20px;
 }
 
@@ -119,8 +88,8 @@ body::after {
 .season-info {
   text-align: center;
   font-size: 1.2rem;
-  color: var(--glow-green); /* MUDANÇA: Cor Verde */
-  border: 1px dashed rgba(57, 255, 20, 0.3); /* MUDANÇA: Cor Verde */
+  color: var(--glow-green);
+  border: 1px dashed var(--border-color);
   padding: 10px 20px;
   border-radius: 4px;
   margin-bottom: 0;
@@ -134,7 +103,7 @@ body::after {
   font-size: 0.9rem;
   font-weight: bold;
   font-family: "Chakra Petch", sans-serif;
-  color: #ff2d55; /* Rosa/Vermelho Neon (Mantido para Ação Destrutiva) */
+  color: #ff2d55; /* Mantido vermelho para ação destrutiva */
   background-color: transparent;
   border: 2px solid #ff2d55;
   border-radius: 4px;
@@ -150,7 +119,7 @@ body::after {
 }
 
 
-/* --- Tabelas (agora verde) --- */
+/* --- Tabelas (verde) --- */
 .tables-container {
   display: flex;
   justify-content: space-around;
@@ -162,7 +131,7 @@ body::after {
   flex: 1;
   min-width: 400px; /* Ajuste conforme necessário */
   background-color: transparent;
-  border: 1px solid rgba(57, 255, 20, 0.3); /* MUDANÇA: Cor Verde */
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   overflow: hidden; /* Será modificado no mobile */
 }
@@ -171,7 +140,7 @@ body::after {
   font-size: 1.5rem;
   font-weight: 600;
   color: #ffffff;
-  background-color: rgba(57, 255, 20, 0.1); /* MUDANÇA: Cor Verde */
+  background-color: var(--hover-bg-color);
   padding: 15px;
   text-align: center;
   text-transform: uppercase;
@@ -187,13 +156,13 @@ th,
 td {
   padding: 12px 15px;
   text-align: center;
-  border-bottom: 1px solid rgba(57, 255, 20, 0.2); /* MUDANÇA: Cor Verde */
+  border-bottom: 1px solid var(--border-color);
   white-space: nowrap; /* Evita que o texto quebre linha */
 }
 
 thead tr {
   background-color: transparent;
-  color: var(--glow-green); /* MUDANÇA: Cor Verde */
+  color: var(--glow-green);
   font-weight: 600;
 }
 
@@ -201,12 +170,16 @@ thead tr {
 td:nth-child(2), th:nth-child(2) {
   text-align: left;
 }
+/* Alinha emblema+nome à esquerda */
+td:nth-child(3).emblem-cell, th:nth-child(3).emblem-cell {
+  text-align: left;
+}
 
 tbody tr {
   transition: background-color 0.3s ease;
 }
 tbody tr:hover {
-  background-color: rgba(57, 255, 20, 0.1); /* MUDANÇA: Cor Verde */
+  background-color: var(--hover-bg-color);
   color: #fff;
 }
 
@@ -215,7 +188,6 @@ tbody tr:hover {
   display: flex;
   align-items: center;
   justify-content: flex-start; /* Alinha à esquerda */
-  text-align: left;
   padding: 4px 10px;
 }
 
@@ -233,12 +205,12 @@ tbody tr:hover {
 
 /* --- Coluna Evolução Neon --- */
 .evolution-positive {
-  color: #00ff00; /* Verde Neon */
+  color: #00ff00;
   font-weight: bold;
   text-shadow: 0 0 5px #00ff00;
 }
 .evolution-negative {
-  color: #ff2d55; /* Rosa/Vermelho Neon */
+  color: #ff2d55;
   font-weight: bold;
   text-shadow: 0 0 5px #ff2d55;
 }
@@ -246,7 +218,7 @@ tbody tr:hover {
   color: rgba(224, 251, 252, 0.6);
 }
 
-/* --- Paginação (agora verde) --- */
+/* --- Paginação (verde) --- */
 .pagination {
   display: flex;
   justify-content: center;
@@ -259,9 +231,9 @@ tbody tr:hover {
   font-size: 1rem;
   font-weight: bold;
   font-family: "Chakra Petch", sans-serif;
-  color: var(--glow-green); /* MUDANÇA: Cor Verde */
+  color: var(--glow-green);
   background-color: transparent;
-  border: 2px solid var(--glow-green); /* MUDANÇA: Cor Verde */
+  border: 2px solid var(--glow-green);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -269,14 +241,14 @@ tbody tr:hover {
 }
 
 .pagination button:hover:not(:disabled) {
-  background-color: var(--glow-green); /* MUDANÇA: Cor Verde */
+  background-color: var(--glow-green);
   color: #02040a;
-  box-shadow: 0 0 20px var(--glow-green); /* MUDANÇA: Cor Verde */
+  box-shadow: 0 0 20px var(--glow-green);
 }
 
 .pagination button:disabled {
-  color: rgba(57, 255, 20, 0.3); /* MUDANÇA: Cor Verde */
-  border-color: rgba(57, 255, 20, 0.3); /* MUDANÇA: Cor Verde */
+  color: rgba(57, 255, 20, 0.3);
+  border-color: rgba(57, 255, 20, 0.3);
   cursor: not-allowed;
 }
 
@@ -288,19 +260,19 @@ tbody tr:hover {
 
 /* --- Estilo para o rodapé da tabela (Total) --- */
 tfoot tr {
-  background-color: rgba(57, 255, 20, 0.1); /* MUDANÇA: Cor Verde */
+  background-color: var(--hover-bg-color);
   color: #ffffff;
   font-weight: bold;
   text-transform: uppercase;
   text-align: center;
 }
-.lvTotal { /* Adicionado para garantir visibilidade no mobile */
+.lvTotal { /* Garante visibilidade no mobile */
   display: table-footer-group;
 }
-.lvAA { /* Adicionado para garantir visibilidade no mobile */
+.lvAA { /* Garante visibilidade no mobile */
   display: table-row;
 }
-.lvtt{ /* Adicionado para garantir visibilidade no mobile */
+.lvtt{ /* Garante visibilidade no mobile */
   display: table-cell;
 }
 .txtcenter {
@@ -309,34 +281,45 @@ tfoot tr {
 }
 
 
-/* --- SUGESTÃO DE MUDANÇA PARA MOBILE --- */
+/* --- AJUSTES PARA MOBILE (Revisado) --- */
 @media (max-width: 768px) {
   .container {
-    padding: 20px 10px; /* Menos padding lateral */
-    top: 80px;
+    padding: 20px 10px;
+    margin-top: 20px; /* Reduz margem superior se a navbar for menor no mobile */
   }
 
   .title {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+
+  .season-info-container {
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 25px;
+  }
+  .season-info {
+    font-size: 1rem;
   }
 
   .tables-container {
     flex-direction: column; /* Empilha as tabelas */
-    gap: 30px; /* Espaço entre as tabelas */
+    gap: 25px;
   }
 
   .table-wrapper {
-    min-width: unset; /* Remove largura mínima */
-    overflow-x: auto; /* << ADICIONADO: Habilita rolagem horizontal */
+    min-width: unset;
+    width: 100%;
+    overflow-x: auto; /* Permite rolagem horizontal DENTRO do wrapper */
     border-radius: 6px;
-    padding-bottom: 5px; /* Pequeno espaço extra no fundo */
+    padding-bottom: 5px;
 
-    /* Estilização da barra de rolagem (opcional) */
+    /* Estilização da barra de rolagem horizontal */
     scrollbar-width: thin;
     scrollbar-color: var(--glow-green) rgba(10, 25, 47, 0.5);
   }
   .table-wrapper::-webkit-scrollbar {
-    height: 8px; /* Altura da barra horizontal */
+    height: 8px;
   }
   .table-wrapper::-webkit-scrollbar-track {
     background: rgba(10, 25, 47, 0.5);
@@ -347,59 +330,66 @@ tfoot tr {
     border-radius: 4px;
   }
   .table-wrapper::-webkit-scrollbar-thumb:hover {
-    background-color: #2aaa0f; /* Verde um pouco mais escuro no hover */
+    background-color: #2aaa0f;
   }
 
+  /* Força a tabela a ter uma largura mínima para ativar a rolagem */
+  table {
+     min-width: 600px; /* Ajuste este valor se suas colunas forem mais largas/estreitas */
+  }
 
-  /* --- REMOÇÃO DOS ESTILOS DE CARD --- */
-  /* Remove a transformação da tabela em blocos */
-  /* table, thead, tbody, th, td, tr { display: block; } */ /* << REMOVIDO */
-  /* Remove o cabeçalho oculto */
-  /* thead tr { position: absolute; top: -9999px; left: -9999px; } */ /* << REMOVIDO */
-  /* Remove a borda/margem de cada linha */
-  /* tr { border: 1px solid rgba(0, 255, 255, 0.2); margin-bottom: 14px; padding: 7px; background-color: rgba(10, 25, 47, 0.5); } */ /* << REMOVIDO */
-
-  /* Reverte o estilo das células */
+  /* Ajusta padding e fonte das células */
+  th,
   td {
-    /* border: none; */ /* << REMOVIDO */
-    border-bottom: 1px solid rgba(57, 255, 20, 0.2); /* << RESTAURADO/AJUSTADO */
-    position: relative; /* Mantido por segurança, mas pode não ser necessário */
-    padding: 10px 12px; /* Padding ajustado para mobile */
-    text-align: center; /* Restaurado para centralizado */
-    /* display: flex; justify-content: flex-end; align-items: center; min-height: 35px; */ /* << REMOVIDO */
-    white-space: nowrap; /* Garante que não quebre linha */
-    font-size: 0.9rem; /* Leve redução da fonte */
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    white-space: nowrap; /* Impede quebra de linha */
+    border-bottom: 1px solid var(--border-color);
   }
-  /* Alinha nome à esquerda */
-  td:nth-child(2) {
-    text-align: left;
+  th {
+     font-size: 0.8rem;
   }
 
-  /* Remove o pseudo-elemento :before que criava os labels */
-  /* td:before { content: attr(data-label); ... } */ /* << REMOVIDO */
-
-  /* Ajustes finos */
+  /* Ajustes específicos de células */
   .emblem-cell {
-    padding: 4px 8px; /* Menor padding */
-    justify-content: center; /* Centraliza no mobile se preferir */
+    padding: 4px 8px;
   }
-   /* Alinha emblema + nome à esquerda */
-   td:nth-child(3).emblem-cell {
-     justify-content: flex-start;
-   }
   .tier-emblem {
-    width: 24px; /* Emblema menor */
-    margin-right: 6px;
+    width: 22px;
+    margin-right: 5px;
   }
   .emblem-cell span {
-    font-size: 0.85em;
+    font-size: 0.8em;
   }
-  
-  /* Mantém o rodapé visível */
-  tfoot tr {
-     display: table-row;
+
+  /* Garante visibilidade do rodapé */
+  tfoot tr, tfoot td {
+     display: table-cell; /* Garante que funcione como célula de tabela */
+     font-size: 0.85rem;
+     padding: 8px 10px;
+     vertical-align: middle; /* Alinha verticalmente */
   }
-  tfoot td {
-     display: table-cell;
+   /* Corrige o colspan no mobile (cada td do tfoot agora é uma célula) */
+   tfoot .lvtt[colspan="2"], tfoot .lvtt[colspan="3"], tfoot .lvtt[colspan="5"] {
+    display: table-cell;
+    width: auto; /* Deixa a largura ser automática */
+    text-align: center; /* Centraliza o texto */
   }
+  /* Estilo específico para a célula de total */
+  tfoot .lvtt:last-child {
+      text-align: center; /* Ou right se preferir */
+  }
+
+
+  .pagination {
+    margin-top: 25px;
+  }
+  .pagination button {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+  }
+
+  /* GARANTIR QUE OS ESTILOS DE CARD NÃO ESTEJAM PRESENTES */
+  /* Se você tinha regras como `td { display: block; }` ou `td:before`, elas devem ser removidas */
+
 }

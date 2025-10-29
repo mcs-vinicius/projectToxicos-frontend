@@ -145,31 +145,31 @@ const Cta = () => {
   // Retorna o container principal que terá o canvas e a imagem sobreposta
   return (
     <div style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden' }}>
-      {/* Div onde o canvas da fumaça será montado */}
-      <div ref={mountRef} style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 1 }} />
-      {/* Imagem do logo posicionada sobre o div do canvas */}
-      <img
-        src={logoTextureUrl}
-        alt="Tóxicos Logo"
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          maxWidth: '60%', // Ajuste o tamanho conforme necessário
-          maxHeight: '60%',// Ajuste o tamanho conforme necessário
-          width: 'auto',   // Mantém proporção
-          height: 'auto',  // Mantém proporção
-          zIndex: 10,      // Garante que fique na frente do canvas (zIndex: 1)
-          pointerEvents: 'none',
-          opacity: 1,
-          filter: 'none',
-          imageRendering: 'pixelated', // Opcional
-          WebkitFontSmoothing: 'antialiased', // Opcional
-          MozOsxFontSmoothing: 'grayscale' // Opcional
-        }}
-      />
-    </div>
+    {/* Div onde o canvas da fumaça será montado */}
+    <div ref={mountRef} style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 1 }} />
+    {/* Imagem do logo posicionada sobre o div do canvas */}
+    <img
+      src={logoTextureUrl}
+      alt="Tóxicos Logo"
+      style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        maxWidth: '80%', // << AJUSTADO DE 60% para 70%
+        maxHeight: '80%',// << AJUSTADO DE 60% para 70%
+        width: 'auto',
+        height: 'auto',
+        zIndex: 10,
+        pointerEvents: 'none',
+        opacity: 1,
+        filter: 'none',
+        imageRendering: 'pixelated',
+        WebkitFontSmoothing: 'antialiased',
+        MozOsxFontSmoothing: 'grayscale'
+      }}
+    />
+  </div>
   );
 };
 
