@@ -63,14 +63,14 @@
 }
 .btn-delete-season:hover { background-color: #ff2d55; color: #fff; box-shadow: 0 0 15px #ff2d55; }
 
-/* --- Tabelas (Estilos Desktop Padrão - com ajuste no Tier) --- */
+/* --- Tabelas (Estilos Desktop Padrão) --- */
 .tables-container {
   display: flex; justify-content: space-around; gap: 30px; flex-wrap: wrap;
 }
 .table-wrapper {
   flex: 1; min-width: 400px; background-color: transparent;
   border: 1px solid var(--border-color); border-radius: 6px;
-  overflow: hidden; /* Mantém hidden no wrapper */
+  overflow: hidden;
 }
 .table-title {
   font-size: 1.5rem; font-weight: 600; color: #ffffff; background-color: var(--hover-bg-color);
@@ -100,13 +100,12 @@ thead tr {
 /* Rank Acesso */
 .table-wrapper:first-child th:nth-child(1), .table-wrapper:first-child td:nth-child(1) { width: 15%; text-align: center; } /* Posição */
 .table-wrapper:first-child th:nth-child(2), .table-wrapper:first-child td:nth-child(2) { width: 30%; text-align: left; } /* Nome */
-.table-wrapper:first-child th:nth-child(3) { width: 25%; text-align: left; } /* Tier Header */
-/* Regra específica para a célula TD do Tier (Desktop) que funcionou visualmente */
+/* REMOVIDO width da coluna Tier (th e td), MANTIDO text-align */
+.table-wrapper:first-child th:nth-child(3), .table-wrapper:first-child td:nth-child(3) { text-align: left; }
+/* MANTIDO overflow: hidden / ellipsis na célula Tier (td) - Para testar */
 .table-wrapper:first-child td:nth-child(3) {
-    width: 25%;
-    text-align: left;
-    overflow: visible; /* <<< Garante que o conteúdo possa transbordar a célula */
-    text-overflow: clip; /* <<< Evita ellipsis na célula */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .table-wrapper:first-child th:nth-child(4), .table-wrapper:first-child td:nth-child(4) { width: 15%; text-align: center; } /* Fase */
 .table-wrapper:first-child th:nth-child(5), .table-wrapper:first-child td:nth-child(5) { width: 15%; text-align: center; } /* Evolução */
@@ -124,16 +123,16 @@ tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
 /* Emblema (Desktop) */
 .emblem-cell-jsx {
   display: flex; align-items: center; justify-content: flex-start; padding: 4px 8px;
-  overflow: visible; /* Garante que o conteúdo flex não seja cortado */
+  /* Garante que o conteúdo flex não seja cortado pelo pai TD */
+   overflow: visible;
 }
 .tier-emblem { width: 24px; height: auto; margin-right: 6px; vertical-align: middle; flex-shrink: 0; }
-/* Regra específica para o span do Tier (Desktop) que funcionou visualmente */
 .emblem-cell-jsx span {
   font-size: 0.9em;
   line-height: 1;
   white-space: nowrap;
-  overflow: visible; /* <<< Garante que o span não seja cortado */
-  text-overflow: clip; /* <<< Evita ellipsis no span */
+  overflow: visible; /* Garante que o span não seja cortado */
+  text-overflow: clip; /* Evita ellipsis no span */
   display: inline-block;
   vertical-align: middle;
 }
@@ -167,7 +166,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 .txtcenter { display: flex; justify-content: center; }
 
 
-/* --- AJUSTES PARA MOBILE (Versão Final Corrigida) --- */
+/* --- AJUSTES PARA MOBILE (Mantidos como estavam) --- */
 @media (max-width: 768px) {
   .results-page-container {
     padding: 20px 5px;
