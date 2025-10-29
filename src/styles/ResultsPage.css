@@ -15,7 +15,7 @@
 /* Container principal da página ResultsPage */
 .results-page-container {
   max-width: 1200px;
-  margin: 80px auto 20px auto; /* Margem superior para compensar navbar fixa */
+  margin: 80px auto 20px auto;
   padding: 30px;
   background-color: rgba(10, 25, 47, 0.8);
   border: 1px solid var(--glow-green);
@@ -25,7 +25,7 @@
   backdrop-filter: blur(5px);
   position: relative;
   animation: fadeIn 1s ease-out;
-  font-family: 'Chakra Petch', sans-serif; /* Adicionado para garantir a fonte */
+  font-family: 'Chakra Petch', sans-serif; /* Fonte adicionada */
   color: #e0fbfc; /* Cor padrão do texto */
 }
 
@@ -63,14 +63,14 @@
 }
 .btn-delete-season:hover { background-color: #ff2d55; color: #fff; box-shadow: 0 0 15px #ff2d55; }
 
-/* --- Tabelas (Estilos Desktop Padrão) --- */
+/* --- Tabelas (Desktop - Original) --- */
 .tables-container {
   display: flex; justify-content: space-around; gap: 30px; flex-wrap: wrap;
 }
 .table-wrapper {
   flex: 1; min-width: 400px; background-color: transparent;
   border: 1px solid var(--border-color); border-radius: 6px;
-  overflow: hidden; /* Mantém overflow hidden para desktop */
+  overflow: hidden; /* Original para desktop */
 }
 .table-title {
   font-size: 1.5rem; font-weight: 600; color: #ffffff; background-color: var(--hover-bg-color);
@@ -79,16 +79,15 @@
 table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed; /* Mantém table-layout fixed para desktop */
+  table-layout: fixed; /* Original para desktop */
 }
 th, td {
-  padding: 10px 8px; /* Padding padrão desktop */
-  text-align: center;
-  border-bottom: 1px solid var(--border-color);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; /* Mantém nowrap para desktop */
-  font-size: 0.95rem; /* Fonte padrão desktop */
+  padding: 10px 8px; /* Padding original desktop */
+  text-align: center; border-bottom: 1px solid var(--border-color);
+  overflow: hidden; /* Original para desktop */
+  text-overflow: ellipsis; /* Original para desktop */
+  white-space: nowrap; /* Original para desktop */
+  font-size: 0.95rem; /* Fonte original desktop */
   vertical-align: middle;
 }
 thead tr {
@@ -98,13 +97,11 @@ thead tr {
 }
 
 /* Larguras e Alinhamentos Específicos (Desktop) */
-/* Rank Acesso */
 .table-wrapper:first-child th:nth-child(1), .table-wrapper:first-child td:nth-child(1) { width: 15%; text-align: center; } /* Posição */
 .table-wrapper:first-child th:nth-child(2), .table-wrapper:first-child td:nth-child(2) { width: 30%; text-align: left; } /* Nome */
 .table-wrapper:first-child th:nth-child(3), .table-wrapper:first-child td:nth-child(3) { width: 25%; text-align: left; } /* Tier */
 .table-wrapper:first-child th:nth-child(4), .table-wrapper:first-child td:nth-child(4) { width: 15%; text-align: center; } /* Fase */
 .table-wrapper:first-child th:nth-child(5), .table-wrapper:first-child td:nth-child(5) { width: 15%; text-align: center; } /* Evolução */
-/* Expedição */
 .table-wrapper:last-child th:nth-child(1), .table-wrapper:last-child td:nth-child(1) { width: 15%; text-align: center; } /* Posição */
 .table-wrapper:last-child th:nth-child(2), .table-wrapper:last-child td:nth-child(2) { width: 35%; text-align: left;} /* Nome */
 .table-wrapper:last-child th:nth-child(3), .table-wrapper:last-child td:nth-child(3) { width: 12.5%; text-align: center; } /* R1 */
@@ -115,7 +112,7 @@ thead tr {
 tbody tr { transition: background-color 0.3s ease; }
 tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
 
-/* Emblema (Desktop) */
+/* Emblema (Desktop - Original) */
 .emblem-cell-jsx {
   display: flex; align-items: center; justify-content: flex-start; padding: 4px 8px;
 }
@@ -127,7 +124,7 @@ tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
 .evolution-negative { color: #ff2d55; font-weight: bold; text-shadow: 0 0 5px #ff2d55; }
 .evolution-neutral { color: rgba(224, 251, 252, 0.6); }
 
-/* Paginação */
+/* Paginação (Original) */
 .pagination { display: flex; justify-content: center; gap: 15px; margin-top: 40px; }
 .pagination button {
   padding: 10px 20px; font-size: 1rem; font-weight: bold; font-family: "Chakra Petch", sans-serif;
@@ -141,21 +138,21 @@ tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
   color: rgba(57, 255, 20, 0.3); border-color: rgba(57, 255, 20, 0.3); cursor: not-allowed;
 }
 
-/* Inativos */
+/* Inativos (Original) */
 .inactive-participant td { color: rgba(224, 251, 252, 0.4); font-style: italic; }
 
-/* Rodapé Tabela */
+/* Rodapé Tabela (Original) */
 tfoot tr { background-color: var(--hover-bg-color); color: #ffffff; font-weight: bold; text-transform: uppercase; text-align: center; }
 tfoot .lvtt { display: table-cell; text-align: center; vertical-align: middle; }
 tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 .txtcenter { display: flex; justify-content: center; }
 
 
-/* --- AJUSTES PARA MOBILE --- */
+/* --- AJUSTES PARA MOBILE (Mantidos dentro da media query) --- */
 @media (max-width: 768px) {
   .results-page-container {
     padding: 20px 5px;
-    margin: 20px 5px; /* Ajusta margens superior e laterais */
+    margin: 20px 5px;
     box-sizing: border-box;
     width: calc(100% - 10px);
     max-width: 100%;
@@ -183,9 +180,10 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     min-width: unset;
     width: 100%;
     overflow-x: auto; /* Mantém scroll horizontal se necessário */
+    overflow-y: hidden; /* Evita rolagem vertical desnecessária no wrapper */
     border: 1px solid var(--border-color);
     background-color: transparent;
-    border-radius: 6px; /* Garante borda arredondada */
+    border-radius: 6px;
   }
   .table-title {
     font-size: 1.2rem;
