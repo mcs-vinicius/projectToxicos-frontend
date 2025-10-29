@@ -13,9 +13,9 @@
 }
 
 /* Container principal da página ResultsPage */
-.results-page-container { /* Renomeado de .container para evitar conflitos futuros */
+.results-page-container {
   max-width: 1200px;
-  margin: 80px auto 20px auto; /* Margem superior para compensar navbar fixa */
+  margin: 80px auto 20px auto;
   padding: 30px;
   background-color: rgba(10, 25, 47, 0.8);
   border: 1px solid var(--glow-green);
@@ -37,7 +37,7 @@
 .results-page-container::after { bottom: -5px; right: -5px; border-width: 0 2px 2px 0; }
 
 /* --- Tipografia e Títulos --- */
-.results-page-container .title { /* Especificidade aumentada */
+.results-page-container .title {
   text-align: center; font-size: 3rem; font-weight: 700; color: #ffffff;
   text-transform: uppercase; letter-spacing: 5px; margin-bottom: 20px;
   text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--glow-green), 0 0 30px var(--glow-green);
@@ -68,21 +68,22 @@
 .table-wrapper {
   flex: 1; min-width: 400px; background-color: transparent;
   border: 1px solid var(--border-color); border-radius: 6px;
-  /* overflow: hidden; /* Removido para mobile */
+  overflow: hidden; /* Mantém hidden para desktop */
 }
 .table-title {
   font-size: 1.5rem; font-weight: 600; color: #ffffff; background-color: var(--hover-bg-color);
   padding: 15px; text-align: center; text-transform: uppercase; letter-spacing: 2px;
 }
-table { width: 100%; border-collapse: collapse; table-layout: fixed; /* Ajuda a controlar larguras */ }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Usa layout fixo para desktop */
+}
 th, td {
-  padding: 10px 8px; /* Padding padrão reduzido um pouco */
+  padding: 10px 8px;
   text-align: center; border-bottom: 1px solid var(--border-color);
-  overflow: hidden; /* Esconde conteúdo que transborda */
-  text-overflow: ellipsis; /* Adiciona "..." se o conteúdo for cortado */
-  white-space: nowrap; /* Impede quebra de linha por padrão */
-  font-size: 0.95rem; /* Fonte ligeiramente menor por padrão */
-  vertical-align: middle; /* Alinha verticalmente no meio */
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 0.95rem; vertical-align: middle;
 }
 thead tr { background-color: transparent; color: var(--glow-green); font-weight: 600; }
 
@@ -106,12 +107,12 @@ tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
 
 /* Emblema (Desktop) */
 .emblem-cell-jsx {
-  display: flex; align-items: center; justify-content: flex-start; padding: 4px 8px; /* Padding interno da célula */
+  display: flex; align-items: center; justify-content: flex-start; padding: 4px 8px;
 }
-.tier-emblem { width: 24px; height: auto; margin-right: 6px; vertical-align: middle; flex-shrink: 0; /* Impede que o emblema encolha */ }
-.emblem-cell-jsx span { font-size: 0.9em; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } /* Span ainda pode ter ellipsis */
+.tier-emblem { width: 24px; height: auto; margin-right: 6px; vertical-align: middle; flex-shrink: 0; }
+.emblem-cell-jsx span { font-size: 0.9em; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* Coluna Evolução (CORRIGIDO - Regras não vazias) */
+/* Coluna Evolução */
 .evolution-positive { color: #00ff00; font-weight: bold; text-shadow: 0 0 5px #00ff00; }
 .evolution-negative { color: #ff2d55; font-weight: bold; text-shadow: 0 0 5px #ff2d55; }
 .evolution-neutral { color: rgba(224, 251, 252, 0.6); }
@@ -140,10 +141,10 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 .txtcenter { display: flex; justify-content: center; }
 
 
-/* --- AJUSTES PARA MOBILE (Tabela Responsiva Adaptada) --- */
+/* --- AJUSTES PARA MOBILE (Tabela Responsiva - Layout Vertical no Tier) --- */
 @media (max-width: 768px) {
   .results-page-container { padding: 20px 5px; margin-top: 20px; }
-  .results-page-container .title { font-size: 1.8rem; margin-bottom: 15px; letter-spacing: 3px;}
+  .results-page-container .title { font-size: 1.8rem; margin-bottom: 15px; }
   .season-info-container { flex-direction: column; gap: 10px; margin-bottom: 25px; }
   .season-info { font-size: 1rem; }
 
@@ -151,22 +152,24 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 
   .table-wrapper {
     min-width: unset; width: 100%;
-    overflow: visible; /* Conteúdo não deve transbordar */
+    overflow: visible; /* Permite conteúdo maior que a célula */
     border: 1px solid var(--border-color);
     background-color: transparent;
   }
   .table-title { font-size: 1.2rem; padding: 10px; }
 
-  table { table-layout: auto; } /* Mudado para auto para permitir quebra de linha */
+  table {
+      table-layout: fixed; /* Mantém fixo para controle de largura */
+      width: 100%;
+  }
 
-  /* Reduz padding e fonte, permite quebra de linha */
   th, td {
     padding: 6px 4px;
     font-size: 0.75rem;
-    white-space: normal; /* << IMPORTANTE: Permite quebra de linha */
-    overflow: visible;
+    white-space: normal; /* Permite quebra de linha */
+    overflow: visible; /* Permite conteúdo transbordar visualmente se necessário */
     text-overflow: clip;
-    word-break: break-word; /* Ajuda a quebrar palavras */
+    word-break: break-word; /* Força quebra de palavras longas */
     vertical-align: middle;
   }
   th {
@@ -174,52 +177,63 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
       white-space: normal;
   }
 
-  /* Remove larguras fixas para permitir ajuste automático */
-  .table-wrapper th, .table-wrapper td { width: auto !important; }
+  /* Larguras Relativas Mobile (Ajuste fino) */
+  /* Rank Acesso */
+  .table-wrapper:first-child th:nth-child(1), .table-wrapper:first-child td:nth-child(1) { width: 13%; } /* Pos. */
+  .table-wrapper:first-child th:nth-child(2), .table-wrapper:first-child td:nth-child(2) { width: 32%; text-align: left; } /* Nome */
+  .table-wrapper:first-child th:nth-child(3), .table-wrapper:first-child td:nth-child(3) { width: 25%; text-align: center; } /* Tier */
+  .table-wrapper:first-child th:nth-child(4), .table-wrapper:first-child td:nth-child(4) { width: 15%; } /* Fase */
+  .table-wrapper:first-child th:nth-child(5), .table-wrapper:first-child td:nth-child(5) { width: 15%; } /* Evo. */
+  /* Expedição */
+  .table-wrapper:last-child th:nth-child(1), .table-wrapper:last-child td:nth-child(1) { width: 13%; } /* Pos. */
+  .table-wrapper:last-child th:nth-child(2), .table-wrapper:last-child td:nth-child(2) { width: 37%; text-align: left;} /* Nome */
+  .table-wrapper:last-child th:nth-child(3), .table-wrapper:last-child td:nth-child(3) { width: 12%; } /* R1 */
+  .table-wrapper:last-child th:nth-child(4), .table-wrapper:last-child td:nth-child(4) { width: 12%; } /* R2 */
+  .table-wrapper:last-child th:nth-child(5), .table-wrapper:last-child td:nth-child(5) { width: 12%; } /* R3 */
+  .table-wrapper:last-child th:nth-child(6), .table-wrapper:last-child td:nth-child(6) { width: 14%; } /* Total */
 
-  /* Garante alinhamentos mesmo com quebra de linha */
-  td:nth-child(1), th:nth-child(1) { text-align: center; } /* Posição */
-  td:nth-child(2), th:nth-child(2) { text-align: left; } /* Nome */
-  td:nth-child(3).emblem-cell-jsx, th:nth-child(3) { text-align: left; } /* Tier */
-  td:nth-child(4), th:nth-child(4) { text-align: center; } /* Fase/R1 */
-  td:nth-child(5), th:nth-child(5) { text-align: center; } /* Evolução/R2 */
-  td:nth-child(6), th:nth-child(6) { text-align: center; } /* R3/Total */
-
-  /* Ajusta Célula do Emblema para Mobile (Emblema em cima, Texto embaixo) */
-  .emblem-cell-jsx {
-    display: flex;
-    flex-direction: column; /* Empilha verticalmente */
+  /* *** AJUSTE CRÍTICO PARA CÉLULA DO TIER NO MOBILE *** */
+  td:nth-child(3).emblem-cell-jsx { /* Seleciona especificamente a TD do Tier */
+    display: flex; /* Usa flexbox */
+    flex-direction: column; /* Empilha os itens (imagem e span) */
     align-items: center; /* Centraliza horizontalmente */
-    justify-content: center; /* Centraliza verticalmente */
-    padding: 4px; /* Menor padding */
-    text-align: center; /* Centraliza o texto */
+    justify-content: center; /* Centraliza verticalmente (se houver espaço extra) */
+    padding: 4px 2px; /* Padding mínimo para a célula */
+    text-align: center; /* Garante que o texto dentro do span seja centralizado */
+    overflow: visible; /* Garante que nada seja cortado */
   }
   .tier-emblem {
     width: 20px; /* Emblema pequeno */
     height: auto;
-    margin-right: 0; /* Remove margem lateral */
+    margin-right: 0; /* Sem margem lateral */
     margin-bottom: 3px; /* Espaço entre emblema e texto */
+    display: block; /* Garante que a imagem se comporte como bloco */
   }
   .emblem-cell-jsx span {
     font-size: 0.7em; /* Nome do tier bem pequeno */
-    white-space: normal; /* Permite quebrar */
-    line-height: 1.1; /* Ajusta espaçamento entre linhas */
-    text-align: center; /* Garante centralização */
-    display: block; /* Garante que o span ocupe a largura */
+    white-space: normal; /* Permite quebrar linha */
+    line-height: 1.1; /* Espaçamento entre linhas se quebrar */
+    text-align: center; /* Centraliza o texto */
+    display: block; /* Ocupa a largura disponível */
+    overflow: visible; /* Garante que não seja cortado */
+    text-overflow: clip;
+    width: 100%; /* Faz o span ocupar a largura da célula */
   }
+  /* *** FIM DO AJUSTE CRÍTICO *** */
+
 
   /* Rodapé no Mobile */
   tfoot td.lvtt {
-      font-size: 0.8rem;
-      padding: 6px 4px;
-      white-space: nowrap; /* Evita quebra no total */
+      font-size: 0.75rem;
+      padding: 5px 3px;
+      white-space: nowrap;
   }
   tfoot .lvtt:first-child {
-     padding-right: 10px;
+     padding-right: 5px;
   }
 
   .pagination { margin-top: 25px; }
-  .pagination button { padding: 8px 15px; font-size: 0.9rem; }
+  .pagination button { padding: 8px 12px; font-size: 0.85rem; }
 
   /* Garante que o layout de tabela padrão seja mantido */
   table, thead, tbody, tfoot, tr, td, th { display: revert; }
@@ -228,5 +242,5 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
   tfoot { display: table-footer-group; }
   tr { display: table-row; }
   td, th { display: table-cell; }
-  td::before { display: none; } /* Garante que o pseudo-elemento :before não seja exibido */
+  td::before { display: none; }
 }
