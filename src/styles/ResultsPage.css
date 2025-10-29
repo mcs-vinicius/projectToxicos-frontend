@@ -68,7 +68,7 @@
 .table-wrapper {
   flex: 1; min-width: 400px; background-color: transparent;
   border: 1px solid var(--border-color); border-radius: 6px;
-  /* overflow: hidden; /* Removido para mobile */
+  overflow: hidden; /* Mantém hidden para desktop */
 }
 .table-title {
   font-size: 1.5rem; font-weight: 600; color: #ffffff; background-color: var(--hover-bg-color);
@@ -141,7 +141,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 .txtcenter { display: flex; justify-content: center; }
 
 
-/* --- AJUSTES PARA MOBILE (Tabela Responsiva - Layout Vertical no Tier CORRIGIDO) --- */
+/* --- AJUSTES PARA MOBILE (Layout Vertical no Tier CORRIGIDO FINAL) --- */
 @media (max-width: 768px) {
   .results-page-container { padding: 20px 5px; margin-top: 20px; }
   .results-page-container .title { font-size: 1.8rem; margin-bottom: 15px; }
@@ -152,7 +152,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 
   .table-wrapper {
     min-width: unset; width: 100%;
-    overflow: hidden; /* Mantém hidden para cortar cantos arredondados */
+    overflow: hidden;
     border: 1px solid var(--border-color);
     background-color: transparent;
   }
@@ -165,7 +165,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 
   th, td {
     padding: 5px 3px;
-    font-size: 0.7rem; /* Reduzido ainda mais */
+    font-size: 0.7rem;
     white-space: normal; /* Permite quebra */
     overflow: hidden; /* Corta o excesso */
     text-overflow: ellipsis; /* Usa '...' */
@@ -173,7 +173,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     vertical-align: middle;
   }
   th {
-      font-size: 0.65rem; /* Cabeçalho minúsculo */
+      font-size: 0.65rem;
       padding: 6px 3px;
       white-space: normal;
       overflow: hidden;
@@ -195,33 +195,34 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
   .table-wrapper:last-child th:nth-child(5), .table-wrapper:last-child td:nth-child(5) { width: 12%; } /* R3 */
   .table-wrapper:last-child th:nth-child(6), .table-wrapper:last-child td:nth-child(6) { width: 14%; } /* Total */
 
-  /* *** AJUSTE CÉLULA TIER MOBILE CORRIGIDO *** */
+  /* *** AJUSTE FINAL CÉLULA TIER MOBILE *** */
   td.emblem-cell-jsx {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;  /* Emblema em cima */
+    align-items: center;     /* Centraliza horizontalmente */
+    justify-content: center; /* Centraliza verticalmente */
     padding: 4px 2px;
-    text-align: center;
-    overflow: visible; /* Permite que o span cresça verticalmente */
+    text-align: center;      /* Garante centralização do texto */
+    overflow: visible;       /* Permite que o conteúdo determine a altura */
+    vertical-align: middle;  /* Alinha a célula inteira com as outras */
   }
   .tier-emblem {
-    width: 18px;
+    width: 18px;             /* Imagem pequena */
     height: auto;
-    margin: 0 0 2px 0;
-    display: block;
+    margin: 0 0 2px 0;       /* Margem apenas abaixo da imagem */
+    display: block;          /* Imagem como bloco */
     flex-shrink: 0;
   }
   .emblem-cell-jsx span {
-    font-size: 0.8em;
-    white-space: normal;
-    line-height: 1.1;
-    text-align: center;
-    display: block;
-    width: 100%;
-    overflow: hidden;        /* Garante corte se ainda for muito longo */
-    text-overflow: ellipsis; /* Usa "..." */
-    max-height: 2.4em;       /* Limita a altura */
+    font-size: 0.8em;        /* Texto relativo ao td */
+    white-space: normal;     /* Permite quebrar linha */
+    line-height: 1.1;        /* Espaçamento se quebrar */
+    text-align: center;      /* Centraliza texto */
+    display: block;          /* Span como bloco */
+    width: 100%;             /* Ocupa largura da célula */
+    overflow: hidden;        /* Esconde overflow do span */
+    text-overflow: ellipsis; /* Usa "..." se for muito longo */
+    max-height: 2.4em;       /* Limita altura (aprox. 2 linhas) */
   }
   /* *** FIM AJUSTE TIER *** */
 
