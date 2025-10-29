@@ -25,8 +25,8 @@
   backdrop-filter: blur(5px);
   position: relative;
   animation: fadeIn 1s ease-out;
-  font-family: 'Chakra Petch', sans-serif;
-  color: #e0fbfc;
+  font-family: 'Chakra Petch', sans-serif; /* Fonte adicionada */
+  color: #e0fbfc; /* Cor padrão do texto */
 }
 
 /* --- Cantoneiras Decorativas --- */
@@ -63,14 +63,14 @@
 }
 .btn-delete-season:hover { background-color: #ff2d55; color: #fff; box-shadow: 0 0 15px #ff2d55; }
 
-/* --- Tabelas (Estilos Desktop Padrão) --- */
+/* --- Tabelas (Desktop - Original) --- */
 .tables-container {
   display: flex; justify-content: space-around; gap: 30px; flex-wrap: wrap;
 }
 .table-wrapper {
   flex: 1; min-width: 400px; background-color: transparent;
   border: 1px solid var(--border-color); border-radius: 6px;
-  overflow: hidden;
+  overflow: hidden; /* Original para desktop */
 }
 .table-title {
   font-size: 1.5rem; font-weight: 600; color: #ffffff; background-color: var(--hover-bg-color);
@@ -79,15 +79,15 @@
 table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: fixed; /* Original para desktop */
 }
 th, td {
-  padding: 10px 8px;
+  padding: 10px 8px; /* Padding original desktop */
   text-align: center; border-bottom: 1px solid var(--border-color);
-  overflow: hidden; /* Mantém na célula TD por padrão */
-  text-overflow: ellipsis; /* Mantém na célula TD por padrão */
-  white-space: nowrap;
-  font-size: 0.95rem;
+  overflow: hidden; /* Original para desktop */
+  text-overflow: ellipsis; /* Original para desktop */
+  white-space: nowrap; /* Original para desktop */
+  font-size: 0.95rem; /* Fonte original desktop */
   vertical-align: middle;
 }
 thead tr {
@@ -96,20 +96,12 @@ thead tr {
   font-weight: 600;
 }
 
-/* Larguras e Alinhamentos Específicos (Desktop) */
-/* Rank Acesso */
+/* Larguras e Alinhamentos Específicos (Desktop - Original) */
 .table-wrapper:first-child th:nth-child(1), .table-wrapper:first-child td:nth-child(1) { width: 15%; text-align: center; } /* Posição */
 .table-wrapper:first-child th:nth-child(2), .table-wrapper:first-child td:nth-child(2) { width: 30%; text-align: left; } /* Nome */
-.table-wrapper:first-child th:nth-child(3) { width: 25%; text-align: left; } /* Tier Header */
-.table-wrapper:first-child td:nth-child(3) { /* Tier Cell */
-    width: 25%;
-    text-align: left;
-    overflow: visible; /* <<< ALTERAÇÃO AQUI: Permite overflow na célula do Tier */
-    text-overflow: clip; /* <<< ALTERAÇÃO AQUI: Garante que não haja ellipsis */
-}
+.table-wrapper:first-child th:nth-child(3), .table-wrapper:first-child td:nth-child(3) { width: 25%; text-align: left; } /* Tier */
 .table-wrapper:first-child th:nth-child(4), .table-wrapper:first-child td:nth-child(4) { width: 15%; text-align: center; } /* Fase */
 .table-wrapper:first-child th:nth-child(5), .table-wrapper:first-child td:nth-child(5) { width: 15%; text-align: center; } /* Evolução */
-/* Expedição */
 .table-wrapper:last-child th:nth-child(1), .table-wrapper:last-child td:nth-child(1) { width: 15%; text-align: center; } /* Posição */
 .table-wrapper:last-child th:nth-child(2), .table-wrapper:last-child td:nth-child(2) { width: 35%; text-align: left;} /* Nome */
 .table-wrapper:last-child th:nth-child(3), .table-wrapper:last-child td:nth-child(3) { width: 12.5%; text-align: center; } /* R1 */
@@ -120,20 +112,17 @@ thead tr {
 tbody tr { transition: background-color 0.3s ease; }
 tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
 
-/* Emblema (Desktop) */
+/* Emblema (Desktop - Original) */
 .emblem-cell-jsx {
   display: flex; align-items: center; justify-content: flex-start; padding: 4px 8px;
-  overflow: visible; /* Garante que o conteúdo flex não seja cortado */
+  /* Não precisa de overflow: visible aqui, pois o TD controla */
 }
 .tier-emblem { width: 24px; height: auto; margin-right: 6px; vertical-align: middle; flex-shrink: 0; }
 .emblem-cell-jsx span {
-  font-size: 0.9em;
-  line-height: 1;
-  white-space: nowrap;
-  overflow: visible; /* Garante que o span não seja cortado */
-  text-overflow: clip; /* Evita ellipsis no span */
-  display: inline-block;
-  vertical-align: middle;
+  font-size: 0.9em; line-height: 1; white-space: nowrap;
+  /* Mantém as propriedades originais que podem causar corte se o TD for muito estreito */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Coluna Evolução */
@@ -141,7 +130,7 @@ tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
 .evolution-negative { color: #ff2d55; font-weight: bold; text-shadow: 0 0 5px #ff2d55; }
 .evolution-neutral { color: rgba(224, 251, 252, 0.6); }
 
-/* Paginação */
+/* Paginação (Original) */
 .pagination { display: flex; justify-content: center; gap: 15px; margin-top: 40px; }
 .pagination button {
   padding: 10px 20px; font-size: 1rem; font-weight: bold; font-family: "Chakra Petch", sans-serif;
@@ -155,17 +144,17 @@ tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
   color: rgba(57, 255, 20, 0.3); border-color: rgba(57, 255, 20, 0.3); cursor: not-allowed;
 }
 
-/* Inativos */
+/* Inativos (Original) */
 .inactive-participant td { color: rgba(224, 251, 252, 0.4); font-style: italic; }
 
-/* Rodapé Tabela */
+/* Rodapé Tabela (Original) */
 tfoot tr { background-color: var(--hover-bg-color); color: #ffffff; font-weight: bold; text-transform: uppercase; text-align: center; }
 tfoot .lvtt { display: table-cell; text-align: center; vertical-align: middle; }
 tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 .txtcenter { display: flex; justify-content: center; }
 
 
-/* --- AJUSTES PARA MOBILE --- */
+/* --- AJUSTES PARA MOBILE (Versão Final Corrigida) --- */
 @media (max-width: 768px) {
   .results-page-container {
     padding: 20px 5px;
@@ -217,15 +206,10 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     padding: 5px 3px;
     font-size: 0.7rem;
     white-space: normal;
-    overflow: visible; /* Garante visibilidade no mobile */
-    text-overflow: clip; /* Garante sem ellipsis no mobile */
+    overflow: visible;
+    text-overflow: clip;
     word-break: break-word;
     /* vertical-align: middle; /* Removido da regra geral */
-  }
-  /* Especifica overflow visible para a célula Tier no mobile também */
-  .table-wrapper:first-child td:nth-child(3) {
-      overflow: visible;
-      text-overflow: clip;
   }
   th {
       font-size: 0.65rem;
