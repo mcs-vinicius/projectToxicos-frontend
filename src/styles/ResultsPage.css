@@ -63,14 +63,14 @@
 }
 .btn-delete-season:hover { background-color: #ff2d55; color: #fff; box-shadow: 0 0 15px #ff2d55; }
 
-/* --- Tabelas (Estilos Desktop Padrão - com ajuste no Tier) --- */
+/* --- Tabelas (Estilos Desktop Padrão) --- */
 .tables-container {
   display: flex; justify-content: space-around; gap: 30px; flex-wrap: wrap;
 }
 .table-wrapper {
   flex: 1; min-width: 400px; background-color: transparent;
   border: 1px solid var(--border-color); border-radius: 6px;
-  overflow: hidden; /* Mantém hidden no wrapper */
+  overflow: hidden;
 }
 .table-title {
   font-size: 1.5rem; font-weight: 600; color: #ffffff; background-color: var(--hover-bg-color);
@@ -84,8 +84,8 @@ table {
 th, td {
   padding: 10px 8px;
   text-align: center; border-bottom: 1px solid var(--border-color);
-  overflow: hidden; /* Mantém na célula TD por padrão */
-  text-overflow: ellipsis; /* Mantém na célula TD por padrão */
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 0.95rem;
   vertical-align: middle;
@@ -100,13 +100,8 @@ thead tr {
 /* Rank Acesso */
 .table-wrapper:first-child th:nth-child(1), .table-wrapper:first-child td:nth-child(1) { width: 15%; text-align: center; } /* Posição */
 .table-wrapper:first-child th:nth-child(2), .table-wrapper:first-child td:nth-child(2) { width: 30%; text-align: left; } /* Nome */
-.table-wrapper:first-child th:nth-child(3) { width: 25%; text-align: left; } /* Tier Header */
-.table-wrapper:first-child td:nth-child(3) { /* Tier Cell - Ajuste que funcionou */
-    width: 25%;
-    text-align: left;
-    overflow: visible;
-    text-overflow: clip;
-}
+/* REMOVIDO width: 25% da coluna Tier (th e td) */
+.table-wrapper:first-child th:nth-child(3), .table-wrapper:first-child td:nth-child(3) { text-align: left; } /* Tier - Apenas alinhamento */
 .table-wrapper:first-child th:nth-child(4), .table-wrapper:first-child td:nth-child(4) { width: 15%; text-align: center; } /* Fase */
 .table-wrapper:first-child th:nth-child(5), .table-wrapper:first-child td:nth-child(5) { width: 15%; text-align: center; } /* Evolução */
 /* Expedição */
@@ -123,15 +118,15 @@ tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
 /* Emblema (Desktop) */
 .emblem-cell-jsx {
   display: flex; align-items: center; justify-content: flex-start; padding: 4px 8px;
-  overflow: visible; /* Garante que o conteúdo flex não seja cortado */
+  /* Não precisa mais de overflow: visible aqui */
 }
 .tier-emblem { width: 24px; height: auto; margin-right: 6px; vertical-align: middle; flex-shrink: 0; }
-.emblem-cell-jsx span { /* Ajuste que funcionou */
+.emblem-cell-jsx span {
   font-size: 0.9em;
   line-height: 1;
-  white-space: nowrap;
-  overflow: visible;
-  text-overflow: clip;
+  white-space: nowrap; /* Mantém nowrap no span */
+  overflow: visible; /* Garante que o span não seja cortado internamente */
+  text-overflow: clip; /* Garante que não haja ellipsis no span */
   display: inline-block;
   vertical-align: middle;
 }
@@ -165,7 +160,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 .txtcenter { display: flex; justify-content: center; }
 
 
-/* --- AJUSTES PARA MOBILE (Versão Final Corrigida) --- */
+/* --- AJUSTES PARA MOBILE (Mantidos como estavam) --- */
 @media (max-width: 768px) {
   .results-page-container {
     padding: 20px 5px;
@@ -226,12 +221,14 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
   .table-wrapper:first-child td:nth-child(3) {
       overflow: visible;
       text-overflow: clip;
+      text-align: center; /* Centraliza no mobile */
   }
   th {
       font-size: 0.65rem;
       white-space: normal;
   }
 
+  /* Remove larguras fixas no mobile */
   .table-wrapper th, .table-wrapper td { width: auto !important; }
 
   td:nth-child(1), th:nth-child(1) { text-align: center; } /* Posição */
