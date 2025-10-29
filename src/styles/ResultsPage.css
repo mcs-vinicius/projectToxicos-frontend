@@ -142,27 +142,56 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 
 /* --- AJUSTES PARA MOBILE (Tabela Responsiva Adaptada) --- */
 @media (max-width: 768px) {
-  .results-page-container { padding: 20px 5px; margin-top: 20px; }
-  .results-page-container .title { font-size: 1.8rem; margin-bottom: 15px; letter-spacing: 3px;}
-  .season-info-container { flex-direction: column; gap: 10px; margin-bottom: 25px; }
-  .season-info { font-size: 1rem; }
+  .results-page-container {
+    padding: 20px 5px; /* Padding horizontal reduzido */
+    margin-top: 20px;
+    margin-left: 5px;  /* Adiciona margem esquerda */
+    margin-right: 5px; /* Adiciona margem direita */
+    box-sizing: border-box; /* Garante que padding/border não aumentem a largura total */
+    width: calc(100% - 10px); /* Ajusta a largura para considerar as margens */
+    max-width: 100%; /* Garante que não ultrapasse a largura da tela */
+  }
+  .results-page-container .title {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    letter-spacing: 3px;
+  }
+  .season-info-container {
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 25px;
+  }
+  .season-info {
+    font-size: 1rem;
+  }
 
-  .tables-container { flex-direction: column; gap: 30px; }
+  .tables-container {
+    flex-direction: column;
+    gap: 20px; /* Reduzido o gap entre tabelas */
+  }
 
   .table-wrapper {
-    min-width: unset; width: 100%;
-    overflow: visible; /* Conteúdo não deve transbordar */
+    min-width: unset;
+    width: 100%; /* O wrapper ocupa 100% do container pai */
+    overflow-x: auto; /* ADICIONADO: Permite scroll horizontal SE necessário */
     border: 1px solid var(--border-color);
     background-color: transparent;
   }
-  .table-title { font-size: 1.2rem; padding: 10px; }
+  .table-title {
+    font-size: 1.2rem;
+    padding: 10px;
+  }
 
-  table { table-layout: auto; } /* Mudado para auto para permitir quebra de linha */
+  table {
+    table-layout: auto;
+    width: 100%; /* Garante que a tabela tente usar a largura do wrapper */
+    min-width: 300px; /* Define uma largura mínima para evitar compressão excessiva */
+  }
 
   /* Reduz padding e fonte, permite quebra de linha */
   th, td {
-    padding: 6px 4px;
-    font-size: 0.75rem;
+    padding: 5px 3px; /* Padding reduzido ainda mais */
+    font-size: 0.7rem; /* Fonte ligeiramente menor */
     white-space: normal; /* << IMPORTANTE: Permite quebra de linha */
     overflow: visible;
     text-overflow: clip;
@@ -170,7 +199,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     vertical-align: middle;
   }
   th {
-      font-size: 0.7rem;
+      font-size: 0.65rem; /* Fonte do header ainda menor */
       white-space: normal;
   }
 
@@ -180,7 +209,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
   /* Garante alinhamentos mesmo com quebra de linha */
   td:nth-child(1), th:nth-child(1) { text-align: center; } /* Posição */
   td:nth-child(2), th:nth-child(2) { text-align: left; } /* Nome */
-  td:nth-child(3).emblem-cell-jsx, th:nth-child(3) { text-align: left; } /* Tier */
+  td:nth-child(3).emblem-cell-jsx, th:nth-child(3) { text-align: center; } /* Tier - Centralizado */
   td:nth-child(4), th:nth-child(4) { text-align: center; } /* Fase/R1 */
   td:nth-child(5), th:nth-child(5) { text-align: center; } /* Evolução/R2 */
   td:nth-child(6), th:nth-child(6) { text-align: center; } /* R3/Total */
@@ -191,17 +220,17 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     flex-direction: column; /* Empilha verticalmente */
     align-items: center; /* Centraliza horizontalmente */
     justify-content: center; /* Centraliza verticalmente */
-    padding: 4px; /* Menor padding */
+    padding: 3px; /* Padding mínimo */
     text-align: center; /* Centraliza o texto */
   }
   .tier-emblem {
-    width: 20px; /* Emblema pequeno */
+    width: 18px; /* Emblema bem pequeno */
     height: auto;
     margin-right: 0; /* Remove margem lateral */
-    margin-bottom: 3px; /* Espaço entre emblema e texto */
+    margin-bottom: 2px; /* Espaço mínimo */
   }
   .emblem-cell-jsx span {
-    font-size: 0.7em; /* Nome do tier bem pequeno */
+    font-size: 0.6em; /* Nome do tier minúsculo */
     white-space: normal; /* Permite quebrar */
     line-height: 1.1; /* Ajusta espaçamento entre linhas */
     text-align: center; /* Garante centralização */
@@ -210,18 +239,18 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 
   /* Rodapé no Mobile */
   tfoot td.lvtt {
-      font-size: 0.8rem;
-      padding: 6px 4px;
+      font-size: 0.75rem; /* Reduzido */
+      padding: 5px 3px; /* Reduzido */
       white-space: nowrap; /* Evita quebra no total */
   }
   tfoot .lvtt:first-child {
-     padding-right: 10px;
+     padding-right: 5px; /* Reduzido */
   }
 
   .pagination { margin-top: 25px; }
-  .pagination button { padding: 8px 15px; font-size: 0.9rem; }
+  .pagination button { padding: 8px 12px; font-size: 0.8rem; } /* Botões menores */
 
-  /* Garante que o layout de tabela padrão seja mantido */
+  /* Mantém layout de tabela, mas :before não é usado */
   table, thead, tbody, tfoot, tr, td, th { display: revert; }
   thead { display: table-header-group; }
   tbody { display: table-row-group; }
