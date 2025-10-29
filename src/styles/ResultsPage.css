@@ -84,8 +84,8 @@ table {
 th, td {
   padding: 10px 8px;
   text-align: center; border-bottom: 1px solid var(--border-color);
-  overflow: hidden; /* Mantém na célula TD */
-  text-overflow: ellipsis; /* Mantém na célula TD */
+  overflow: hidden; /* Mantém na célula TD por padrão */
+  text-overflow: ellipsis; /* Mantém na célula TD por padrão */
   white-space: nowrap;
   font-size: 0.95rem;
   vertical-align: middle;
@@ -97,11 +97,19 @@ thead tr {
 }
 
 /* Larguras e Alinhamentos Específicos (Desktop) */
+/* Rank Acesso */
 .table-wrapper:first-child th:nth-child(1), .table-wrapper:first-child td:nth-child(1) { width: 15%; text-align: center; } /* Posição */
 .table-wrapper:first-child th:nth-child(2), .table-wrapper:first-child td:nth-child(2) { width: 30%; text-align: left; } /* Nome */
-.table-wrapper:first-child th:nth-child(3), .table-wrapper:first-child td:nth-child(3) { width: 25%; text-align: left; } /* Tier */
+.table-wrapper:first-child th:nth-child(3) { width: 25%; text-align: left; } /* Tier Header */
+.table-wrapper:first-child td:nth-child(3) { /* Tier Cell */
+    width: 25%;
+    text-align: left;
+    overflow: visible; /* <<< ALTERAÇÃO AQUI: Permite overflow na célula do Tier */
+    text-overflow: clip; /* <<< ALTERAÇÃO AQUI: Garante que não haja ellipsis */
+}
 .table-wrapper:first-child th:nth-child(4), .table-wrapper:first-child td:nth-child(4) { width: 15%; text-align: center; } /* Fase */
 .table-wrapper:first-child th:nth-child(5), .table-wrapper:first-child td:nth-child(5) { width: 15%; text-align: center; } /* Evolução */
+/* Expedição */
 .table-wrapper:last-child th:nth-child(1), .table-wrapper:last-child td:nth-child(1) { width: 15%; text-align: center; } /* Posição */
 .table-wrapper:last-child th:nth-child(2), .table-wrapper:last-child td:nth-child(2) { width: 35%; text-align: left;} /* Nome */
 .table-wrapper:last-child th:nth-child(3), .table-wrapper:last-child td:nth-child(3) { width: 12.5%; text-align: center; } /* R1 */
@@ -115,15 +123,17 @@ tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
 /* Emblema (Desktop) */
 .emblem-cell-jsx {
   display: flex; align-items: center; justify-content: flex-start; padding: 4px 8px;
+  overflow: visible; /* Garante que o conteúdo flex não seja cortado */
 }
 .tier-emblem { width: 24px; height: auto; margin-right: 6px; vertical-align: middle; flex-shrink: 0; }
-/* AJUSTE AQUI: Remove overflow e text-overflow do span no desktop */
 .emblem-cell-jsx span {
   font-size: 0.9em;
   line-height: 1;
-  white-space: nowrap; /* Mantém nowrap para o texto do tier no desktop */
-  /* overflow: hidden; */ /* REMOVIDO */
-  /* text-overflow: ellipsis; */ /* REMOVIDO */
+  white-space: nowrap;
+  overflow: visible; /* Garante que o span não seja cortado */
+  text-overflow: clip; /* Evita ellipsis no span */
+  display: inline-block;
+  vertical-align: middle;
 }
 
 /* Coluna Evolução */
@@ -207,10 +217,15 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     padding: 5px 3px;
     font-size: 0.7rem;
     white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
+    overflow: visible; /* Garante visibilidade no mobile */
+    text-overflow: clip; /* Garante sem ellipsis no mobile */
     word-break: break-word;
-    vertical-align: middle;
+    /* vertical-align: middle; /* Removido da regra geral */
+  }
+  /* Especifica overflow visible para a célula Tier no mobile também */
+  .table-wrapper:first-child td:nth-child(3) {
+      overflow: visible;
+      text-overflow: clip;
   }
   th {
       font-size: 0.65rem;
@@ -229,11 +244,12 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
   /* Ajusta Célula do Emblema para Mobile */
   .emblem-cell-jsx {
     display: flex;
-    flex-direction: column; /* Mantém vertical no mobile */
+    flex-direction: column; /* Vertical no mobile */
     align-items: center;
     justify-content: center;
     padding: 3px;
     text-align: center;
+    overflow: visible;
   }
   .tier-emblem {
     width: 18px;
@@ -244,12 +260,13 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
   /* Estilo do span do tier especificamente no mobile */
   .emblem-cell-jsx span {
     font-size: 0.6em;
-    white-space: normal; /* Permite quebra de linha no mobile */
+    white-space: normal; /* Permite quebra */
     line-height: 1.1;
     text-align: center;
     display: block;
-    overflow: visible; /* Garante que não haja corte no mobile */
-    text-overflow: clip; /* Garante que não haja ellipsis no mobile */
+    overflow: visible;
+    text-overflow: clip;
+    vertical-align: initial; /* Reset vertical-align */
   }
 
   /* Rodapé no Mobile */
@@ -265,11 +282,15 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
   .pagination { margin-top: 25px; }
   .pagination button { padding: 8px 12px; font-size: 0.8rem; }
 
+  /* Garante layout de tabela e alinhamento */
   table, thead, tbody, tfoot, tr, td, th { display: revert; }
   thead { display: table-header-group; }
   tbody { display: table-row-group; }
   tfoot { display: table-footer-group; }
   tr { display: table-row; }
-  td, th { display: table-cell; }
+  td, th {
+    display: table-cell;
+    vertical-align: middle; /* Aplicado aqui onde display é table-cell */
+   }
   td::before { display: none; }
 }
