@@ -13,9 +13,9 @@
 }
 
 /* Container principal da página ResultsPage */
-.results-page-container {
+.results-page-container { /* Renomeado de .container para evitar conflitos futuros */
   max-width: 1200px;
-  margin: 80px auto 20px auto;
+  margin: 80px auto 20px auto; /* Margem superior para compensar navbar fixa */
   padding: 30px;
   background-color: rgba(10, 25, 47, 0.8);
   border: 1px solid var(--glow-green);
@@ -37,7 +37,7 @@
 .results-page-container::after { bottom: -5px; right: -5px; border-width: 0 2px 2px 0; }
 
 /* --- Tipografia e Títulos --- */
-.results-page-container .title {
+.results-page-container .title { /* Especificidade aumentada */
   text-align: center; font-size: 3rem; font-weight: 700; color: #ffffff;
   text-transform: uppercase; letter-spacing: 5px; margin-bottom: 20px;
   text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--glow-green), 0 0 30px var(--glow-green);
@@ -67,48 +67,68 @@
 }
 .table-wrapper {
   flex: 1; min-width: 400px; background-color: transparent;
-  border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; /* Mantém hidden para desktop */
+  border: 1px solid var(--border-color); border-radius: 6px;
+  /* overflow: hidden; /* Removido para mobile */
 }
 .table-title {
   font-size: 1.5rem; font-weight: 600; color: #ffffff; background-color: var(--hover-bg-color);
   padding: 15px; text-align: center; text-transform: uppercase; letter-spacing: 2px;
 }
-table {
-  width: 100%;
-  border-collapse: collapse;
-  /* table-layout: fixed; /* REMOVIDO ou comentado - deixa o navegador ajustar */
-}
+table { width: 100%; border-collapse: collapse; table-layout: fixed; /* Ajuda a controlar larguras */ }
 th, td {
-  padding: 12px 15px; /* Padding padrão desktop */
-  text-align: center;
-  border-bottom: 1px solid var(--border-color);
-  /* overflow: hidden; text-overflow: ellipsis;  Removido do padrão */
-  white-space: nowrap; /* Mantém nowrap para desktop */
-  font-size: 0.95rem;
+  padding: 10px 8px; /* Padding padrão reduzido um pouco */
+  text-align: center; border-bottom: 1px solid var(--border-color);
+  overflow: hidden; /* Esconde conteúdo que transborda */
+  text-overflow: ellipsis; /* Adiciona "..." se o conteúdo for cortado */
+  white-space: nowrap; /* Impede quebra de linha por padrão */
+  font-size: 0.95rem; /* Fonte ligeiramente menor por padrão */
   vertical-align: middle; /* Alinha verticalmente no meio */
 }
 thead tr { background-color: transparent; color: var(--glow-green); font-weight: 600; }
-/* Alinhamentos Desktop */
-th:nth-child(2), td:nth-child(2) { text-align: left; } /* Nome */
-th:nth-child(3), td:nth-child(3).emblem-cell-jsx { text-align: left; } /* Tier */
+
+/* Larguras e Alinhamentos Específicos (Desktop) */
+/* Rank Acesso */
+.table-wrapper:first-child th:nth-child(1), .table-wrapper:first-child td:nth-child(1) { width: 15%; text-align: center; } /* Posição */
+.table-wrapper:first-child th:nth-child(2), .table-wrapper:first-child td:nth-child(2) { width: 30%; text-align: left; } /* Nome */
+.table-wrapper:first-child th:nth-child(3), .table-wrapper:first-child td:nth-child(3) { width: 25%; text-align: left; } /* Tier */
+.table-wrapper:first-child th:nth-child(4), .table-wrapper:first-child td:nth-child(4) { width: 15%; text-align: center; } /* Fase */
+.table-wrapper:first-child th:nth-child(5), .table-wrapper:first-child td:nth-child(5) { width: 15%; text-align: center; } /* Evolução */
+/* Expedição */
+.table-wrapper:last-child th:nth-child(1), .table-wrapper:last-child td:nth-child(1) { width: 15%; text-align: center; } /* Posição */
+.table-wrapper:last-child th:nth-child(2), .table-wrapper:last-child td:nth-child(2) { width: 35%; text-align: left;} /* Nome */
+.table-wrapper:last-child th:nth-child(3), .table-wrapper:last-child td:nth-child(3) { width: 12.5%; text-align: center; } /* R1 */
+.table-wrapper:last-child th:nth-child(4), .table-wrapper:last-child td:nth-child(4) { width: 12.5%; text-align: center; } /* R2 */
+.table-wrapper:last-child th:nth-child(5), .table-wrapper:last-child td:nth-child(5) { width: 12.5%; text-align: center; } /* R3 */
+.table-wrapper:last-child th:nth-child(6), .table-wrapper:last-child td:nth-child(6) { width: 12.5%; text-align: center; } /* Total */
+
 tbody tr { transition: background-color 0.3s ease; }
 tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
 
 /* Emblema (Desktop) */
-.emblem-cell-jsx { display: flex; align-items: center; justify-content: flex-start; padding: 4px 10px; }
-.tier-emblem { width: 28px; height: auto; margin-right: 8px; vertical-align: middle; flex-shrink: 0; }
+.emblem-cell-jsx {
+  display: flex; align-items: center; justify-content: flex-start; padding: 4px 8px; /* Padding interno da célula */
+}
+.tier-emblem { width: 24px; height: auto; margin-right: 6px; vertical-align: middle; flex-shrink: 0; /* Impede que o emblema encolha */ }
 .emblem-cell-jsx span { font-size: 0.9em; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } /* Span ainda pode ter ellipsis */
 
-/* Coluna Evolução */
+/* Coluna Evolução (CORRIGIDO - Regras não vazias) */
 .evolution-positive { color: #00ff00; font-weight: bold; text-shadow: 0 0 5px #00ff00; }
 .evolution-negative { color: #ff2d55; font-weight: bold; text-shadow: 0 0 5px #ff2d55; }
 .evolution-neutral { color: rgba(224, 251, 252, 0.6); }
 
 /* Paginação */
 .pagination { display: flex; justify-content: center; gap: 15px; margin-top: 40px; }
-.pagination button { /* ... (sem alterações) ... */ }
-.pagination button:hover:not(:disabled) { /* ... (sem alterações) ... */ }
-.pagination button:disabled { /* ... (sem alterações) ... */ }
+.pagination button {
+  padding: 10px 20px; font-size: 1rem; font-weight: bold; font-family: "Chakra Petch", sans-serif;
+  color: var(--glow-green); background-color: transparent; border: 2px solid var(--glow-green);
+  border-radius: 4px; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
+}
+.pagination button:hover:not(:disabled) {
+  background-color: var(--glow-green); color: #02040a; box-shadow: 0 0 20px var(--glow-green);
+}
+.pagination button:disabled {
+  color: rgba(57, 255, 20, 0.3); border-color: rgba(57, 255, 20, 0.3); cursor: not-allowed;
+}
 
 /* Inativos */
 .inactive-participant td { color: rgba(224, 251, 252, 0.4); font-style: italic; }
@@ -119,72 +139,73 @@ tfoot .lvtt { display: table-cell; text-align: center; vertical-align: middle; }
 tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 .txtcenter { display: flex; justify-content: center; }
 
-/* --- AJUSTES PARA MOBILE (Layout de Tabela Adaptado com Quebra de Linha) --- */
+
+/* --- AJUSTES PARA MOBILE (Tabela Responsiva Adaptada) --- */
 @media (max-width: 768px) {
   .results-page-container { padding: 20px 5px; margin-top: 20px; }
-  .results-page-container .title { font-size: 1.8rem; margin-bottom: 15px; }
+  .results-page-container .title { font-size: 1.8rem; margin-bottom: 15px; letter-spacing: 3px;}
   .season-info-container { flex-direction: column; gap: 10px; margin-bottom: 25px; }
   .season-info { font-size: 1rem; }
 
-  .tables-container { flex-direction: column; gap: 30px; } /* Empilha tabelas */
+  .tables-container { flex-direction: column; gap: 30px; }
 
   .table-wrapper {
     min-width: unset; width: 100%;
-    overflow: visible; /* Garante que wrapper não corte conteúdo */
+    overflow: visible; /* Conteúdo não deve transbordar */
     border: 1px solid var(--border-color);
     background-color: transparent;
   }
   .table-title { font-size: 1.2rem; padding: 10px; }
 
-  /* Ajustes gerais para células no mobile */
+  table { table-layout: auto; } /* Mudado para auto para permitir quebra de linha */
+
+  /* Reduz padding e fonte, permite quebra de linha */
   th, td {
-    padding: 8px 5px; /* Padding reduzido */
-    font-size: 0.8rem; /* Fonte menor */
+    padding: 6px 4px;
+    font-size: 0.75rem;
     white-space: normal; /* << IMPORTANTE: Permite quebra de linha */
-    overflow: visible; /* << IMPORTANTE: Mostra todo o conteúdo */
-    text-overflow: clip; /* << IMPORTANTE: Não usa ellipsis */
-    word-break: break-word; /* Opcional: Ajuda a quebrar palavras longas se necessário */
-    vertical-align: middle; /* Mantém alinhamento vertical */
-  }
-  th {
-      font-size: 0.75rem; /* Cabeçalho um pouco menor */
-      white-space: normal; /* Cabeçalho também pode quebrar linha */
-  }
-
-  /* Define larguras relativas (ajuste se necessário) */
-  /* Rank Acesso */
-  .table-wrapper:first-child th:nth-child(1), .table-wrapper:first-child td:nth-child(1) { width: 15%; text-align: center; } /* Posição */
-  .table-wrapper:first-child th:nth-child(2), .table-wrapper:first-child td:nth-child(2) { width: 35%; text-align: left; } /* Nome (mais espaço) */
-  .table-wrapper:first-child th:nth-child(3), .table-wrapper:first-child td:nth-child(3) { width: 25%; text-align: left; } /* Tier */
-  .table-wrapper:first-child th:nth-child(4), .table-wrapper:first-child td:nth-child(4) { width: 12%; text-align: center; } /* Fase */
-  .table-wrapper:first-child th:nth-child(5), .table-wrapper:first-child td:nth-child(5) { width: 13%; text-align: center; } /* Evolução */
-  /* Expedição */
-  .table-wrapper:last-child th:nth-child(1), .table-wrapper:last-child td:nth-child(1) { width: 15%; text-align: center; } /* Posição */
-  .table-wrapper:last-child th:nth-child(2), .table-wrapper:last-child td:nth-child(2) { width: 40%; text-align: left;} /* Nome (mais espaço) */
-  .table-wrapper:last-child th:nth-child(3), .table-wrapper:last-child td:nth-child(3) { width: 10%; text-align: center; } /* R1 */
-  .table-wrapper:last-child th:nth-child(4), .table-wrapper:last-child td:nth-child(4) { width: 10%; text-align: center; } /* R2 */
-  .table-wrapper:last-child th:nth-child(5), .table-wrapper:last-child td:nth-child(5) { width: 10%; text-align: center; } /* R3 */
-  .table-wrapper:last-child th:nth-child(6), .table-wrapper:last-child td:nth-child(6) { width: 15%; text-align: center; } /* Total */
-
-  /* Ajusta Célula do Emblema para Mobile */
-  .emblem-cell-jsx {
-    padding: 2px 4px;
-    align-items: center;
-    /* Permite que o span quebre se necessário, mas mantém o emblema fixo */
-    flex-wrap: nowrap; /* Não quebra linha entre img e span, mas span pode quebrar internamente */
-  }
-  .tier-emblem {
-    width: 18px; /* Emblema ainda menor */
-    height: 18px; /* Garante altura */
-    margin-right: 4px;
-    flex-shrink: 0;
-  }
-  .emblem-cell-jsx span {
-    font-size: 0.85em; /* Nome do tier */
-    white-space: normal; /* Permite que o nome do tier quebre linha */
     overflow: visible;
     text-overflow: clip;
-    text-align: left; /* Alinha texto do tier à esquerda */
+    word-break: break-word; /* Ajuda a quebrar palavras */
+    vertical-align: middle;
+  }
+  th {
+      font-size: 0.7rem;
+      white-space: normal;
+  }
+
+  /* Remove larguras fixas para permitir ajuste automático */
+  .table-wrapper th, .table-wrapper td { width: auto !important; }
+
+  /* Garante alinhamentos mesmo com quebra de linha */
+  td:nth-child(1), th:nth-child(1) { text-align: center; } /* Posição */
+  td:nth-child(2), th:nth-child(2) { text-align: left; } /* Nome */
+  td:nth-child(3).emblem-cell-jsx, th:nth-child(3) { text-align: left; } /* Tier */
+  td:nth-child(4), th:nth-child(4) { text-align: center; } /* Fase/R1 */
+  td:nth-child(5), th:nth-child(5) { text-align: center; } /* Evolução/R2 */
+  td:nth-child(6), th:nth-child(6) { text-align: center; } /* R3/Total */
+
+  /* Ajusta Célula do Emblema para Mobile (Emblema em cima, Texto embaixo) */
+  .emblem-cell-jsx {
+    display: flex;
+    flex-direction: column; /* Empilha verticalmente */
+    align-items: center; /* Centraliza horizontalmente */
+    justify-content: center; /* Centraliza verticalmente */
+    padding: 4px; /* Menor padding */
+    text-align: center; /* Centraliza o texto */
+  }
+  .tier-emblem {
+    width: 20px; /* Emblema pequeno */
+    height: auto;
+    margin-right: 0; /* Remove margem lateral */
+    margin-bottom: 3px; /* Espaço entre emblema e texto */
+  }
+  .emblem-cell-jsx span {
+    font-size: 0.7em; /* Nome do tier bem pequeno */
+    white-space: normal; /* Permite quebrar */
+    line-height: 1.1; /* Ajusta espaçamento entre linhas */
+    text-align: center; /* Garante centralização */
+    display: block; /* Garante que o span ocupe a largura */
   }
 
   /* Rodapé no Mobile */
@@ -192,6 +213,9 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
       font-size: 0.8rem;
       padding: 6px 4px;
       white-space: nowrap; /* Evita quebra no total */
+  }
+  tfoot .lvtt:first-child {
+     padding-right: 10px;
   }
 
   .pagination { margin-top: 25px; }
@@ -204,5 +228,5 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
   tfoot { display: table-footer-group; }
   tr { display: table-row; }
   td, th { display: table-cell; }
-  td::before { display: none; } /* Confirma que não há pseudo-elementos */
+  td::before { display: none; } /* Garante que o pseudo-elemento :before não seja exibido */
 }
