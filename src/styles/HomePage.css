@@ -11,8 +11,8 @@
 
 .section {
     background-color: rgba(10, 25, 47, 0.8);
-    /* MUDANÇA: Cor da borda */
-    border: 1px solid rgba(57, 255, 20, 0.2);
+    /* Borda principal verde */
+    border: 1px solid var(--border-color, rgba(57, 255, 20, 0.2)); /* Default para verde se não definida globalmente */
     border-radius: 8px;
     padding: 25px;
     margin-bottom: 30px;
@@ -25,8 +25,8 @@
     color: #ffffff;
     text-transform: uppercase;
     letter-spacing: 3px;
-    /* MUDANÇA: Cor do brilho */
-    text-shadow: 0 0 10px var(--glow-green), 0 0 5px var(--glow-green);
+    /* Brilho verde */
+    text-shadow: 0 0 10px var(--glow-green, #39ff14), 0 0 5px var(--glow-green, #39ff14);
     margin-top: 0;
     margin-bottom: 25px;
 }
@@ -36,8 +36,8 @@
     text-align: center;
     font-size: 3rem;
     color: #fff;
-    /* MUDANÇA: Cor do brilho */
-    text-shadow: 0 0 15px var(--glow-green);
+    /* Brilho verde */
+    text-shadow: 0 0 15px var(--glow-green, #39ff14);
     margin-bottom: 25px;
 }
 
@@ -54,14 +54,14 @@
     background: rgba(0,0,0,0.2);
     padding: 20px;
     border-radius: 6px;
-    /* MUDANÇA: Cor da borda */
-    border-left: 3px solid var(--glow-green);
+    /* Borda verde */
+    border-left: 3px solid var(--accent-color, #39ff14);
 }
 
 .header-column h3 {
-    /* MUDANÇA: Cor do texto e borda */
-    color: var(--glow-green);
-    border-bottom: 1px solid rgba(57, 255, 20, 0.3);
+    /* Cor verde */
+    color: var(--accent-color, #39ff14);
+    border-bottom: 1px solid var(--border-color, rgba(57, 255, 20, 0.3));
     padding-bottom: 10px;
     margin-bottom: 15px;
 }
@@ -75,7 +75,7 @@
     padding: 8px 0;
 }
 
-/* --- Estilização do Pódio da Temporada (MODIFICADA COM BORDAS ALINHADAS) --- */
+/* --- Estilização do Pódio da Temporada (CORES RESTAURADAS) --- */
 .podium-container {
     display: flex;
     justify-content: center;
@@ -86,21 +86,22 @@
     margin-top: 40px;
 }
 
-/* --- REGRAS CSS PARA A MOLDURA ANIMADA (BASE) --- */
+/* --- REGRAS CSS PARA A MOLDURA ANIMADA (CORES ORIGINAIS RESTAURADAS) --- */
 
-/* Base Variables - MUDADAS PARA VERDE-TÓXICO */
+/* Base Variables - Gold, Silver, Bronze */
 :root {
-  --electric-border-color-rank-2: var(--glow-green);
-  --electric-light-color-rank-2: var(--glow-green);
-  --gradient-color-rank-2: oklch(0.85 0.29 145 / 0.4); /* oklch de #39ff14 com alfa */
+  /* Cores específicas do pódio */
+  --podium-border-color-rank-2: oklch(0.85 0.02 230); /* Silverish */
+  --podium-light-color-rank-2: oklch(from var(--podium-border-color-rank-2) l c h);
+  --podium-gradient-color-rank-2: oklch(from var(--podium-border-color-rank-2) 0.3 calc(c / 2) h / 0.4);
 
-  --electric-border-color-rank-1: var(--glow-green);
-  --electric-light-color-rank-1: var(--glow-green);
-  --gradient-color-rank-1: oklch(0.85 0.29 145 / 0.4);
+  --podium-border-color-rank-1: oklch(0.85 0.15 85); /* Gold */
+  --podium-light-color-rank-1: oklch(from var(--podium-border-color-rank-1) l c h);
+  --podium-gradient-color-rank-1: oklch(from var(--podium-border-color-rank-1) 0.3 calc(c / 2) h / 0.4);
 
-  --electric-border-color-rank-3: var(--glow-green);
-  --electric-light-color-rank-3: var(--glow-green);
-  --gradient-color-rank-3: oklch(0.85 0.29 145 / 0.4);
+  --podium-border-color-rank-3: oklch(0.7 0.1 50); /* Bronze */
+  --podium-light-color-rank-3: oklch(from var(--podium-border-color-rank-3) l c h);
+  --podium-gradient-color-rank-3: oklch(from var(--podium-border-color-rank-3) 0.3 calc(c / 2) h / 0.4);
 
   --color-neutral-900: oklch(0.185 0 0); /* Dark background for gradient */
 }
@@ -118,16 +119,17 @@
   pointer-events: none; /* Prevent SVG from interfering */
 }
 
-/* Card container - Aplica gradiente (agora verde) */
+/* Card container - Aplica gradiente */
 .card-container {
   padding: 2px;
   border-radius: 24px;
   position: relative;
+  /* Default to rank 2 colors */
   background: linear-gradient(
       -30deg,
-      var(--gradient-color-rank-2),
+      var(--podium-gradient-color-rank-2), /* Usa variável específica do pódio */
       transparent,
-      var(--gradient-color-rank-2)
+      var(--podium-gradient-color-rank-2)
     ),
     linear-gradient(
       to bottom,
@@ -135,151 +137,130 @@
       var(--color-neutral-900)
     );
 }
-/* Linhas abaixo não são mais necessárias pois todos os ranks usam a mesma cor */
-/* .rank-1 .card-container { ... } */
-/* .rank-3 .card-container { ... } */
-
+/* Cores específicas por rank */
+.rank-1 .card-container {
+  background: linear-gradient(-30deg, var(--podium-gradient-color-rank-1), transparent, var(--podium-gradient-color-rank-1)), linear-gradient(to bottom, var(--color-neutral-900), var(--color-neutral-900));
+}
+.rank-3 .card-container {
+  background: linear-gradient(-30deg, var(--podium-gradient-color-rank-3), transparent, var(--podium-gradient-color-rank-3)), linear-gradient(to bottom, var(--color-neutral-900), var(--color-neutral-900));
+}
 
 .inner-container {
   position: relative;
 }
 
-/* Outer border (agora verde) */
+/* Outer border (transparente) */
 .border-outer {
-  border: 2px solid rgba(57, 255, 20, 0.5); /* Default Green */
+  border: 2px solid rgba(180, 220, 255, 0.5); /* Default Silver */
   border-radius: 24px;
 }
-/* Linhas abaixo não são mais necessárias */
-/* .rank-1 .border-outer { ... } */
-/* .rank-3 .border-outer { ... } */
+.rank-1 .border-outer { border-color: rgba(255, 215, 0, 0.5); } /* Gold */
+.rank-3 .border-outer { border-color: rgba(205, 127, 50, 0.5); } /* Bronze */
 
-/* Main card - holds content, applies filter */
+/* Main card */
 .main-card {
-  width: 200px;  /* Adjusted size */
-  height: 180px; /* Adjusted size */
+  width: 200px;
+  height: 180px;
   border-radius: 24px;
-  border: 2px solid var(--electric-border-color-rank-2); /* Default Green */
+  border: 2px solid var(--podium-border-color-rank-2); /* Default Silver */
   filter: url(#turbulent-displace);
   position: relative;
   overflow: hidden;
   background-color: rgba(10, 25, 47, 0.85); /* Match section background */
-  display: flex; /* Added for centering content */
-  align-items: center; /* Added for centering content */
-  justify-content: center; /* Added for centering content */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.rank-1 .main-card { border-color: var(--electric-border-color-rank-1); height: 210px; } /* Taller */
-.rank-3 .main-card { border-color: var(--electric-border-color-rank-3); height: 160px; } /* Shorter */
+.rank-1 .main-card { border-color: var(--podium-border-color-rank-1); height: 210px; } /* Gold + Taller */
+.rank-3 .main-card { border-color: var(--podium-border-color-rank-3); height: 160px; } /* Bronze + Shorter */
 
 
-/* Glow layers (agora verde) */
+/* Glow layers */
 .glow-layer-1, .glow-layer-2 {
   border-radius: 24px;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%; height: 100%;
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
   pointer-events: none;
 }
 .glow-layer-1 {
-  border: 2px solid rgba(57, 255, 20, 0.6); /* Default Green */
+  border: 2px solid rgba(180, 220, 255, 0.6); /* Default Silver */
   filter: blur(1px);
 }
-/* .rank-1 .glow-layer-1 { ... } */
-/* .rank-3 .glow-layer-1 { ... } */
+.rank-1 .glow-layer-1 { border-color: rgba(255, 215, 0, 0.6); } /* Gold */
+.rank-3 .glow-layer-1 { border-color: rgba(205, 127, 50, 0.6); } /* Bronze */
 
 .glow-layer-2 {
-  border: 2px solid var(--electric-light-color-rank-2); /* Default Green */
+  border: 2px solid var(--podium-light-color-rank-2); /* Default Silver */
   filter: blur(4px);
 }
-/* .rank-1 .glow-layer-2 { ... } */
-/* .rank-3 .glow-layer-2 { ... } */
+.rank-1 .glow-layer-2 { border-color: var(--podium-light-color-rank-1); } /* Gold */
+.rank-3 .glow-layer-2 { border-color: var(--podium-light-color-rank-3); } /* Bronze */
 
 /* Overlay effects (keep generic white) */
 .overlay-1, .overlay-2 {
-  position: absolute;
-  width: 100%; height: 100%;
+  position: absolute; width: 100%; height: 100%;
   top: 0; left: 0; right: 0; bottom: 0;
-  border-radius: 24px;
-  mix-blend-mode: overlay;
-  transform: scale(1.1);
-  filter: blur(16px);
+  border-radius: 24px; mix-blend-mode: overlay;
+  transform: scale(1.1); filter: blur(16px);
   background: linear-gradient(-30deg, white, transparent 30%, transparent 70%, white);
   pointer-events: none;
 }
 .overlay-1 { opacity: 1; }
 .overlay-2 { opacity: 0.5; }
 
-/* Background glow (agora verde) */
+/* Background glow */
 .background-glow {
-  position: absolute;
-  width: 100%; height: 100%;
+  position: absolute; width: 100%; height: 100%;
   top: 0; left: 0; right: 0; bottom: 0;
-  border-radius: 24px;
-  filter: blur(32px);
-  transform: scale(1.1);
-  opacity: 0.3;
-  z-index: -1;
-  background: linear-gradient(-30deg, var(--electric-light-color-rank-2), transparent, var(--electric-border-color-rank-2)); /* Default Green */
+  border-radius: 24px; filter: blur(32px);
+  transform: scale(1.1); opacity: 0.3; z-index: -1;
+  background: linear-gradient(-30deg, var(--podium-light-color-rank-2), transparent, var(--podium-border-color-rank-2)); /* Default Silver */
   pointer-events: none;
 }
-/* .rank-1 .background-glow { ... } */
-/* .rank-3 .background-glow { ... } */
+.rank-1 .background-glow { background: linear-gradient(-30deg, var(--podium-light-color-rank-1), transparent, var(--podium-border-color-rank-1)); } /* Gold */
+.rank-3 .background-glow { background: linear-gradient(-30deg, var(--podium-light-color-rank-3), transparent, var(--podium-border-color-rank-3)); } /* Bronze */
 
 /* Content Container - Centered */
 .content-container {
-    position: absolute; /* Position over the card background */
-    top: 0; left: 0; right: 0; bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    text-align: center;
-    color: #fff; /* Default text color */
-    z-index: 5; /* Ensure content is above background/overlays */
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 20px; text-align: center; color: #fff; z-index: 5;
 }
 
-/* Styles for rank, name, score inside content-container (agora verde) */
+/* Styles for rank, name, score inside content-container (cores originais) */
 .content-container .podium-rank {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    color: var(--glow-green);
-    text-shadow: 0 0 10px var(--glow-green);
+    font-size: 2.5rem; font-weight: 700; margin-bottom: 10px;
+    color: #c0c0c0; /* Prata */
+    text-shadow: 0 0 10px #c0c0c0;
 }
 .content-container .podium-name {
-    font-size: 1.3rem;
-    font-weight: 500;
-    margin-bottom: 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 90%; /* Prevent long names from breaking layout */
-    color: #f0f0f0;
+    font-size: 1.3rem; font-weight: 500; margin-bottom: 5px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    max-width: 90%; color: #f0f0f0; /* Prata claro */
 }
 .content-container .podium-score {
-    font-size: 1rem;
-    opacity: 0.8;
+    font-size: 1rem; opacity: 0.8;
 }
 
-/* Rank specific color overrides for text (NÃO MAIS NECESSÁRIO) */
-/* .rank-1 .content-container .podium-rank { ... } */
-/* .rank-3 .content-container .podium-rank { ... } */
+/* Rank specific color overrides for text */
+.rank-1 .content-container .podium-rank { color: #ffd700; text-shadow: 0 0 10px #ffd700; } /* Dourado */
+.rank-1 .content-container .podium-name { color: #fff; } /* Branco para 1º */
 
+.rank-3 .content-container .podium-rank { color: #cd7f32; text-shadow: 0 0 10px #cd7f32; } /* Bronze */
+.rank-3 .content-container .podium-name { color: #e0e0e0; } /* Cinza claro para 3º */
 
 /* --- Positioning within Flex Container --- */
-.rank-1 { order: 2; transform: translateY(-20px); z-index: 10; } /* Center and slightly raised */
-.rank-2 { order: 1; } /* Left */
-.rank-3 { order: 3; } /* Right */
+.rank-1 { order: 2; transform: translateY(-20px); z-index: 10; }
+.rank-2 { order: 1; }
+.rank-3 { order: 3; }
 
 /* --- END OF PODIUM STYLES --- */
 
 
-/* --- Seção Membros de Honra --- */
+/* --- Seção Membros de Honra (Continua usando .gloria-profile do App.css) --- */
 .honor-section {
   text-align: center;
 }
-
 .honor-members-grid {
   display: flex;
   justify-content: center;
@@ -287,95 +268,6 @@
   flex-wrap: wrap;
   margin-bottom: 20px;
 }
-
-/* O estilo .gloria-profile (agora verde) será aplicado aqui globalmente pelo App.css */
-.honor-member-card {
-  padding: 20px 30px;
-  /* background-color: rgba(255, 215, 0, 0.1); */ /* Removido - .gloria-profile controla isso */
-  /* border: 1px solid #ffd700; */ /* Removido */
-  border-radius: 6px;
-  min-width: 200px;
-  /* box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); */ /* Removido */
-}
-
-.honor-member-name {
-  font-size: 1.4rem;
-  font-weight: bold;
-  /* MUDANÇA: Cor do texto de honra */
-  color: var(--glow-green);
-  text-shadow: 0 0 8px var(--glow-green);
-  margin: 0;
-}
-
-.honor-period {
-  font-size: 1rem;
-  color: rgba(224, 251, 252, 0.7);
-}
-
-
-/* --- Controles de Admin (agora verde) --- */
-.admin-controls {
-  text-align: right;
-  margin-bottom: 20px;
-}
-.btn-edit-mode, .btn-save, .btn-cancel {
-    padding: 8px 16px;
-    font-family: 'Chakra Petch', sans-serif;
-    background: transparent;
-    color: var(--glow-green);
-    border: 1px solid var(--glow-green);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.3s;
-    margin-left: 10px; /* Espaçamento entre botões */
-}
-.btn-edit-mode:hover, .btn-save:hover, .btn-cancel:hover {
-    background: var(--glow-green);
-    color: #02040a;
-    box-shadow: 0 0 10px var(--glow-green);
-}
-.btn-save { color: #28a745; border-color: #28a745; }
-.btn-save:hover { background: #28a745; color: #fff; box-shadow: 0 0 10px #28a745; }
-.btn-cancel { color: #dc3545; border-color: #dc3545; }
-.btn-cancel:hover { background: #dc3545; color: #fff; box-shadow: 0 0 10px #dc3545; }
-
-.edit-fields input, .edit-textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(57, 255, 20, 0.3);
-    color: #e0fbfc;
-    border-radius: 4px;
-    font-family: inherit;
-    font-size: 1rem;
-    box-sizing: border-box;
-}
-.edit-textarea { min-height: 120px; }
-
-
-/* --- Rodapé (agora verde) --- */
-.footer {
-  text-align: center;
-  padding-top: 20px;
-  margin-top: 30px;
-  border-top: 1px solid rgba(57, 255, 20, 0.2);
-  color: rgba(224, 251, 252, 0.6);
-  font-size: 0.9rem;
-}
-
-.footer a {
-  color: var(--glow-green);
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.footer a:hover {
-  color: #fff;
-  text-shadow: 0 0 5px var(--glow-green);
-}
-
-/* Estilos para Membros de Honra na Home */
 .honor-member-card {
   padding: 20px;
   min-width: 220px;
@@ -383,33 +275,71 @@
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  /* Bordas e sombras vêm da classe global .gloria-profile (agora verde) */
+  /* Bordas e sombras vêm da classe global .gloria-profile (agora verde/biohazard) */
 }
-
 .honor-member-card .profile-pic-wrapper {
   position: relative;
 }
-
 .honor-member-card .profile-pic {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  /* Bordas vêm da classe global .gloria-profile (agora verde) */
+  width: 80px; height: 80px;
+  border-radius: 50%; object-fit: cover;
+  /* Bordas vêm da classe global .gloria-profile */
+}
+.honor-member-name {
+  font-size: 1.2rem; font-weight: bold;
+  color: var(--accent-color, #39ff14); /* Texto verde */
+  text-shadow: 0 0 8px var(--glow-green, #39ff14); /* Brilho verde */
+  margin: 0;
+}
+.honor-period {
+  font-size: 1rem; color: rgba(224, 251, 252, 0.7);
 }
 
-.honor-member-name {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: var(--glow-green);
-  text-shadow: 0 0 8px var(--glow-green);
-  margin: 0;
+
+/* --- Controles de Admin (Continua verde) --- */
+.admin-controls {
+  text-align: right; margin-bottom: 20px;
+}
+.btn-edit-mode, .btn-save, .btn-cancel {
+    padding: 8px 16px; font-family: 'Chakra Petch', sans-serif;
+    background: transparent; color: var(--accent-color, #39ff14);
+    border: 1px solid var(--accent-color, #39ff14);
+    border-radius: 4px; cursor: pointer; transition: all 0.3s;
+    margin-left: 10px;
+}
+.btn-edit-mode:hover, .btn-save:hover, .btn-cancel:hover {
+    background: var(--accent-color, #39ff14); color: #02040a;
+    box-shadow: 0 0 10px var(--glow-green, #39ff14);
+}
+.btn-save { color: #28a745; border-color: #28a745; }
+.btn-save:hover { background: #28a745; color: #fff; box-shadow: 0 0 10px #28a745; }
+.btn-cancel { color: #dc3545; border-color: #dc3545; }
+.btn-cancel:hover { background: #dc3545; color: #fff; box-shadow: 0 0 10px #dc3545; }
+
+.edit-fields input, .edit-textarea {
+    width: 100%; padding: 10px; margin-bottom: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color, rgba(57, 255, 20, 0.3));
+    color: #e0fbfc; border-radius: 4px; font-family: inherit;
+    font-size: 1rem; box-sizing: border-box;
+}
+.edit-textarea { min-height: 120px; }
+
+
+/* --- Rodapé (Continua verde) --- */
+.footer {
+  text-align: center; padding-top: 20px; margin-top: 30px;
+  border-top: 1px solid var(--border-color, rgba(57, 255, 20, 0.2));
+  color: rgba(224, 251, 252, 0.6); font-size: 0.9rem;
+}
+.footer a {
+  color: var(--accent-color, #39ff14); text-decoration: none; transition: color 0.3s;
+}
+.footer a:hover {
+  color: #fff; text-shadow: 0 0 5px var(--glow-green, #39ff14);
 }
 
 .season-period {
-  text-align: center;
-  margin-top: 25px;
-  font-size: 1rem;
-  color: rgba(224, 251, 252, 0.7);
-  font-weight: 500;
+  text-align: center; margin-top: 25px; font-size: 1rem;
+  color: rgba(224, 251, 252, 0.7); font-weight: 500;
 }
