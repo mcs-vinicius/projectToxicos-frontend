@@ -190,7 +190,7 @@ const ResultsPage = ({ currentUser }) => {
   }
 
   return (
-    <div className="container">
+    <div className="container results-page-container"> {/* Adiciona classe específica */}
       <h1 className="title">Expedição Lunar</h1>
       {/* Verifica se existe season E rankingData antes de renderizar */}
       {season && rankingData ? (

@@ -62,10 +62,10 @@
 
 /* --- Área de Conteúdo Principal --- */
 .content-area {
-  /* REMOVIDO padding-top: 80px; */ /* Padding será adicionado pelos containers internos ou globalmente */
-  padding: 20px; /* Padding geral para o conteúdo */
+  /* REMOVIDO padding-top: 80px; */
+  padding: 0 20px 20px 20px; /* Mantém padding lateral e inferior, remove superior */
   position: relative; z-index: 2; background-color: transparent;
-  min-height: calc(100vh - 61px); /* Altura mínima considerando navbar */
+  min-height: calc(100vh - 61px);
 }
 
 /* --- ESTILIZAÇÃO GLOBAL MEMBROS DE HONRA --- */
@@ -83,22 +83,13 @@
     text-shadow: 0 0 5px var(--glow-green), 0 0 10px var(--glow-green), 0 0 15px var(--glow-green), 0 0 20px var(--glow-green);
     animation: flicker 1.5s infinite alternate; z-index: 10;
 }
-
-/* Animação de 'piscar' para o efeito neon */
 @keyframes flicker {
   0%, 100% {
     opacity: 1;
-    text-shadow: 
-        0 0 5px var(--glow-green),
-        0 0 10px var(--glow-green),
-        0 0 15px var(--glow-green),
-        0 0 20px var(--glow-green); /* MUDADO */
+    text-shadow: 0 0 5px var(--glow-green), 0 0 10px var(--glow-green), 0 0 15px var(--glow-green), 0 0 20px var(--glow-green);
   }
   50% {
     opacity: 0.8;
-    text-shadow: 
-        0 0 5px var(--glow-green),
-        0 0 8px var(--glow-green),
-        0 0 12px var(--glow-green); /* MUDADO */
+    text-shadow: 0 0 5px var(--glow-green), 0 0 8px var(--glow-green), 0 0 12px var(--glow-green);
   }
 }

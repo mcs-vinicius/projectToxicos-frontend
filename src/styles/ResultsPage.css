@@ -12,11 +12,10 @@
   100% { transform: translateY(110%); }
 }
 
-/* Estilos do body agora estão principalmente no global.css */
-
-.container {
+/* Container principal da página ResultsPage */
+.results-page-container { /* Renomeado de .container para evitar conflitos futuros */
   max-width: 1200px;
-  margin: 80px auto 20px auto;
+  margin: 80px auto 20px auto; /* Margem superior para compensar navbar fixa */
   padding: 30px;
   background-color: rgba(10, 25, 47, 0.8);
   border: 1px solid var(--glow-green);
@@ -28,17 +27,17 @@
   animation: fadeIn 1s ease-out;
 }
 
-/* --- Cantoneiras Decorativas (verde) --- */
-.container::before,
-.container::after {
+/* --- Cantoneiras Decorativas --- */
+.results-page-container::before,
+.results-page-container::after {
   content: ""; position: absolute; width: 25px; height: 25px;
   border-color: var(--glow-green); border-style: solid; z-index: 2;
 }
-.container::before { top: -5px; left: -5px; border-width: 2px 0 0 2px; }
-.container::after { bottom: -5px; right: -5px; border-width: 0 2px 2px 0; }
+.results-page-container::before { top: -5px; left: -5px; border-width: 2px 0 0 2px; }
+.results-page-container::after { bottom: -5px; right: -5px; border-width: 0 2px 2px 0; }
 
-/* --- Tipografia e Títulos (verde) --- */
-.title {
+/* --- Tipografia e Títulos --- */
+.results-page-container .title { /* Especificidade aumentada */
   text-align: center; font-size: 3rem; font-weight: 700; color: #ffffff;
   text-transform: uppercase; letter-spacing: 5px; margin-bottom: 20px;
   text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--glow-green), 0 0 30px var(--glow-green);
@@ -60,9 +59,7 @@
   color: #ff2d55; background-color: transparent; border: 2px solid #ff2d55;
   border-radius: 4px; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
 }
-.btn-delete-season:hover {
-  background-color: #ff2d55; color: #fff; box-shadow: 0 0 15px #ff2d55;
-}
+.btn-delete-season:hover { background-color: #ff2d55; color: #fff; box-shadow: 0 0 15px #ff2d55; }
 
 /* --- Tabelas (Desktop) --- */
 .tables-container {
@@ -70,7 +67,8 @@
 }
 .table-wrapper {
   flex: 1; min-width: 400px; background-color: transparent;
-  border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden;
+  border: 1px solid var(--border-color); border-radius: 6px;
+  /* overflow: hidden; /* Removido para mobile */
 }
 .table-title {
   font-size: 1.5rem; font-weight: 600; color: #ffffff; background-color: var(--hover-bg-color);
@@ -87,9 +85,7 @@ tbody tr { transition: background-color 0.3s ease; }
 tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
 
 /* Emblema (Desktop) */
-.emblem-cell-jsx {
-  display: flex; align-items: center; justify-content: flex-start; padding: 4px 10px;
-}
+.emblem-cell-jsx { display: flex; align-items: center; justify-content: flex-start; padding: 4px 10px; }
 .tier-emblem { width: 28px; height: auto; margin-right: 8px; vertical-align: middle; }
 .emblem-cell-jsx span { font-size: 0.9em; line-height: 1; white-space: nowrap; }
 
@@ -122,25 +118,21 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 .txtcenter { display: flex; justify-content: center; }
 
 
-/* --- AJUSTES PARA MOBILE (Layout de Cards Corrigido) --- */
+/* --- AJUSTES PARA MOBILE (Layout de Cards Corrigido FINAL) --- */
 @media (max-width: 768px) {
-  .container { padding: 20px 10px; margin-top: 20px; }
-  .title { font-size: 1.8rem; margin-bottom: 15px; }
+  .results-page-container { padding: 20px 10px; margin-top: 20px; }
+  .results-page-container .title { font-size: 1.8rem; margin-bottom: 15px; }
   .season-info-container { flex-direction: column; gap: 10px; margin-bottom: 25px; }
   .season-info { font-size: 1rem; }
 
   .tables-container { flex-direction: column; gap: 0; }
 
   .table-wrapper {
-    min-width: unset; width: 100%;
-    overflow: visible; /* Remove overflow do wrapper */
+    min-width: unset; width: 100%; overflow: visible;
     border: none; background: none; padding: 0; box-shadow: none;
   }
-   .table-wrapper:not(:last-child) {
-     margin-bottom: 30px; /* Adiciona espaço ABAIXO de cada tabela */
-   }
-   .table-title { font-size: 1.3rem; }
-
+   .table-wrapper:not(:last-child) { margin-bottom: 30px; }
+   .table-title { font-size: 1.3rem; padding: 10px; border-bottom: 1px solid var(--border-color); }
 
   /* Transforma Tabela em Layout de Cards */
   table, thead, tbody, tfoot, th, td, tr { display: block; }
@@ -152,7 +144,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     margin-bottom: 15px; padding: 10px 15px;
     background-color: rgba(10, 25, 47, 0.7);
   }
-  tbody tr:hover { background-color: rgba(10, 25, 47, 0.7); } /* Sobrescreve hover do desktop */
+  tbody tr:hover { background-color: rgba(10, 25, 47, 0.7); }
 
   /* Estilo de cada item de dado (célula) */
   td {
@@ -172,51 +164,22 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     font-size: 0.75rem;
   }
 
-  /* Ajustes específicos para a célula de Tier (emblem-cell-jsx) */
-  td.emblem-cell-jsx {
-    padding-left: 45%; /* Mantém espaço para label */
-    justify-content: flex-end; /* Alinha conteúdo à direita */
-  }
-  /* Força o label a ser "Tier" */
+  /* Célula de Tier (emblem-cell-jsx) */
+  td.emblem-cell-jsx { padding-left: 45%; justify-content: flex-end; }
   td.emblem-cell-jsx:before { content: 'Tier'; }
-
-  .emblem-cell-jsx { /* Estiliza o container interno da imagem e span */
-    padding: 0; display: flex; align-items: center;
-    justify-content: flex-end; /* Alinha img+span à direita */
-    width: 55%; /* Ocupa espaço restante */
-  }
+  .emblem-cell-jsx { padding: 0; display: flex; align-items: center; justify-content: flex-end; width: 55%; }
   .tier-emblem { width: 22px; margin-right: 5px; }
   .emblem-cell-jsx span { font-size: 0.8em; text-align: right; }
 
-
-  /* Ajustes para o Rodapé (Total) no mobile */
- tfoot {
-     display: block; margin-top: 15px; padding-top: 10px;
-     border-top: 1px solid var(--border-color);
- }
- /* Linha do rodapé como flex */
- tfoot tr.lvAA {
-     border: none; padding: 0; margin-bottom: 0; background: none;
-     display: flex; justify-content: space-between; align-items: center;
- }
- /* Células do rodapé */
- tfoot td.lvtt {
-     border: none; padding: 5px 0; text-align: left;
-     min-height: unset; display: inline; font-size: 1rem;
- }
- tfoot td.lvtt:before { display: none; } /* Esconde pseudo-label */
- /* Célula do texto "Total" */
- tfoot .lvtt[colSpan="1"], tfoot .lvtt[colSpan="4"], tfoot .lvtt[colSpan="5"] {
-     text-align: left; font-weight: bold; color: var(--glow-green); width: auto; /* Reseta colspan */
-     display: inline; /* Garante que fique inline */
- }
- /* Célula do valor total */
- tfoot .lvtt:last-child {
-     text-align: right; font-weight: bold; color: #fff; width: auto; /* Reseta colspan */
-     display: inline; /* Garante que fique inline */
- }
- .txtcenter { display: inline; } /* Remove centralização */
-
+  /* Rodapé (Total) no mobile */
+ tfoot { display: block; margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border-color); }
+ tfoot tr.lvAA { border: none; padding: 0; margin-bottom: 0; background: none; display: flex; justify-content: space-between; align-items: center; }
+ tfoot td.lvtt { border: none; padding: 5px 0; text-align: left; min-height: unset; display: inline; font-size: 1rem; width: auto; }
+ tfoot td.lvtt:before { display: none; }
+ tfoot .lvtt[colspan="1"], tfoot .lvtt[colspan="4"], tfoot .lvtt[colspan="5"] { width: auto; display: inline; }
+ tfoot .lvtt:first-child { text-align: left; font-weight: bold; color: var(--glow-green); }
+ tfoot .lvtt:last-child { text-align: right; font-weight: bold; color: #fff; }
+ .txtcenter { display: inline; }
 
   .pagination { margin-top: 25px; }
   .pagination button { padding: 8px 15px; font-size: 0.9rem; }
