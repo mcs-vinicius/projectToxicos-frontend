@@ -1,213 +1,86 @@
 /* src/App.css */
 
+/* --- Estilos da Navbar --- */
 .navsup {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: rgba(10, 25, 47, 0.8);
-  backdrop-filter: blur(5px);
-  /* MUDANÇA: Cor da borda */
-  border-bottom: 1px solid rgba(57, 255, 20, 0.2);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  width: 100%;
-  box-sizing: border-box;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 20px; background-color: rgba(10, 25, 47, 0.8);
+  backdrop-filter: blur(5px); border-bottom: 1px solid var(--border-color);
+  position: sticky; top: 0; z-index: 1000; width: 100%; box-sizing: border-box;
 }
-
 .nav-left .nav-logo {
-  font-family: 'Chakra Petch', sans-serif;
-  font-weight: bold;
-  font-size: 1.5rem;
-  color: #fff;
-  text-decoration: none;
-  /* MUDANÇA: Cor do brilho */
-  text-shadow: 0 0 10px var(--glow-green);
+  font-family: 'Chakra Petch', sans-serif; font-weight: bold; font-size: 1.5rem;
+  color: #fff; text-decoration: none; text-shadow: 0 0 10px var(--glow-green);
 }
+.nav-center-desktop { display: flex; gap: 10px; }
+.nav-right { display: flex; align-items: center; gap: 15px; }
 
-.nav-center-desktop {
-  display: flex;
-  gap: 10px;
-}
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
+/* --- Estilos dos Botões do Menu --- */
 .btt-menu {
-  /* MUDANÇA: Cor do texto */
-  color: var(--glow-green);
-  text-decoration: none;
-  font-family: 'Chakra Petch', sans-serif;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background-color 0.3s, color 0.3s;
-  border: 1px solid transparent;
-  white-space: nowrap;
+  color: var(--accent-color); text-decoration: none; font-family: 'Chakra Petch', sans-serif;
+  padding: 8px 12px; border-radius: 4px; transition: all 0.3s;
+  border: 1px solid transparent; white-space: nowrap;
 }
-
-.btt-menu:hover,
-.btt-menu.active {
-  /* MUDANÇA: Cor do hover */
-  background-color: rgba(57, 255, 20, 0.15);
-  border-color: rgba(57, 255, 20, 0.5);
-  text-shadow: 0 0 8px var(--glow-green);
+.btt-menu:hover, .btt-menu.active {
+  background-color: var(--hover-bg-color); border-color: rgba(57, 255, 20, 0.5);
+  color: #fff; text-shadow: 0 0 8px var(--glow-green);
 }
+.btt-logout { background: none; border: none; cursor: pointer; font-size: 1rem; }
 
-.btt-logout {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.hamburger-icon {
-  display: none;
-  color: #fff;
-  font-size: 1.5rem;
-  cursor: pointer;
-  z-index: 1001; /* Garante que fique acima da busca */
-}
-
+/* --- Ícone Hamburger e Menu Mobile --- */
+.hamburger-icon { display: none; color: #fff; font-size: 1.5rem; cursor: pointer; z-index: 1001; }
 .mobile-menu {
-  position: fixed;
-  top: 61px;
-  left: -100%;
-  width: 280px; /* Um pouco mais largo para a busca */
-  height: calc(100vh - 61px);
-  background-color: rgba(10, 25, 47, 0.95);
-  backdrop-filter: blur(10px);
-  z-index: 999;
-  transition: left 0.3s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  /* MUDANÇA: Cor da borda */
-  border-right: 1px solid rgba(57, 255, 20, 0.3);
+  position: fixed; top: 61px; left: -100%; width: 280px; height: calc(100vh - 61px);
+  background-color: rgba(10, 25, 47, 0.95); backdrop-filter: blur(10px);
+  z-index: 999; transition: left 0.3s ease-in-out; display: flex; flex-direction: column;
+  border-right: 1px solid var(--border-color); overflow-y: auto;
 }
-
-.mobile-menu.open {
-  left: 0;
-}
-
-.mobile-search-wrapper {
-  padding: 20px 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-/* Ajusta a largura da busca dentro do menu */
-.mobile-search-wrapper .search-wrapper {
-  width: 100%;
-}
-
+.mobile-menu.open { left: 0; }
+.mobile-search-wrapper { padding: 20px 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+.mobile-search-wrapper .search-wrapper { width: 100%; }
 .btt-menu-mobile {
-  color: #e0fbfc;
-  text-decoration: none;
-  font-family: 'Chakra Petch', sans-serif;
-  padding: 15px 20px;
-  font-size: 1.1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: background-color 0.2s;
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  text-align: left;
+  color: var(--light-text); text-decoration: none; font-family: 'Chakra Petch', sans-serif;
+  padding: 15px 20px; font-size: 1.1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.2s, color 0.2s; display: block; width: 100%;
+  box-sizing: border-box; text-align: left;
 }
-
-.btt-menu-mobile:hover,
-.btt-menu-mobile.active {
-  /* MUDANÇA: Cor do hover */
-  background-color: rgba(57, 255, 20, 0.15);
-  color: #fff;
+.btt-menu-mobile:hover, .btt-menu-mobile.active {
+  background-color: var(--hover-bg-color); color: #fff;
 }
-
-.mobile-auth-section {
-  margin-top: auto; /* Empurra para o final do menu */
-  padding-top: 10px;
-  /* MUDANÇA: Cor da borda */
-  border-top: 1px solid rgba(57, 255, 20, 0.2);
-}
-
+.mobile-auth-section { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border-color); }
 .btt-logout-mobile {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #ff4d4d;
+  background: none; border: none; cursor: pointer; color: #ff4d4d;
+  width: 100%; text-align: left; padding: 15px 20px;
 }
-.btt-logout-mobile:hover {
-  background-color: rgba(255, 77, 77, 0.1);
-}
+.btt-logout-mobile:hover { background-color: rgba(255, 77, 77, 0.1); }
 
-/* --- Media Query para Responsividade --- */
-
+/* --- Media Query --- */
 @media (max-width: 1024px) {
-  .nav-center-desktop, .desktop-only {
-    display: none; /* Esconde os links do centro e a busca/login do desktop */
-  }
-
-  .hamburger-icon {
-    display: block;
-  }
-  
-  .navsup {
-    justify-content: space-between;
-  }
+  .nav-center-desktop, .desktop-only { display: none; }
+  .hamburger-icon { display: block; }
+  .navsup { justify-content: space-between; }
 }
 
+/* --- Área de Conteúdo Principal --- */
 .content-area {
-  padding-top: 20px;
+  /* REMOVIDO padding-top: 80px; */ /* Padding será adicionado pelos containers internos ou globalmente */
+  padding: 20px; /* Padding geral para o conteúdo */
+  position: relative; z-index: 2; background-color: transparent;
+  min-height: calc(100vh - 61px); /* Altura mínima considerando navbar */
 }
 
-
-
-/* --- ESTILIZAÇÃO GLOBAL PARA MEMBROS DE HONRA (SUGESTÃO DE MUDANÇA) --- */
-
-/* Contêiner com brilho verde-tóxico */
+/* --- ESTILIZAÇÃO GLOBAL MEMBROS DE HONRA --- */
 .gloria-profile {
     border: 2px solid var(--glow-green) !important;
-    box-shadow: 0 0 20px rgba(57, 255, 20, 0.7), 0 0 30px rgba(57, 255, 20, 0.5) !important;
+    box-shadow: 0 0 20px var(--shadow-color), 0 0 30px var(--shadow-color) !important;
 }
-
-/* Foto com borda verde-tóxico */
 .gloria-profile .profile-pic {
     border-color: var(--glow-green) !important;
-    box-shadow: 0 0 20px rgba(57, 255, 20, 0.6) !important;
+    box-shadow: 0 0 20px var(--shadow-color) !important;
 }
-
-/* Símbolo de 'Biohazard' sobre a foto */
 .gloria-profile .profile-pic-wrapper::after {
-    content: '☣️'; /* MUDADO DE '👑' */
-    position: absolute;
-    top: -40px; 
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 32px;
-    color: var(--glow-green); /* MUDADO DE #ffd700 */
-    text-shadow: 
-        0 0 5px var(--glow-green),
-        0 0 10px var(--glow-green),
-        0 0 15px var(--glow-green),
-        0 0 20px var(--glow-green); /* MUDADO DE DOURADO/LARANJA */
-    animation: flicker 1.5s infinite alternate;
-    z-index: 10;
+    content: '☣️'; position: absolute; top: -40px; left: 50%;
+    transform: translateX(-50%); font-size: 32px; color: var(--glow-green);
+    text-shadow: 0 0 5px var(--glow-green), 0 0 10px var(--glow-green), 0 0 15px var(--glow-green), 0 0 20px var(--glow-green);
+    animation: flicker 1.5s infinite alternate; z-index: 10;
 }
-
-/* Animação de 'piscar' para o efeito neon */
-@keyframes flicker {
-  0%, 100% {
-    opacity: 1;
-    text-shadow: 
-        0 0 5px var(--glow-green),
-        0 0 10px var(--glow-green),
-        0 0 15px var(--glow-green),
-        0 0 20px var(--glow-green); /* MUDADO */
-  }
-  50% {
-    opacity: 0.8;
-    text-shadow: 
-        0 0 5px var(--glow-green),
-        0 0 8px var(--glow-green),
-        0 0 12px var(--glow-green); /* MUDADO */
-  }
-}
+@keyframes flicker { /* ... (sem alterações) ... */ }

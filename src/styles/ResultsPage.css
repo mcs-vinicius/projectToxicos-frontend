@@ -129,7 +129,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
   .season-info-container { flex-direction: column; gap: 10px; margin-bottom: 25px; }
   .season-info { font-size: 1rem; }
 
-  .tables-container { flex-direction: column; gap: 0; /* Remove gap entre wrappers */ }
+  .tables-container { flex-direction: column; gap: 0; }
 
   .table-wrapper {
     min-width: unset; width: 100%;
@@ -139,7 +139,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
    .table-wrapper:not(:last-child) {
      margin-bottom: 30px; /* Adiciona espaço ABAIXO de cada tabela */
    }
-   .table-title { font-size: 1.3rem; /* Título menor no mobile */ }
+   .table-title { font-size: 1.3rem; }
 
 
   /* Transforma Tabela em Layout de Cards */
@@ -152,7 +152,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     margin-bottom: 15px; padding: 10px 15px;
     background-color: rgba(10, 25, 47, 0.7);
   }
-  tr:hover { background-color: rgba(10, 25, 47, 0.7); }
+  tbody tr:hover { background-color: rgba(10, 25, 47, 0.7); } /* Sobrescreve hover do desktop */
 
   /* Estilo de cada item de dado (célula) */
   td {
@@ -177,7 +177,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     padding-left: 45%; /* Mantém espaço para label */
     justify-content: flex-end; /* Alinha conteúdo à direita */
   }
-  /* Força o label a ser "Tier" (caso o data-label não seja pego corretamente) */
+  /* Força o label a ser "Tier" */
   td.emblem-cell-jsx:before { content: 'Tier'; }
 
   .emblem-cell-jsx { /* Estiliza o container interno da imagem e span */
@@ -188,30 +188,35 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
   .tier-emblem { width: 22px; margin-right: 5px; }
   .emblem-cell-jsx span { font-size: 0.8em; text-align: right; }
 
+
   /* Ajustes para o Rodapé (Total) no mobile */
  tfoot {
      display: block; margin-top: 15px; padding-top: 10px;
      border-top: 1px solid var(--border-color);
  }
- /* Corrige a linha do rodapé para flex */
+ /* Linha do rodapé como flex */
  tfoot tr.lvAA {
      border: none; padding: 0; margin-bottom: 0; background: none;
      display: flex; justify-content: space-between; align-items: center;
  }
+ /* Células do rodapé */
  tfoot td.lvtt {
      border: none; padding: 5px 0; text-align: left;
      min-height: unset; display: inline; font-size: 1rem;
  }
  tfoot td.lvtt:before { display: none; } /* Esconde pseudo-label */
  /* Célula do texto "Total" */
- tfoot .lvtt[colspan="4"], tfoot .lvtt[colspan="5"] {
+ tfoot .lvtt[colSpan="1"], tfoot .lvtt[colSpan="4"], tfoot .lvtt[colSpan="5"] {
      text-align: left; font-weight: bold; color: var(--glow-green); width: auto; /* Reseta colspan */
+     display: inline; /* Garante que fique inline */
  }
  /* Célula do valor total */
- tfoot .lvtt[colspan="1"], tfoot .lvtt:last-child {
+ tfoot .lvtt:last-child {
      text-align: right; font-weight: bold; color: #fff; width: auto; /* Reseta colspan */
+     display: inline; /* Garante que fique inline */
  }
  .txtcenter { display: inline; } /* Remove centralização */
+
 
   .pagination { margin-top: 25px; }
   .pagination button { padding: 8px 15px; font-size: 0.9rem; }
