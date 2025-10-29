@@ -1,184 +1,173 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
-// import Stats from 'stats.js'; // REMOVIDO
-import './Cta.css';
-import logoTextureUrl from "../../assets/logo/logoFE.png"; // Importado
+import './Cta.css'; // Mantenha a importação do CSS
+import logoTextureUrl from "../../assets/logo/logoFE.png"; // Mantenha a importação para o <img>
 
 const Cta = () => {
-  const mountRef = useRef(null);
-  // const statsRef = useRef(null); // REMOVIDO
+  const mountRef = useRef(null); // Ref para o div onde o canvas será montado
 
   useEffect(() => {
-    // --- Basic setup ---
-    // REMOVIDO: Variável stats
+    // --- Variáveis ---
     let camera, scene, renderer, clock, delta;
-    let textGeo, textTexture, textMaterial, text;
-    let smokeTexture, smokeMaterial, smokeGeo, smokeParticles = [];
-    let light, ambientLight; // <--- ambientLight declarado aqui
+    let smokeTexture, smokeMaterial, smokeGeo, smokeParticles = []; // Apenas fumaça
+    let light, ambientLight; // Luzes
     let animationFrameId;
 
     const currentMount = mountRef.current;
+    let width = currentMount?.clientWidth || 0;
+    let height = currentMount?.clientHeight || 0;
 
     function init() {
-      // --- Stats Panel --- REMOVIDO
-
       clock = new THREE.Clock();
-      // Verifique se currentMount existe antes de acessar clientWidth/clientHeight
-      if (!currentMount) return;
-      renderer = new THREE.WebGLRenderer({ alpha: true });
-      renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
+      if (!currentMount || width === 0 || height === 0) return;
+
+      // --- Renderer ---
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(width, height);
       currentMount.appendChild(renderer.domElement);
+
+      // --- Cena e Câmera (Apenas para fumaça) ---
       scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(75, currentMount.clientWidth / currentMount.clientHeight, 1, 10000);
+      camera = new THREE.PerspectiveCamera(75, width / height, 1, 2000);
       camera.position.z = 1000;
-      scene.add(camera);
 
-      //--- Geometry for the logo ---
-      textGeo = new THREE.PlaneGeometry(150, 150);
-
-      const textureLoader = new THREE.TextureLoader();
-      textTexture = textureLoader.load(logoTextureUrl);
-
-      textMaterial = new THREE.MeshLambertMaterial({
-        map: textTexture,
-        transparent: true,
-        blending: THREE.NormalBlending,
-        depthWrite: false,
-        opacity: 1,
-      });
-      text = new THREE.Mesh(textGeo, textMaterial);
-      text.position.z = 901;
-      text.renderOrder = 1;
-      scene.add(text);
-
-      // --- Lighting ---
+      // --- Iluminação ---
       light = new THREE.DirectionalLight(0xffffff, 0.7);
       light.position.set(-1, 0, 1);
       scene.add(light);
-      ambientLight = new THREE.AmbientLight(0x555555); // <--- Atribuído aqui
+      ambientLight = new THREE.AmbientLight(0xaaaaaa);
       scene.add(ambientLight);
 
-      //--- Smoke texture setup ---
+      const textureLoader = new THREE.TextureLoader();
+
+      // --- Configuração da FUMAÇA ---
       smokeTexture = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/95637/Smoke-Element.png');
       smokeMaterial = new THREE.MeshLambertMaterial({
-        color: 0x39FF14, // Toxic Green Color
+        color: 0x39FF14,
         map: smokeTexture,
         transparent: true,
-        opacity: 0.6,
+        opacity: 0.4, // Ajuste a opacidade como desejar
         blending: THREE.AdditiveBlending,
-        depthWrite: false
+        depthWrite: false,
+        depthTest: true
       });
       smokeGeo = new THREE.PlaneGeometry(300, 300);
       smokeParticles = [];
 
       for (let p = 0; p < 150; p++) {
         var particle = new THREE.Mesh(smokeGeo, smokeMaterial);
-        particle.position.set(Math.random() * 500 - 250, Math.random() * 500 - 250, Math.random() * 1000 - 100);
+        particle.position.set(
+          Math.random() * 500 - 250,
+          Math.random() * 500 - 250,
+          Math.random() * 800 - 100
+        );
         particle.rotation.z = Math.random() * 360;
-        particle.renderOrder = 0;
         scene.add(particle);
         smokeParticles.push(particle);
       }
     }
 
+    // --- Funções animate, evolveSmoke, render, onWindowResize (sem alterações) ---
     function animate() {
-      // REMOVIDO: stats.begin()
-      // Verifica se o clock foi inicializado
       if (clock) {
         delta = clock.getDelta();
         evolveSmoke();
       }
       animationFrameId = requestAnimationFrame(animate);
       render();
-      // REMOVIDO: stats.end()
     }
 
     function evolveSmoke() {
-      var sp = smokeParticles.length;
-      while (sp--) {
-        // Verifica se delta existe
+      smokeParticles.forEach(particle => {
         if (delta !== undefined) {
-           smokeParticles[sp].rotation.z += (delta * 0.2);
+           particle.rotation.z += (delta * 0.2);
         }
-      }
+      });
     }
 
     function render() {
-      // Verifica se renderer e scene existem
       if (renderer && scene && camera) {
         renderer.render(scene, camera);
       }
     }
 
     function onWindowResize() {
-      if (currentMount && camera && renderer) {
-         camera.aspect = currentMount.clientWidth / currentMount.clientHeight;
-         camera.updateProjectionMatrix();
-         renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
+        width = currentMount?.clientWidth || 0;
+        height = currentMount?.clientHeight || 0;
+        if (currentMount && camera && renderer) {
+           camera.aspect = width / height;
+           camera.updateProjectionMatrix();
+           renderer.setSize(width, height);
+        }
       }
-    }
 
-    // Apenas inicialize e comece a animação se o mountRef estiver disponível
+    // --- Inicialização e Limpeza ---
     if (currentMount) {
         init();
         window.addEventListener('resize', onWindowResize, false);
         animate();
     }
 
-
-    // Função de Limpeza Reforçada
     return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', onWindowResize);
+        cancelAnimationFrame(animationFrameId);
+        window.removeEventListener('resize', onWindowResize);
 
-      // Dispose de geometrias, materiais e texturas
-      if (textGeo) textGeo.dispose();
-      if (textMaterial) {
-        if (textMaterial.map) textMaterial.map.dispose();
-        textMaterial.dispose();
-      }
-      if (smokeGeo) smokeGeo.dispose();
-      if (smokeMaterial) {
-        if (smokeMaterial.map) smokeMaterial.map.dispose();
-        smokeMaterial.dispose();
-      }
-      if (smokeTexture) smokeTexture.dispose();
+        // Dispose apenas da fumaça
+        if (smokeGeo) smokeGeo.dispose();
+        if (smokeMaterial) {
+            if (smokeMaterial.map) smokeMaterial.map.dispose();
+            smokeMaterial.dispose();
+        }
+        if (smokeTexture) smokeTexture.dispose();
 
-      // Remove objetos da cena
-      if (scene) {
-        if (text) scene.remove(text);
-        if (light) scene.remove(light);
-        if (ambientLight) scene.remove(ambientLight); // <--- Agora acessível
-        smokeParticles.forEach(p => scene.remove(p));
-      }
-      smokeParticles = []; // Limpa o array
+        if (scene) {
+          if (light) scene.remove(light);
+          if (ambientLight) scene.remove(ambientLight);
+          smokeParticles.forEach(p => scene.remove(p));
+        }
+        smokeParticles = [];
 
-       // Remove o renderer do DOM se ele existir e ainda estiver montado
-       if (renderer && renderer.domElement && currentMount && currentMount.contains(renderer.domElement)) {
-        currentMount.removeChild(renderer.domElement);
-      }
+        if (renderer && renderer.domElement && currentMount && currentMount.contains(renderer.domElement)) {
+          currentMount.removeChild(renderer.domElement);
+        }
+        if (renderer) renderer.dispose();
 
-      // Dispose do renderer
-      if (renderer) renderer.dispose();
+        camera = undefined; scene = undefined; renderer = undefined; clock = undefined;
+        light = undefined; ambientLight = undefined;
+        smokeGeo = undefined; smokeMaterial = undefined; smokeTexture = undefined;
+      };
+  }, []);
 
-      // Limpa as referências principais para ajudar o GC (Garbage Collector)
-      camera = undefined;
-      scene = undefined;
-      renderer = undefined;
-      clock = undefined;
-      light = undefined;
-      ambientLight = undefined; // Limpa referência
-      text = undefined;
-      textGeo = undefined;
-      textMaterial = undefined;
-      textTexture = undefined;
-      smokeGeo = undefined;
-      smokeMaterial = undefined;
-      smokeTexture = undefined;
-    };
-  }, []); // Dependência vazia ainda é correta aqui
-
-  return <div ref={mountRef} style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden' }} />;
+  // Retorna o container principal que terá o canvas e a imagem sobreposta
+  return (
+    <div style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden' }}>
+      {/* Div onde o canvas da fumaça será montado */}
+      <div ref={mountRef} style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 1 }} />
+      {/* Imagem do logo posicionada sobre o div do canvas */}
+      <img
+        src={logoTextureUrl}
+        alt="Tóxicos Logo"
+        style={{ // Estilos inline para simplicidade, podem ir para Cta.css
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          maxWidth: '60%', // Ajuste o tamanho conforme necessário
+          maxHeight: '60%',// Ajuste o tamanho conforme necessário
+          width: 'auto',   // Mantém proporção
+          height: 'auto',  // Mantém proporção
+          zIndex: 10,      // Garante que fique na frente do canvas (zIndex: 1)
+          pointerEvents: 'none', // Não interfere com cliques/eventos no canvas
+          // Garante a nitidez:
+          opacity: 1,
+          filter: 'none',
+          imageRendering: 'pixelated', // Opcional: Para pixel art ou logos que não devem ser suavizados
+          WebkitFontSmoothing: 'antialiased', // Opcional: Melhora a renderização de texto (se houver no logo)
+          MozOsxFontSmoothing: 'grayscale' // Opcional: Melhora a renderização de texto (se houver no logo)
+        }}
+      />
+    </div>
+  );
 };
 
 export default Cta;

@@ -7,7 +7,8 @@
   padding: 10px 20px;
   background-color: rgba(10, 25, 47, 0.8);
   backdrop-filter: blur(5px);
-  border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+  /* MUDANÇA: Cor da borda */
+  border-bottom: 1px solid rgba(57, 255, 20, 0.2);
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -21,7 +22,8 @@
   font-size: 1.5rem;
   color: #fff;
   text-decoration: none;
-  text-shadow: 0 0 8px #ff00ff;
+  /* MUDANÇA: Cor do brilho */
+  text-shadow: 0 0 10px var(--glow-green);
 }
 
 .nav-center-desktop {
@@ -36,7 +38,8 @@
 }
 
 .btt-menu {
-  color: #00ffff;
+  /* MUDANÇA: Cor do texto */
+  color: var(--glow-green);
   text-decoration: none;
   font-family: 'Chakra Petch', sans-serif;
   padding: 8px 12px;
@@ -48,9 +51,10 @@
 
 .btt-menu:hover,
 .btt-menu.active {
-  background-color: rgba(0, 255, 255, 0.1);
-  border-color: rgba(0, 255, 255, 0.5);
-  text-shadow: 0 0 5px #00ffff;
+  /* MUDANÇA: Cor do hover */
+  background-color: rgba(57, 255, 20, 0.15);
+  border-color: rgba(57, 255, 20, 0.5);
+  text-shadow: 0 0 8px var(--glow-green);
 }
 
 .btt-logout {
@@ -80,7 +84,8 @@
   transition: left 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid rgba(0, 255, 255, 0.3);
+  /* MUDANÇA: Cor da borda */
+  border-right: 1px solid rgba(57, 255, 20, 0.3);
 }
 
 .mobile-menu.open {
@@ -112,14 +117,16 @@
 
 .btt-menu-mobile:hover,
 .btt-menu-mobile.active {
-  background-color: rgba(0, 255, 255, 0.1);
+  /* MUDANÇA: Cor do hover */
+  background-color: rgba(57, 255, 20, 0.15);
   color: #fff;
 }
 
 .mobile-auth-section {
   margin-top: auto; /* Empurra para o final do menu */
   padding-top: 10px;
-  border-top: 1px solid rgba(0, 255, 255, 0.2);
+  /* MUDANÇA: Cor da borda */
+  border-top: 1px solid rgba(57, 255, 20, 0.2);
 }
 
 .btt-logout-mobile {
@@ -154,35 +161,34 @@
 
 
 
-/* --- ESTILIZAÇÃO GLOBAL PARA MEMBROS DE HONRA --- */
+/* --- ESTILIZAÇÃO GLOBAL PARA MEMBROS DE HONRA (SUGESTÃO DE MUDANÇA) --- */
 
-/* Contêiner com brilho dourado */
+/* Contêiner com brilho verde-tóxico */
 .gloria-profile {
-    border: 2px solid #ffd700 !important;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 0 0 30px rgba(255, 174, 0, 0.5) !important;
+    border: 2px solid var(--glow-green) !important;
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.7), 0 0 30px rgba(57, 255, 20, 0.5) !important;
 }
 
-/* Foto com borda dourada */
+/* Foto com borda verde-tóxico */
 .gloria-profile .profile-pic {
-    border-color: #ffd700 !important;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6) !important;
+    border-color: var(--glow-green) !important;
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.6) !important;
 }
 
-/* Coroa de neon sobre a foto */
+/* Símbolo de 'Biohazard' sobre a foto */
 .gloria-profile .profile-pic-wrapper::after {
-    content: '👑';
+    content: '☣️'; /* MUDADO DE '👑' */
     position: absolute;
-    /* AJUSTE PRINCIPAL AQUI: Move a coroa para cima da foto */
     top: -40px; 
     left: 50%;
     transform: translateX(-50%);
     font-size: 32px;
-    color: #ffd700;
+    color: var(--glow-green); /* MUDADO DE #ffd700 */
     text-shadow: 
-        0 0 5px #ffd700,
-        0 0 10px #ffd700,
-        0 0 15px #ffae00,
-        0 0 20px #ffae00;
+        0 0 5px var(--glow-green),
+        0 0 10px var(--glow-green),
+        0 0 15px var(--glow-green),
+        0 0 20px var(--glow-green); /* MUDADO DE DOURADO/LARANJA */
     animation: flicker 1.5s infinite alternate;
     z-index: 10;
 }
@@ -192,16 +198,16 @@
   0%, 100% {
     opacity: 1;
     text-shadow: 
-        0 0 5px #ffd700,
-        0 0 10px #ffd700,
-        0 0 15px #ffae00,
-        0 0 20px #ffae00;
+        0 0 5px var(--glow-green),
+        0 0 10px var(--glow-green),
+        0 0 15px var(--glow-green),
+        0 0 20px var(--glow-green); /* MUDADO */
   }
   50% {
     opacity: 0.8;
     text-shadow: 
-        0 0 5px #ffd700,
-        0 0 8px #ffd700,
-        0 0 12px #ffae00;
+        0 0 5px var(--glow-green),
+        0 0 8px var(--glow-green),
+        0 0 12px var(--glow-green); /* MUDADO */
   }
 }
