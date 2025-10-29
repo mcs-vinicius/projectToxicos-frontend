@@ -13,7 +13,7 @@
 }
 
 /* Container principal da página ResultsPage */
-.results-page-container { /* Renomeado de .container para evitar conflitos futuros */
+.results-page-container {
   max-width: 1200px;
   margin: 80px auto 20px auto; /* Margem superior para compensar navbar fixa */
   padding: 30px;
@@ -37,7 +37,7 @@
 .results-page-container::after { bottom: -5px; right: -5px; border-width: 0 2px 2px 0; }
 
 /* --- Tipografia e Títulos --- */
-.results-page-container .title { /* Especificidade aumentada */
+.results-page-container .title {
   text-align: center; font-size: 3rem; font-weight: 700; color: #ffffff;
   text-transform: uppercase; letter-spacing: 5px; margin-bottom: 20px;
   text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px var(--glow-green), 0 0 30px var(--glow-green);
@@ -74,22 +74,44 @@
   font-size: 1.5rem; font-weight: 600; color: #ffffff; background-color: var(--hover-bg-color);
   padding: 15px; text-align: center; text-transform: uppercase; letter-spacing: 2px;
 }
-table { width: 100%; border-collapse: collapse; }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; /* Ajuda a controlar larguras */ }
 th, td {
-  padding: 12px 15px; text-align: center; border-bottom: 1px solid var(--border-color);
+  padding: 10px 8px; /* Padding padrão reduzido um pouco */
+  text-align: center; border-bottom: 1px solid var(--border-color);
+  overflow: hidden; /* Esconde conteúdo que transborda */
+  text-overflow: ellipsis; /* Adiciona "..." se o conteúdo for cortado */
+  white-space: nowrap; /* Impede quebra de linha por padrão */
+  font-size: 0.95rem; /* Fonte ligeiramente menor por padrão */
 }
 thead tr { background-color: transparent; color: var(--glow-green); font-weight: 600; }
-th:nth-child(2), td:nth-child(2) { text-align: left; } /* Nome */
-th:nth-child(3), td:nth-child(3).emblem-cell-jsx { text-align: left; } /* Tier */
+
+/* Larguras e Alinhamentos Específicos (Desktop) */
+/* Rank Acesso */
+.table-wrapper:first-child th:nth-child(1), .table-wrapper:first-child td:nth-child(1) { width: 15%; text-align: center; } /* Posição */
+.table-wrapper:first-child th:nth-child(2), .table-wrapper:first-child td:nth-child(2) { width: 30%; text-align: left; } /* Nome */
+.table-wrapper:first-child th:nth-child(3), .table-wrapper:first-child td:nth-child(3) { width: 25%; text-align: left; } /* Tier */
+.table-wrapper:first-child th:nth-child(4), .table-wrapper:first-child td:nth-child(4) { width: 15%; text-align: center; } /* Fase */
+.table-wrapper:first-child th:nth-child(5), .table-wrapper:first-child td:nth-child(5) { width: 15%; text-align: center; } /* Evolução */
+/* Expedição */
+.table-wrapper:last-child th:nth-child(1), .table-wrapper:last-child td:nth-child(1) { width: 15%; text-align: center; } /* Posição */
+.table-wrapper:last-child th:nth-child(2), .table-wrapper:last-child td:nth-child(2) { width: 35%; text-align: left;} /* Nome */
+.table-wrapper:last-child th:nth-child(3), .table-wrapper:last-child td:nth-child(3) { width: 12.5%; text-align: center; } /* R1 */
+.table-wrapper:last-child th:nth-child(4), .table-wrapper:last-child td:nth-child(4) { width: 12.5%; text-align: center; } /* R2 */
+.table-wrapper:last-child th:nth-child(5), .table-wrapper:last-child td:nth-child(5) { width: 12.5%; text-align: center; } /* R3 */
+.table-wrapper:last-child th:nth-child(6), .table-wrapper:last-child td:nth-child(6) { width: 12.5%; text-align: center; } /* Total */
+
 tbody tr { transition: background-color 0.3s ease; }
 tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
 
 /* Emblema (Desktop) */
-.emblem-cell-jsx { display: flex; align-items: center; justify-content: flex-start; padding: 4px 10px; }
-.tier-emblem { width: 28px; height: auto; margin-right: 8px; vertical-align: middle; }
-.emblem-cell-jsx span { font-size: 0.9em; line-height: 1; white-space: nowrap; }
+.emblem-cell-jsx {
+  display: flex; align-items: center; justify-content: flex-start; padding: 4px 8px; /* Padding interno da célula */
+}
+.tier-emblem { width: 24px; height: auto; margin-right: 6px; vertical-align: middle; flex-shrink: 0; /* Impede que o emblema encolha */ }
+.emblem-cell-jsx span { font-size: 0.9em; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* Coluna Evolução */
+/* REMOVIDAS AS REGRAS VAZIAS QUE ESTAVAM AQUI */
 .evolution-positive { color: #00ff00; font-weight: bold; text-shadow: 0 0 5px #00ff00; }
 .evolution-negative { color: #ff2d55; font-weight: bold; text-shadow: 0 0 5px #ff2d55; }
 .evolution-neutral { color: rgba(224, 251, 252, 0.6); }
@@ -118,69 +140,85 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 .txtcenter { display: flex; justify-content: center; }
 
 
-/* --- AJUSTES PARA MOBILE (Layout de Cards Corrigido FINAL) --- */
+/* --- AJUSTES PARA MOBILE (Tabela Responsiva Adaptada) --- */
 @media (max-width: 768px) {
-  .results-page-container { padding: 20px 10px; margin-top: 20px; }
-  .results-page-container .title { font-size: 1.8rem; margin-bottom: 15px; }
+  .results-page-container { padding: 20px 5px; margin-top: 20px; }
+  .results-page-container .title { font-size: 1.8rem; margin-bottom: 15px; letter-spacing: 3px;}
   .season-info-container { flex-direction: column; gap: 10px; margin-bottom: 25px; }
   .season-info { font-size: 1rem; }
 
-  .tables-container { flex-direction: column; gap: 0; }
+  .tables-container { flex-direction: column; gap: 30px; }
 
   .table-wrapper {
-    min-width: unset; width: 100%; overflow: visible;
-    border: none; background: none; padding: 0; box-shadow: none;
+    min-width: unset; width: 100%;
+    overflow: visible; /* Conteúdo não deve transbordar */
+    border: 1px solid var(--border-color);
+    background-color: transparent;
   }
-   .table-wrapper:not(:last-child) { margin-bottom: 30px; }
-   .table-title { font-size: 1.3rem; padding: 10px; border-bottom: 1px solid var(--border-color); }
+  .table-title { font-size: 1.2rem; padding: 10px; }
 
-  /* Transforma Tabela em Layout de Cards */
-  table, thead, tbody, tfoot, th, td, tr { display: block; }
-  thead tr { position: absolute; top: -9999px; left: -9999px; opacity: 0; pointer-events: none; }
+  table { table-layout: fixed; }
 
-  /* Estilo de cada card (linha) */
-  tr {
-    border: 1px solid var(--border-color); border-radius: 6px;
-    margin-bottom: 15px; padding: 10px 15px;
-    background-color: rgba(10, 25, 47, 0.7);
-  }
-  tbody tr:hover { background-color: rgba(10, 25, 47, 0.7); }
-
-  /* Estilo de cada item de dado (célula) */
-  td {
-    border: none; border-bottom: 1px solid rgba(57, 255, 20, 0.1);
-    position: relative; padding: 10px 0 10px 45%;
-    text-align: right; min-height: 30px; display: flex;
-    align-items: center; justify-content: flex-end;
-    white-space: normal; font-size: 0.9rem;
-  }
-  td:last-child { border-bottom: none; }
-
-  /* Cria o label usando o data-label */
-  td:before {
-    content: attr(data-label); position: absolute; left: 0px; width: 40%;
-    padding-right: 10px; white-space: nowrap; text-align: left;
-    font-weight: bold; color: var(--glow-green); text-transform: uppercase;
+  /* Reduz padding e fonte */
+  th, td {
+    padding: 6px 4px;
     font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  th {
+      font-size: 0.7rem;
+      padding: 8px 4px;
   }
 
-  /* Célula de Tier (emblem-cell-jsx) */
-  td.emblem-cell-jsx { padding-left: 45%; justify-content: flex-end; }
-  td.emblem-cell-jsx:before { content: 'Tier'; }
-  .emblem-cell-jsx { padding: 0; display: flex; align-items: center; justify-content: flex-end; width: 55%; }
-  .tier-emblem { width: 22px; margin-right: 5px; }
-  .emblem-cell-jsx span { font-size: 0.8em; text-align: right; }
+  /* Ajustes finos de largura e alinhamento para Mobile */
+  /* Rank Acesso */
+  .table-wrapper:first-child th:nth-child(1), .table-wrapper:first-child td:nth-child(1) { width: 12%; } /* Posição */
+  .table-wrapper:first-child th:nth-child(2), .table-wrapper:first-child td:nth-child(2) { width: 30%; } /* Nome */
+  .table-wrapper:first-child th:nth-child(3), .table-wrapper:first-child td:nth-child(3) { width: 28%; } /* Tier */
+  .table-wrapper:first-child th:nth-child(4), .table-wrapper:first-child td:nth-child(4) { width: 15%; } /* Fase */
+  .table-wrapper:first-child th:nth-child(5), .table-wrapper:first-child td:nth-child(5) { width: 15%; } /* Evolução */
+  /* Expedição */
+  .table-wrapper:last-child th:nth-child(1), .table-wrapper:last-child td:nth-child(1) { width: 12%; } /* Posição */
+  .table-wrapper:last-child th:nth-child(2), .table-wrapper:last-child td:nth-child(2) { width: 33%; } /* Nome */
+  .table-wrapper:last-child th:nth-child(3), .table-wrapper:last-child td:nth-child(3) { width: 13%; } /* R1 */
+  .table-wrapper:last-child th:nth-child(4), .table-wrapper:last-child td:nth-child(4) { width: 13%; } /* R2 */
+  .table-wrapper:last-child th:nth-child(5), .table-wrapper:last-child td:nth-child(5) { width: 13%; } /* R3 */
+  .table-wrapper:last-child th:nth-child(6), .table-wrapper:last-child td:nth-child(6) { width: 16%; } /* Total */
 
-  /* Rodapé (Total) no mobile */
- tfoot { display: block; margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--border-color); }
- tfoot tr.lvAA { border: none; padding: 0; margin-bottom: 0; background: none; display: flex; justify-content: space-between; align-items: center; }
- tfoot td.lvtt { border: none; padding: 5px 0; text-align: left; min-height: unset; display: inline; font-size: 1rem; width: auto; }
- tfoot td.lvtt:before { display: none; }
- tfoot .lvtt[colspan="1"], tfoot .lvtt[colspan="4"], tfoot .lvtt[colspan="5"] { width: auto; display: inline; }
- tfoot .lvtt:first-child { text-align: left; font-weight: bold; color: var(--glow-green); }
- tfoot .lvtt:last-child { text-align: right; font-weight: bold; color: #fff; }
- .txtcenter { display: inline; }
+  /* Ajusta Célula do Emblema para Mobile */
+  .emblem-cell-jsx {
+    padding: 2px 4px;
+    align-items: center;
+  }
+  .tier-emblem {
+    width: 16px;
+    margin-right: 3px;
+  }
+  .emblem-cell-jsx span {
+    font-size: 0.8em;
+  }
+
+  /* Rodapé no Mobile */
+  tfoot td.lvtt {
+      font-size: 0.8rem;
+      padding: 6px 4px;
+  }
+  tfoot .lvtt:first-child {
+     padding-right: 10px;
+  }
 
   .pagination { margin-top: 25px; }
   .pagination button { padding: 8px 15px; font-size: 0.9rem; }
+
+  /* Garante que o layout de tabela padrão seja mantido */
+  table, thead, tbody, tfoot, tr, td, th { display: revert; } /* Reverte para o display padrão de tabela */
+  thead { display: table-header-group; }
+  tbody { display: table-row-group; }
+  tfoot { display: table-footer-group; }
+  tr { display: table-row; }
+  td, th { display: table-cell; }
+  td::before { display: none; } /* Garante que o pseudo-elemento :before não seja exibido */
+
 }
