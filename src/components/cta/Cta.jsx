@@ -1,15 +1,16 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
-import './Cta.css'; // Mantenha a importação do CSS
-import logoTextureUrl from "../../assets/logo/logoFE.png"; // Mantenha a importação para o <img>
+import './Cta.css';
+import logoTextureUrl from "../../assets/logo/logoFE.png"; // Mantém a importação para o <img>
 
 const Cta = () => {
   const mountRef = useRef(null); // Ref para o div onde o canvas será montado
 
   useEffect(() => {
-    // --- Variáveis ---
+    // --- Variáveis (restauradas para o original) ---
     let camera, scene, renderer, clock, delta;
-    let smokeTexture, smokeMaterial, smokeGeo, smokeParticles = []; // Apenas fumaça
+    // REMOVIDO: textGeo, textTexture, textMaterial, text; // Logo não é mais 3D
+    let smokeTexture, smokeMaterial, smokeGeo, smokeParticles = []; // Fumaça
     let light, ambientLight; // Luzes
     let animationFrameId;
 
@@ -22,52 +23,55 @@ const Cta = () => {
       if (!currentMount || width === 0 || height === 0) return;
 
       // --- Renderer ---
-      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); // Fundo transparente e suavização
       renderer.setSize(width, height);
+      // renderer.sortObjects = true; // Não é mais estritamente necessário
       currentMount.appendChild(renderer.domElement);
 
-      // --- Cena e Câmera (Apenas para fumaça) ---
+      // --- Cena e Câmera (original) ---
       scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(75, width / height, 1, 2000);
+      camera = new THREE.PerspectiveCamera(75, width / height, 1, 10000); // Far plane original
       camera.position.z = 1000;
+      scene.add(camera); // Adiciona a câmera à cena (como no original)
 
-      // --- Iluminação ---
+      // --- Iluminação (original) ---
       light = new THREE.DirectionalLight(0xffffff, 0.7);
       light.position.set(-1, 0, 1);
       scene.add(light);
-      ambientLight = new THREE.AmbientLight(0xaaaaaa);
+      ambientLight = new THREE.AmbientLight(0x555555); // Luz ambiente original
       scene.add(ambientLight);
 
       const textureLoader = new THREE.TextureLoader();
 
-      // --- Configuração da FUMAÇA ---
+      // --- Configuração da FUMAÇA (ORIGINAL RESTAURADA) ---
       smokeTexture = textureLoader.load('https://s3-us-west-2.amazonaws.com/s.cdpn.io/95637/Smoke-Element.png');
       smokeMaterial = new THREE.MeshLambertMaterial({
-        color: 0x39FF14,
+        color: 0x39FF14, // Cor verde tóxico
         map: smokeTexture,
         transparent: true,
-        opacity: 0.4, // Ajuste a opacidade como desejar
+        opacity: 0.6, // << OPACIDADE ORIGINAL
         blending: THREE.AdditiveBlending,
-        depthWrite: false,
-        depthTest: true
+        depthWrite: false
       });
-      smokeGeo = new THREE.PlaneGeometry(300, 300);
+      smokeGeo = new THREE.PlaneGeometry(300, 300); // << TAMANHO ORIGINAL
       smokeParticles = [];
 
-      for (let p = 0; p < 150; p++) {
+      // Loop para criar partículas de fumaça (ORIGINAL RESTAURADO)
+      for (let p = 0; p < 150; p++) { // << NÚMERO ORIGINAL
         var particle = new THREE.Mesh(smokeGeo, smokeMaterial);
         particle.position.set(
-          Math.random() * 500 - 250,
-          Math.random() * 500 - 250,
-          Math.random() * 800 - 100
+          Math.random() * 500 - 250, // << POSIÇÃO ORIGINAL X/Y
+          Math.random() * 500 - 250, // << POSIÇÃO ORIGINAL X/Y
+          Math.random() * 1000 - 100 // << POSIÇÃO ORIGINAL Z
         );
         particle.rotation.z = Math.random() * 360;
+        // particle.renderOrder = 0; // Não é mais necessário controlar
         scene.add(particle);
         smokeParticles.push(particle);
       }
     }
 
-    // --- Funções animate, evolveSmoke, render, onWindowResize (sem alterações) ---
+    // --- Funções animate, evolveSmoke, render, onWindowResize (sem alterações da versão anterior) ---
     function animate() {
       if (clock) {
         delta = clock.getDelta();
@@ -78,7 +82,7 @@ const Cta = () => {
     }
 
     function evolveSmoke() {
-      smokeParticles.forEach(particle => {
+      smokeParticles.forEach(particle => { // Usando forEach é um pouco mais moderno
         if (delta !== undefined) {
            particle.rotation.z += (delta * 0.2);
         }
@@ -147,7 +151,7 @@ const Cta = () => {
       <img
         src={logoTextureUrl}
         alt="Tóxicos Logo"
-        style={{ // Estilos inline para simplicidade, podem ir para Cta.css
+        style={{
           position: 'absolute',
           top: '50%',
           left: '50%',
@@ -157,13 +161,12 @@ const Cta = () => {
           width: 'auto',   // Mantém proporção
           height: 'auto',  // Mantém proporção
           zIndex: 10,      // Garante que fique na frente do canvas (zIndex: 1)
-          pointerEvents: 'none', // Não interfere com cliques/eventos no canvas
-          // Garante a nitidez:
+          pointerEvents: 'none',
           opacity: 1,
           filter: 'none',
-          imageRendering: 'pixelated', // Opcional: Para pixel art ou logos que não devem ser suavizados
-          WebkitFontSmoothing: 'antialiased', // Opcional: Melhora a renderização de texto (se houver no logo)
-          MozOsxFontSmoothing: 'grayscale' // Opcional: Melhora a renderização de texto (se houver no logo)
+          imageRendering: 'pixelated', // Opcional
+          WebkitFontSmoothing: 'antialiased', // Opcional
+          MozOsxFontSmoothing: 'grayscale' // Opcional
         }}
       />
     </div>
