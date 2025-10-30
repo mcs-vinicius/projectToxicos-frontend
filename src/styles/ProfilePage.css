@@ -5,7 +5,7 @@
     margin: 40px auto;
     padding: 30px;
     background-color: rgba(10, 25, 47, 0.85);
-    border: 1px solid rgba(0, 255, 255, 0.3);
+    border: 1px solid var(--border-color); /* MODIFICADO */
     border-radius: 8px;
     font-family: 'Chakra Petch', sans-serif;
     color: #e0fbfc;
@@ -18,7 +18,7 @@
     gap: 30px;
     padding-bottom: 25px;
     margin-bottom: 25px;
-    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+    border-bottom: 1px solid var(--border-color); /* MODIFICADO */
 }
 
 .profile-pic-wrapper {
@@ -30,16 +30,16 @@
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    border: 3px solid #00ffff;
+    border: 3px solid var(--glow-green); /* MODIFICADO */
     object-fit: cover;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    box-shadow: 0 0 15px var(--shadow-color); /* MODIFICADO */
 }
 
 .profile-details h1 {
     margin: 0 0 10px 0;
     font-size: 2.5rem;
     color: #ffffff;
-    text-shadow: 0 0 10px #ff00ff;
+    text-shadow: 0 0 10px var(--glow-green), 0 0 5px var(--glow-green); /* MODIFICADO */
 }
 
 .profile-details p {
@@ -51,7 +51,6 @@
 .main-stats {
     display: flex;
     gap: 20px;
-    align-items: center;
 }
 
 .stat-item {
@@ -59,7 +58,7 @@
     padding: 8px 15px;
     border-radius: 4px;
     font-size: 1rem;
-    color: #00ffff;
+    color: var(--glow-green); /* MODIFICADO */
     /* Adicionado para alinhar o input */
     display: flex;
     align-items: center;
@@ -82,13 +81,13 @@
     padding: 20px;
     border-radius: 6px;
     flex: 1;
-    border-left: 3px solid #00ffff;
+    border-left: 3px solid var(--glow-green); /* MODIFICADO */
 }
 
 .stats-group h3 {
     margin-top: 0;
-    color: #00ffff;
-    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+    color: var(--glow-green); /* MODIFICADO */
+    border-bottom: 1px solid var(--border-color); /* MODIFICADO */
     padding-bottom: 10px;
     margin-bottom: 15px;
     font-size: 1.2rem;
@@ -118,7 +117,7 @@
     width: 80px;
     padding: 5px;
     background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid #00ffff;
+    border: 1px solid var(--border-color); /* MODIFICADO */
     border-radius: 4px;
     color: #fff;
     text-align: right;
@@ -145,17 +144,17 @@
     font-size: 1.1rem;
     font-family: 'Chakra Petch', sans-serif;
     background: transparent;
-    color: #00ffff;
-    border: 2px solid #00ffff;
+    color: var(--glow-green); /* MODIFICADO */
+    border: 2px solid var(--glow-green); /* MODIFICADO */
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s;
 }
 
 .profile-edit-cta button:hover {
-    background: #00ffff;
+    background: var(--glow-green); /* MODIFICADO */
     color: #02040a;
-    box-shadow: 0 0 15px #00ffff;
+    box-shadow: 0 0 15px var(--glow-green); /* MODIFICADO */
 }
 .profile-edit-cta .btn-cancel {
     color: #ff4d4d;
@@ -223,7 +222,7 @@
     background: rgba(0, 0, 0, 0.25);
     padding: 12px 10px; 
     border-radius: 6px;
-    border-top: 1px solid rgba(0, 255, 255, 0.2);
+    border-top: 1px solid var(--border-color); /* MODIFICADO */
     align-items: flex-start; 
     justify-content: space-around; 
     margin-top: 15px; 
@@ -238,7 +237,7 @@
 .history-item h4 {
     margin: 0 0 3px 0; 
     font-size: 0.8rem; 
-    color: #00ffff;
+    color: var(--glow-green); /* MODIFICADO */
     font-weight: 500;
     text-transform: uppercase;
 }
@@ -270,7 +269,7 @@
     background: rgba(0, 0, 0, 0.25);
     padding: 10px;
     border-radius: 6px;
-    border-top: 1px solid rgba(0, 255, 255, 0.2);
+    border-top: 1px solid var(--border-color); /* MODIFICADO */
     text-align: center;
     font-size: 0.9rem;
     color: rgba(224, 251, 252, 0.7);
@@ -282,7 +281,7 @@
     padding: 5px 8px;
     margin-top: 5px; /* Espaçamento abaixo do input do nick */
     background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid #00ffff;
+    border: 1px solid var(--border-color); /* MODIFICADO */
     border-radius: 4px;
     color: #fff;
     font-family: inherit;
@@ -303,8 +302,8 @@
 }
 
 .tier-emblem-profile {
-  width: 170px;  /* Aumentado */
-  height: 170px; /* Aumentado */
+  width: 48px;  /* Aumentado */
+  height: 48px; /* Aumentado */
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -316,7 +315,7 @@
 .tier-details h4 {
   margin: 0 0 3px 0;
   font-size: 0.8rem;
-  color: #00ffff;
+  color: var(--glow-green); /* MODIFICADO */
   font-weight: 500;
   text-transform: uppercase;
 }
@@ -341,7 +340,7 @@
     background: rgba(0, 0, 0, 0.25);
     padding: 12px 10px;
     border-radius: 6px;
-    border-top: 1px solid rgba(0, 255, 255, 0.2);
+    border-top: 1px solid var(--border-color); /* MODIFICADO */
 }
 
 .inventory-item {
@@ -372,7 +371,7 @@
   width: 60px; 
   padding: 5px;
   background-color: rgba(0, 0, 0, 0.5);
-  border: 1px solid #00ffff;
+  border: 1px solid var(--border-color); /* MODIFICADO */
   border-radius: 4px;
   color: #fff;
   text-align: center;
@@ -386,7 +385,7 @@
     width: 80px;
     padding: 5px;
     background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid #00ffff;
+    border: 1px solid var(--border-color); /* MODIFICADO */
     border-radius: 4px;
     color: #fff;
     text-align: left;

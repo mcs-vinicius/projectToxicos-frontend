@@ -4,9 +4,9 @@
   margin: 40px auto;
   padding: 30px;
   background-color: rgba(10, 25, 47, 0.85);
-  border: 1px solid #00ffff;
+  border: 1px solid var(--border-color); /* MODIFICADO */
   border-radius: 8px;
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 30px var(--shadow-color); /* MODIFICADO */
   backdrop-filter: blur(5px);
   animation: fadeIn 1s ease-out;
   font-family: 'Chakra Petch', sans-serif;
@@ -18,7 +18,7 @@
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 4px;
-  text-shadow: 0 0 10px #ff00ff;
+  text-shadow: 0 0 10px var(--glow-green), 0 0 5px var(--glow-green); /* MODIFICADO */
   margin-bottom: 20px;
 }
 
@@ -29,14 +29,14 @@
   flex-wrap: wrap;
   gap: 15px;
   margin-bottom: 30px;
-  border: 1px dashed rgba(0, 255, 255, 0.3);
+  border: 1px dashed var(--border-color); /* MODIFICADO */
   padding: 10px 15px;
   border-radius: 4px;
 }
 
 .honor-season-info {
   font-size: 1.2rem;
-  color: #00ffff;
+  color: var(--glow-green); /* MODIFICADO */
 }
 
 .btn-delete-season {
@@ -68,11 +68,11 @@
 .honor-list-wrapper td {
   padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+  border-bottom: 1px solid var(--border-color); /* MODIFICADO */
 }
 
 .honor-list-wrapper th {
-  color: #00ffff;
+  color: var(--glow-green); /* MODIFICADO */
   text-transform: uppercase;
 }
 
@@ -99,22 +99,22 @@
   font-size: 1rem;
   font-weight: bold;
   font-family: 'Chakra Petch', sans-serif;
-  color: #00ffff;
+  color: var(--glow-green); /* MODIFICADO */
   background-color: transparent;
-  border: 2px solid #00ffff;
+  border: 2px solid var(--glow-green); /* MODIFICADO */
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .pagination button:hover:not(:disabled) {
-  background-color: #00ffff;
+  background-color: var(--glow-green); /* MODIFICADO */
   color: #02040a;
 }
 
 .pagination button:disabled {
-  color: rgba(0, 255, 255, 0.3);
-  border-color: rgba(0, 255, 255, 0.3);
+  color: var(--border-color); /* MODIFICADO */
+  border-color: var(--border-color); /* MODIFICADO */
   cursor: not-allowed;
 }
 
@@ -122,7 +122,7 @@
   .honor-container { padding: 20px 15px; }
   .honor-list-wrapper table, .honor-list-wrapper thead, .honor-list-wrapper tbody, .honor-list-wrapper th, .honor-list-wrapper td, .honor-list-wrapper tr { display: block; }
   .honor-list-wrapper thead tr { position: absolute; top: -9999px; left: -9999px; }
-  .honor-list-wrapper tr { border: 1px solid rgba(0, 255, 255, 0.2); margin-bottom: 15px; padding: 5px; }
-  .honor-list-wrapper td { border: none; border-bottom: 1px solid rgba(0, 255, 255, 0.1); position: relative; padding-left: 50%; text-align: right; }
-  .honor-list-wrapper td:before { content: attr(data-label); position: absolute; left: 10px; width: 45%; font-weight: bold; color: #00ffff; text-align: left; }
+  .honor-list-wrapper tr { border: 1px solid var(--border-color); margin-bottom: 15px; padding: 5px; } /* MODIFICADO */
+  .honor-list-wrapper td { border: none; border-bottom: 1px solid rgba(57, 255, 20, 0.1); position: relative; padding-left: 50%; text-align: right; } /* MODIFICADO */
+  .honor-list-wrapper td:before { content: attr(data-label); position: absolute; left: 10px; width: 45%; font-weight: bold; color: var(--glow-green); text-align: left; } /* MODIFICADO */
 }

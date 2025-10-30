@@ -13,13 +13,13 @@
     font-size: 2.5rem;
     margin-bottom: 2rem;
     color: #ffffff;
-    text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+    text-shadow: 0 0 10px var(--glow-green), 0 0 5px var(--glow-green); /* MODIFICADO */
 }
 
 .user-list-table-wrapper {
     overflow-x: auto; /* Garante que a tabela não quebre o layout em telas menores */
-    background-color: rgba(0, 25, 51, 0.7);
-    border: 1px solid rgba(0, 255, 255, 0.2);
+    background-color: rgba(10, 25, 47, 0.85); /* MODIFICADO */
+    border: 1px solid var(--border-color); /* MODIFICADO */
     border-radius: 8px;
     padding: 1rem;
 }
@@ -34,11 +34,11 @@
 .user-list-table td {
     padding: 12px 15px;
     text-align: left;
-    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+    border-bottom: 1px solid var(--border-color); /* MODIFICADO */
 }
 
 .user-list-table th {
-    color: #00ffff;
+    color: var(--glow-green); /* MODIFICADO */
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.9rem;
@@ -55,7 +55,7 @@
     height: 45px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #00ffff;
+    border: 2px solid var(--glow-green); /* MODIFICADO */
 }
 
 .role-cell {
@@ -69,7 +69,7 @@
 }
 
 .role-icon.admin { color: #ffd700; }
-.role-icon.leader { color: #00aaff; }
+.role-icon.leader { color: var(--glow-green); } /* MODIFICADO */
 .role-icon.member { color: #e0fbfc; }
 
 .role-text {
@@ -90,9 +90,9 @@
 }
 
 .role-select {
-    background-color: #021a2b;
+    background-color: rgba(0, 0, 0, 0.3); /* MODIFICADO */
     color: #e0fbfc;
-    border: 1px solid #00ffff;
+    border: 1px solid var(--border-color); /* MODIFICADO */
     border-radius: 4px;
     padding: 8px 10px;
     font-family: inherit;
