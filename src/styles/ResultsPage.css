@@ -123,12 +123,12 @@ tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; } /* MODI
 
 /* Emblema (Desktop) */
 .emblem-cell-jsx {
-  display: flex; align-items: center; justify-content: flex-start; padding: 4px 8px;
+  display: flex; align-items: center; justify-content: flex-start; padding: 10px 8px;
   overflow: visible; /* Garante que o conteúdo flex não seja cortado */
 }
 .tier-emblem { 
   width: 24px; 
-  height: 24px; /* Ajustado */
+  height: 30px; /* Ajustado */
   object-fit: contain; /* Ajustado */
   margin-right: 6px; 
   vertical-align: middle; 
