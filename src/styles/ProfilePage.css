@@ -51,7 +51,7 @@
 .main-stats {
     display: flex;
     gap: 20px;
-    margin: auto;
+    align-items: center;
 }
 
 .stat-item {
@@ -303,8 +303,8 @@
 }
 
 .tier-emblem-profile {
-  width: 48px;  /* Aumentado */
-  height: 48px; /* Aumentado */
+  width: 70px;  /* Aumentado */
+  height: 70px; /* Aumentado */
   object-fit: contain;
   flex-shrink: 0;
 }
