@@ -191,35 +191,7 @@ const ProfilePage = ({ currentUser }) => {
                     )}
                     <p>Habby ID: {profile.habby_id}</p>
                     
-                    {/* --- CORREÇÃO APLICADA AQUI --- */}
-                    <div className="main-stats">
-                        <div className="stat-item">ATK: 
-                            {isEditing ? (
-                                <input
-                                    type="number"
-                                    name="atk"
-                                    value={formData.atk || ''}
-                                    onChange={handleChange}
-                                    className="stat-input" 
-                                />
-                            ) : (
-                                <span>{formatStat(profile.atk)}</span>
-                            )}
-                        </div>
-                        <div className="stat-item">HP: 
-                            {isEditing ? (
-                                <input
-                                    type="number"
-                                    name="hp"
-                                    value={formData.hp || ''}
-                                    onChange={handleChange}
-                                    className="stat-input"
-                                />
-                            ) : (
-                                <span>{formatStat(profile.hp)}</span>
-                            )}
-                        </div>
-                    </div>
+                    
                     {/* --- FIM DA CORREÇÃO --- */}
                     
                     {/* --- SEÇÃO DO TIER (MOVIDA PARA DIV PRÓPRIA) --- */}
@@ -267,6 +239,37 @@ const ProfilePage = ({ currentUser }) => {
 
                 </div>
             </div>
+
+            <div className="main-stats">
+                <div className="stat-item">ATK: 
+                            {isEditing ? (
+                                <input
+                                    type="number"
+                                    name="atk"
+                                    value={formData.atk || ''}
+                                    onChange={handleChange}
+                                    className="stat-input" 
+                                />
+                            ) : (
+                                <span>{formatStat(profile.atk)}</span>
+                            )}
+                </div>
+                <div className="stat-item">HP: 
+                            {isEditing ? (
+                                <input
+                                    type="number"
+                                    name="hp"
+                                    value={formData.hp || ''}
+                                    onChange={handleChange}
+                                    className="stat-input"
+                                />
+                            ) : (
+                                <span>{formatStat(profile.hp)}</span>
+                            )}
+                </div>
+            </div>
+
+            <br /><br />
 
             <div className="stats-section">
                 <div className="stats-group">
