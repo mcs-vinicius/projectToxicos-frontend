@@ -139,8 +139,9 @@ const ProfilePage = ({ currentUser }) => {
     );
 
     // Helper para os novos campos de inventário (com ícones)
+    // *** MODIFICADO PARA SE ASSEMELHAR AO history-item ***
     const renderInventoryItem = (label, name, iconSrc) => (
-        <div className="inventory-item" title={label}>
+        <div className="history-item inventory-item" title={label}>
             <img src={iconSrc} alt={label} className="inventory-icon" />
             {isEditing ? (
                 <input
@@ -151,7 +152,7 @@ const ProfilePage = ({ currentUser }) => {
                     className="inventory-input"
                 />
             ) : (
-                <span className="inventory-count">{formatStat(profile[name])}</span>
+                <p>{formatStat(profile[name])}</p> 
             )}
         </div>
     );
@@ -227,6 +228,16 @@ const ProfilePage = ({ currentUser }) => {
                             <p>Sem dados de histórico de ranking para exibir.</p>
                         </div>
                     )}
+
+                    {/* --- NOVO GRUPO DE INVENTÁRIO (Estilo Histórico) --- */}
+                    {/* (MOVIDO PARA CÁ) */}
+                    <div className="profile-history">
+                        {renderInventoryItem("Núcleo de Relíquia", "relic_core", nucleoRelicIcon)}
+                        {renderInventoryItem("Chip de Ressonância", "resonance_chip", chipRessoIcon)}
+                        {renderInventoryItem("Núcleo de Despertar", "survivor_awakening_core", nucleoDespertarIcon)}
+                        {renderInventoryItem("Núcleo de Bichinho Xeno", "xeno_pet_core", nucleoXenoIcon)}
+                    </div>
+
                 </div>
             </div>
 
@@ -265,22 +276,8 @@ const ProfilePage = ({ currentUser }) => {
                 </div>
             </div>
             
-            {/* --- NOVO GRUPO DE INVENTÁRIO --- */}
-            <div className="stats-section">
-                <div className="stats-group inventory-group">
-                    <h3>Inventário</h3>
-                    <div className="inventory-grid">
-                        {renderInventoryItem("Núcleo de Relíquia", "relic_core", nucleoRelicIcon)}
-                        {renderInventoryItem("Chip de Ressonância", "resonance_chip", chipRessoIcon)}
-                        {renderInventoryItem("Núcleo de Despertar", "survivor_awakening_core", nucleoDespertarIcon)}
-                        {renderInventoryItem("Núcleo de Bichinho Xeno", "xeno_pet_core", nucleoXenoIcon)}
-                    </div>
-                </div>
-            </div>
+            {/* --- BLOCO DE INVENTÁRIO ORIGINAL REMOVIDO DESTA POSIÇÃO --- */}
 
-
-            {/* --- SEÇÕES REMOVIDAS (Pet e Colecionáveis) --- */}
-            
 
             {currentUser && currentUser.habby_id === habby_id && (
                 <div className="profile-edit-cta">
