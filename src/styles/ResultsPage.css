@@ -210,7 +210,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
   table {
     table-layout: auto;
     width: auto;
-    min-width: 300px;
+    min-width: 290px;
   }
 
   th, td {
@@ -267,7 +267,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     display: block;
     overflow: visible;
     text-overflow: clip;
-    vertical-align: initial;
+   
   }
 
   /* Rodapé no Mobile */
