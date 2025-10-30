@@ -127,7 +127,7 @@ tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
 }
 .tier-emblem { 
   width: 24px; 
-  height: 50px; /* <-- MUDADO DE 'auto' PARA FIXO */
+  height: 24px; /* <-- MUDADO DE 'auto' PARA FIXO */
   object-fit: contain; /* <-- ADICIONADO PARA PRESERVAR O ASPECT RATIO */
   margin-right: 6px; 
   vertical-align: middle; 
