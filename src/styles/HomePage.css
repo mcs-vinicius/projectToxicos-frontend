@@ -166,7 +166,7 @@
   filter: url(#turbulent-displace);
   position: relative;
   overflow: hidden;
-  background-color: rgba(10, 25, 47, 0.85); /* Match section background */
+  background-color: var(--container-background); /* MODIFICADO */
   display: flex;
   align-items: center;
   justify-content: center;
