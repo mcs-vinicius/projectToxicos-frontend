@@ -115,14 +115,14 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
                         <div className="profile-main-info">
                             <div className="profile-pic-wrapper">
                                 <img src={profile.profile_pic_url} alt={`Foto de ${profile.nick}`} className="profile-pic" />
-                            </div>
-                            <div className="profile-details">
                                 <h1>{profile.nick || 'N/A'}</h1>
                                 <p>Habby ID: {profile.habby_id}</p>
                                 <div className="main-stats">
                                     <div className="stat-item">ATK: <span>{formatStat(profile.atk)}</span></div>
                                     <div className="stat-item">HP: <span>{formatStat(profile.hp)}</span></div>
                                 </div>
+                            </div>
+                            <div className="profile-details">
                                 
                                 {/* --- SEÇÃO DO TIER (MOVIDA PARA DIV PRÓPRIA) --- */}
                                 {currentTier && (
