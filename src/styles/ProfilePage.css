@@ -303,8 +303,8 @@
 }
 
 .tier-emblem-profile {
-  width: 70px;  /* Aumentado */
-  height: 70px; /* Aumentado */
+  width: 100px;  /* Aumentado */
+  height: 100px; /* Aumentado */
   object-fit: contain;
   flex-shrink: 0;
 }
