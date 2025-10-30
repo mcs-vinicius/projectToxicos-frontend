@@ -92,7 +92,6 @@
 .main-stats {
     display: flex;
     gap: 15px;
-    align-items: center;
 }
 
 .stat-item {
@@ -160,7 +159,7 @@
     to { transform: translateY(0); opacity: 1; }
 }
 
-/* Adicione este código no final do seu SearchedUserProfile.css */
+/* --- ESTILOS DE HISTÓRICO (EXISTENTES) --- */
 
 .profile-details {
     flex-grow: 1;
@@ -178,6 +177,7 @@
     border-top: 1px solid rgba(0, 255, 255, 0.2);
     align-items: center;
     justify-content: space-around;
+    margin-top: 10px; /* Ajustado */
 }
 
 .history-item {
@@ -225,6 +225,85 @@
     text-align: center;
     font-size: 0.9rem;
     color: rgba(224, 251, 252, 0.7);
-    margin-top: 10px;
+    margin-top: 10px; /* Ajustado */
 }
 
+/* --- NOVOS ESTILOS PARA TIER E INVENTÁRIO (COPIADOS DE ProfilePage.css) --- */
+
+/* 1. Estilo para o Bloco do Tier (Ranking) */
+.profile-tier-container {
+  display: flex;
+  flex-direction: column; /* Centraliza tudo verticalmente */
+  align-items: center;
+  gap: 5px; /* Espaço entre emblema e texto */
+  margin-top: 10px; /* Espaçamento */
+  /* Sem fundo, sem borda */
+}
+
+.tier-emblem-profile {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.tier-details {
+  text-align: center;
+}
+
+.tier-details h4 {
+  margin: 0 0 3px 0;
+  font-size: 0.8rem;
+  color: #00ffff;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.tier-details p {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+
+/* 2. Estilo para o Bloco de Inventário */
+.profile-inventory-container {
+    display: flex;
+    justify-content: space-evenly; /* Espalha os 4 itens */
+    gap: 5px; /* Define um gap horizontal menor */
+    flex-wrap: wrap; 
+    margin-top: 10px; /* Espaço abaixo do histórico */
+    
+    /* Adicionando o fundo */
+    background: rgba(0, 0, 0, 0.25);
+    padding: 12px 10px;
+    border-radius: 6px;
+    border-top: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.inventory-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px; /* Espaço entre o ícone e o texto/input */
+  cursor: help;
+  min-width: 80px; /* Largura mínima */
+  text-align: center;
+}
+
+.inventory-item p {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.inventory-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  margin-bottom: 3px;
+}
+
+/* Não precisamos do .inventory-input aqui, pois é view-only */
