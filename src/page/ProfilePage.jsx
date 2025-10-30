@@ -139,9 +139,9 @@ const ProfilePage = ({ currentUser }) => {
     );
 
     // Helper para os novos campos de inventário (com ícones)
-    // *** MODIFICADO PARA SE ASSEMELHAR AO history-item ***
+    // *** MODIFICADO PARA NÃO USAR "history-item" ***
     const renderInventoryItem = (label, name, iconSrc) => (
-        <div className="history-item inventory-item" title={label}>
+        <div className="inventory-item" title={label}>
             <img src={iconSrc} alt={label} className="inventory-icon" />
             {isEditing ? (
                 <input
@@ -152,6 +152,7 @@ const ProfilePage = ({ currentUser }) => {
                     className="inventory-input"
                 />
             ) : (
+                // *** MODIFICADO para <p> para consistência ***
                 <p>{formatStat(profile[name])}</p> 
             )}
         </div>
@@ -194,7 +195,7 @@ const ProfilePage = ({ currentUser }) => {
                         <div className="stat-item">HP: <span>{formatStat(isEditing ? formData.hp : profile.hp)}</span></div>
                     </div>
                     
-                    {/* --- SEÇÃO DO TIER (RANKING) ADICIONADA --- */}
+                    {/* --- SEÇÃO DO TIER (MOVIDA PARA DIV PRÓPRIA) --- */}
                     {currentTier && (
                         <div className="profile-tier-info">
                             <img src={getTierImageUrl(currentTier.emblem)} alt={currentTier.name} className="tier-emblem-profile" />
@@ -229,9 +230,8 @@ const ProfilePage = ({ currentUser }) => {
                         </div>
                     )}
 
-                    {/* --- NOVO GRUPO DE INVENTÁRIO (Estilo Histórico) --- */}
-                    {/* (MOVIDO PARA CÁ E COM NOVA CLASSE) */}
-                    <div className="profile-history profile-inventory">
+                    {/* --- NOVO GRUPO DE INVENTÁRIO (MOVIDO PARA DIV PRÓPRIA) --- */}
+                    <div className="profile-inventory-container">
                         {renderInventoryItem("Núcleo de Relíquia", "relic_core", nucleoRelicIcon)}
                         {renderInventoryItem("Chip de Ressonância", "resonance_chip", chipRessoIcon)}
                         {renderInventoryItem("Núcleo de Despertar", "survivor_awakening_core", nucleoDespertarIcon)}

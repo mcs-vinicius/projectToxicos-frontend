@@ -286,30 +286,28 @@
 }
 
 
-/* --- NOVOS ESTILOS PARA TIER E INVENTÁRIO (COMBINADOS) --- */
+/* --- NOVOS ESTILOS PARA TIER E INVENTÁRIO (REESCRITOS) --- */
 
-/* Estilo para o Bloco do Tier (Ranking) */
+/* 1. Estilo para o Bloco do Tier (Ranking) */
 .profile-tier-info {
   display: flex;
+  flex-direction: column; /* Centraliza tudo verticalmente */
   align-items: center;
-  gap: 10px;
-  background: rgba(0, 0, 0, 0.25);
-  padding: 10px;
-  border-radius: 6px;
-  border-top: 1px solid rgba(0, 255, 255, 0.2);
-  margin-top: 15px; /* Espaçamento do ATK/HP */
-  justify-content: center; /* <-- CORRIGIDO: Centraliza o conteúdo */
+  gap: 5px; /* Espaço entre emblema e texto */
+  margin-top: 20px; /* Espaçamento do ATK/HP */
+  /* Removemos o fundo e a borda */
 }
 
 .tier-emblem-profile {
-  width: 48px;  /* <-- CORRIGIDO: Aumentado */
-  height: 48px; /* <-- CORRIGIDO: Aumentado */
+  width: 48px;
+  height: 48px;
   object-fit: contain;
   flex-shrink: 0;
 }
 
 .tier-details {
-  flex-grow: 0; /* <-- CORRIGIDO: Removido o flex-grow */
+  /* Removemos o flex-grow para centralizar o texto */
+  text-align: center;
 }
 
 .tier-details h4 {
@@ -328,19 +326,40 @@
 }
 
 
-/* Ajusta o item de inventário para se parecer com o history-item */
+/* 2. Estilo para o Bloco de Inventário */
+.profile-inventory-container {
+    display: flex;
+    justify-content: center; /* Centraliza a grade */
+    gap: 15px; /* Espaço entre os 4 itens */
+    flex-wrap: wrap; /* Permite quebra em telas pequenas */
+    margin-top: 10px; /* Espaço abaixo do histórico */
+    padding: 10px 0;
+}
+
 .inventory-item {
+  display: flex;
   flex-direction: column;
-  gap: 5px; /* Reduz o espaço entre o ícone e o texto/input */
+  align-items: center;
+  gap: 5px; /* Espaço entre o ícone e o texto/input */
   cursor: help;
-  /* Herda flex: 1 e min-width: 0 da classe .history-item */
+  min-width: 80px; /* Largura mínima para cada item */
+  text-align: center;
+  flex-grow: 0; /* Impede que cresçam */
+  flex-basis: auto; /* Tamanho automático */
+}
+
+.inventory-item p {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
 }
 
 .inventory-icon {
   width: 32px;  /* Tamanho reduzido para caber melhor */
   height: 32px;
   object-fit: contain;
-  margin-bottom: 3px; /* Pequeno espaço extra */
+  margin-bottom: 3px;
 }
 
 .inventory-input {
@@ -352,19 +371,8 @@
   color: #fff;
   text-align: center;
   font-family: inherit;
-  font-size: 1.1rem; /* Tamanho da fonte do input */
-  line-height: 1.2; /* Garante que o input não seja muito alto */
+  font-size: 1.1rem;
+  line-height: 1.2;
 }
 
-/* --- CORREÇÕES FINAIS --- */
-
-/* Sobrescreve o 'gap' e 'justify-content' do .profile-history apenas para o inventário */
-.profile-inventory {
-  gap: 5px; /* <-- CORRIGIDO: Define um gap horizontal menor */
-  justify-content: center; /* <-- CORRIGIDO: Centraliza os 4 itens */
-}
-
-/* Garante que os itens do inventário não cresçam */
-.profile-inventory .history-item {
-    flex-grow: 0;
-}
+/* REMOVIDO .profile-inventory e .profile-inventory .history-item */
