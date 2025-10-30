@@ -15,7 +15,7 @@
 .profile-main-info {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 30px;
     padding-bottom: 25px;
     margin-bottom: 25px;
     border-bottom: 1px solid rgba(0, 255, 255, 0.2);
@@ -216,7 +216,7 @@
 .profile-history {
     display: flex;
     gap: 10px; /* Reduzindo o gap entre os itens de histórico */
-    background: rgba(0, 0, 0, 0);
+    background: rgba(0, 0, 0, 0.25);
     padding: 12px 10px; /* Ajustado padding */
     border-radius: 6px;
     border-top: 1px solid rgba(0, 255, 255, 0.2);
@@ -298,11 +298,12 @@
   border-radius: 6px;
   border-top: 1px solid rgba(0, 255, 255, 0.2);
   margin-top: 15px; /* Espaçamento do ATK/HP */
+  justify-content: center; /* <-- ADICIONADO PARA CENTRALIZAR */
 }
 
 .tier-emblem-profile {
-  width: 40px;
-  height: 40px;
+  width: 48px;  /* <-- ALTERADO DE 40px */
+  height: 48px; /* <-- ALTERADO DE 40px */
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -353,4 +354,10 @@
   font-family: inherit;
   font-size: 1.1rem; /* Tamanho da fonte do input */
   line-height: 1.2; /* Garante que o input não seja muito alto */
+}
+
+/* Sobrescreve o 'gap' do .profile-history apenas para o inventário */
+.profile-inventory {
+  gap: 5px; /* <-- Define um gap horizontal menor */
+  justify-content: space-evenly; /* Distribui melhor os 4 itens */
 }
