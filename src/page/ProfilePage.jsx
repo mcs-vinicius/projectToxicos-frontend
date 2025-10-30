@@ -241,12 +241,11 @@ const ProfilePage = ({ currentUser }) => {
                 </div>
             </div>
 
-            <div className="stats-section">
-                <div className="main-stats">
+            <div className="main-stats">
                         <div className="stat-item">ATK: <span>{formatStat(isEditing ? formData.atk : profile.atk)}</span></div>
                         <div className="stat-item">HP: <span>{formatStat(isEditing ? formData.hp : profile.hp)}</span></div>
-                </div>
-                
+            </div>
+            <div className="stats-section">               
                 <div className="stats-group">
                     <h3>Atributos do Sobrevivente</h3>
                     <ul>
