@@ -18,7 +18,7 @@
 
 .user-list-table-wrapper {
     overflow-x: auto; /* Garante que a tabela não quebre o layout em telas menores */
-    background-color: rgba(10, 25, 47, 0.85); /* MODIFICADO */
+    background-color: var(--container-background); /* MODIFICADO */
     border: 1px solid var(--border-color); /* MODIFICADO */
     border-radius: 8px;
     padding: 1rem;

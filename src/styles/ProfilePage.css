@@ -4,7 +4,7 @@
     max-width: 1200px;
     margin: 40px auto;
     padding: 30px;
-    background-color: rgba(10, 25, 47, 0.85);
+    background-color: var(--container-background);
     border: 1px solid var(--border-color); /* MODIFICADO */
     border-radius: 8px;
     font-family: 'Chakra Petch', sans-serif;

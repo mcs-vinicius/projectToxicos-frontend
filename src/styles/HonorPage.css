@@ -3,7 +3,7 @@
   max-width: 900px;
   margin: 40px auto;
   padding: 30px;
-  background-color: rgba(10, 25, 47, 0.85);
+  background-color: var(--container-background);
   border: 1px solid var(--border-color); /* MODIFICADO */
   border-radius: 8px;
   box-shadow: 0 0 30px var(--shadow-color); /* MODIFICADO */
