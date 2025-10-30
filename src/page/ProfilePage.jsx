@@ -152,6 +152,7 @@ const ProfilePage = ({ currentUser }) => {
                     className="inventory-input"
                 />
             ) : (
+                // *** MODIFICADO para <p> para consistência ***
                 <p>{formatStat(profile[name])}</p> 
             )}
         </div>
@@ -190,6 +191,36 @@ const ProfilePage = ({ currentUser }) => {
                     )}
                     <p>Habby ID: {profile.habby_id}</p>
                     
+                    {/* --- CORREÇÃO APLICADA AQUI --- */}
+                    <div className="main-stats">
+                        <div className="stat-item">ATK: 
+                            {isEditing ? (
+                                <input
+                                    type="number"
+                                    name="atk"
+                                    value={formData.atk || ''}
+                                    onChange={handleChange}
+                                    className="stat-input" 
+                                />
+                            ) : (
+                                <span>{formatStat(profile.atk)}</span>
+                            )}
+                        </div>
+                        <div className="stat-item">HP: 
+                            {isEditing ? (
+                                <input
+                                    type="number"
+                                    name="hp"
+                                    value={formData.hp || ''}
+                                    onChange={handleChange}
+                                    className="stat-input"
+                                />
+                            ) : (
+                                <span>{formatStat(profile.hp)}</span>
+                            )}
+                        </div>
+                    </div>
+                    {/* --- FIM DA CORREÇÃO --- */}
                     
                     {/* --- SEÇÃO DO TIER (MOVIDA PARA DIV PRÓPRIA) --- */}
                     {currentTier && (
@@ -237,12 +268,6 @@ const ProfilePage = ({ currentUser }) => {
                 </div>
             </div>
 
-            <div className="main-stats">
-                <div className="stat-item">ATK: <span>{formatStat(isEditing ? formData.atk : profile.atk)}</span></div>
-                <div className="stat-item">HP: <span>{formatStat(isEditing ? formData.hp : profile.hp)}</span></div>
-            </div>
-            <br />
-            <br />
             <div className="stats-section">
                 <div className="stats-group">
                     <h3>Atributos do Sobrevivente</h3>

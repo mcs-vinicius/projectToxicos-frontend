@@ -59,6 +59,9 @@
     border-radius: 4px;
     font-size: 1rem;
     color: #00ffff;
+    /* Adicionado para alinhar o input */
+    display: flex;
+    align-items: center;
 }
 
 .stat-item span {
@@ -358,7 +361,7 @@
 }
 
 .inventory-icon {
-  width: 32px;
+  width: 32px;  /* Tamanho reduzido para caber melhor */
   height: 32px;
   object-fit: contain;
   margin-bottom: 3px;
@@ -375,4 +378,18 @@
   font-family: inherit;
   font-size: 1.1rem;
   line-height: 1.2;
+}
+
+/* --- ADIÇÃO PARA CORRIGIR INPUTS DE ATK/HP --- */
+.stat-input {
+    width: 80px;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #00ffff;
+    border-radius: 4px;
+    color: #fff;
+    text-align: left;
+    font-family: inherit;
+    font-size: 1rem;
+    margin-left: 8px;
 }
