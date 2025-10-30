@@ -139,7 +139,7 @@ const ProfilePage = ({ currentUser }) => {
     );
 
     // Helper para os novos campos de inventário (com ícones)
-    // *** MODIFICADO PARA NÃO USAR "history-item" ***
+    // *** REMOVIDA A CLASSE "history-item" ***
     const renderInventoryItem = (label, name, iconSrc) => (
         <div className="inventory-item" title={label}>
             <img src={iconSrc} alt={label} className="inventory-icon" />
@@ -152,7 +152,6 @@ const ProfilePage = ({ currentUser }) => {
                     className="inventory-input"
                 />
             ) : (
-                // *** MODIFICADO para <p> para consistência ***
                 <p>{formatStat(profile[name])}</p> 
             )}
         </div>
@@ -190,14 +189,11 @@ const ProfilePage = ({ currentUser }) => {
                         </>
                     )}
                     <p>Habby ID: {profile.habby_id}</p>
-                    <div className="main-stats">
-                        <div className="stat-item">ATK: <span>{formatStat(isEditing ? formData.atk : profile.atk)}</span></div>
-                        <div className="stat-item">HP: <span>{formatStat(isEditing ? formData.hp : profile.hp)}</span></div>
-                    </div>
+                    
                     
                     {/* --- SEÇÃO DO TIER (MOVIDA PARA DIV PRÓPRIA) --- */}
                     {currentTier && (
-                        <div className="profile-tier-info">
+                        <div className="profile-tier-container">
                             <img src={getTierImageUrl(currentTier.emblem)} alt={currentTier.name} className="tier-emblem-profile" />
                             <div className="tier-details">
                                 <h4>Tier Atual</h4>
@@ -242,10 +238,12 @@ const ProfilePage = ({ currentUser }) => {
             </div>
 
             <div className="main-stats">
-                        <div className="stat-item">ATK: <span>{formatStat(isEditing ? formData.atk : profile.atk)}</span></div>
-                        <div className="stat-item">HP: <span>{formatStat(isEditing ? formData.hp : profile.hp)}</span></div>
+                <div className="stat-item">ATK: <span>{formatStat(isEditing ? formData.atk : profile.atk)}</span></div>
+                <div className="stat-item">HP: <span>{formatStat(isEditing ? formData.hp : profile.hp)}</span></div>
             </div>
-            <div className="stats-section">               
+            <br />
+            <br />
+            <div className="stats-section">
                 <div className="stats-group">
                     <h3>Atributos do Sobrevivente</h3>
                     <ul>
