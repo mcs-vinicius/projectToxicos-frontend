@@ -195,7 +195,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 
   .table-wrapper {
     min-width: unset;
-    width: 100%;
+    width: 90%;
     overflow-x: auto;
     overflow-y: hidden;
     border: 1px solid var(--border-color);
@@ -229,7 +229,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
       text-align: center; /* Centraliza no mobile */
   }
   th {
-      font-size: 0.65rem;
+      font-size: 0.60rem;
       white-space: normal;
   }
 
