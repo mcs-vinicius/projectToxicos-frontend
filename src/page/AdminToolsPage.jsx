@@ -3,35 +3,45 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import BackupRestore from '../components/admin/BackupRestore'; // Mantenha este import se você usa o componente
 
-// --- ESTILOS ---
-// Você pode manter estes estilos ou usar os seus próprios de um arquivo .css
+// --- ESTILOS ATUALIZADOS PARA O TEMA TÓXICO ---
 const adminContainerStyle = {
     padding: '2rem',
     maxWidth: '800px',
     margin: '2rem auto',
-    backgroundColor: '#2c2c2c',
+    backgroundColor: 'rgba(10, 25, 47, 0.85)', // Cor de fundo do tema
+    border: '1px solid var(--border-color, rgba(57, 255, 20, 0.3))', // Borda do tema
     borderRadius: '8px',
-    color: 'white',
-    fontFamily: 'Arial, sans-serif'
+    color: 'var(--light-text, #f0fff0)', // Cor do texto do tema
+    fontFamily: 'Chakra Petch, sans-serif',
 };
 
 const emergencyBoxStyle = {
-    border: '2px solid #e74c3c',
+    border: '2px solid #e74c3c', // Mantém vermelho para emergência
     padding: '1.5rem',
     marginTop: '2rem',
     borderRadius: '8px',
-    backgroundColor: '#343a40'
+    backgroundColor: 'rgba(0, 0, 0, 0.2)', // Fundo escuro
 };
 
 const buttonStyleBase = {
-    color: 'white',
+    color: '#fff', // Texto branco para botões coloridos
     padding: '10px 20px',
     border: 'none',
     borderRadius: '5px',
     cursor: 'pointer',
     fontSize: '16px',
+    fontFamily: 'Chakra Petch, sans-serif', // Adiciona fonte do tema
     marginRight: '10px',
-    marginTop: '10px'
+    marginTop: '10px',
+    transition: 'opacity 0.3s ease',
+};
+
+// Estilo para o botão "Gerenciar Usuários" (verde)
+const manageButton = {
+    ...buttonStyleBase,
+    backgroundColor: 'transparent',
+    color: 'var(--glow-green, #39ff14)',
+    border: '1px solid var(--glow-green, #39ff14)',
 };
 
 // --- COMPONENTE ---
@@ -79,17 +89,19 @@ const AdminToolsPage = () => {
 
     return (
         <div style={adminContainerStyle}>
-            <h1>Painel de Administração</h1>
+            <h1 style={{textAlign: 'center', color: 'var(--glow-green)', textShadow: '0 0 10px var(--glow-green)'}}>
+                Painel de Administração
+            </h1>
             <p>Ferramentas disponíveis para gerenciamento do sistema.</p>
             
-            {/* Componente de Backup e Restauração */}
+            {/* Componente de Backup e Restauração (já deve estar estilizado) */}
             <BackupRestore />
             
-            <hr style={{ margin: '2rem 0', borderColor: '#444' }} />
+            <hr style={{ margin: '2rem 0', borderColor: 'var(--border-color)' }} />
 
             {/* Seção de Ferramentas de Emergência */}
             <div style={emergencyBoxStyle}>
-                <h2>Ferramentas de Emergência</h2>
+                <h2 style={{color: '#e74c3c'}}>Ferramentas de Emergência</h2>
                 <p>
                     Use estes botões para resolver erros de "chave duplicada" (pkey) que ocorrem após uma restauração de backup. Cada botão corrige uma tabela específica.
                 </p>
@@ -113,7 +125,7 @@ const AdminToolsPage = () => {
             
             <button 
                 onClick={() => navigate('/manage-users')} 
-                style={{ ...buttonStyleBase, backgroundColor: '#3498db', marginTop: '20px' }}
+                style={{ ...manageButton, marginTop: '20px' }}
             >
                 Gerenciar Usuários
             </button>
