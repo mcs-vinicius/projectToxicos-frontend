@@ -13,7 +13,7 @@
     max-width: 1400px;
     margin: auto;
     padding: 30px;
-    background-color: var(--container-background);
+    background-color: var(--container-background); /* MODIFICADO */
     border: 1px solid var(--border-color); /* MODIFICADO */
     border-radius: 8px;
 }

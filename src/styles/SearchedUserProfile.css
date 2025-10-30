@@ -14,7 +14,7 @@
 }
 
 .searched-user-profile-modal {
-    background-color: rgba(10, 25, 47, 0.95); /* MODIFICADO */
+    background-color: var(--container-background); /* MODIFICADO */
     border: 1px solid var(--border-color); /* MODIFICADO */
     border-radius: 8px;
     width: 90%;
@@ -305,5 +305,3 @@
   object-fit: contain;
   margin-bottom: 3px;
 }
-
-/* Não precisamos do .inventory-input aqui, pois é view-only */

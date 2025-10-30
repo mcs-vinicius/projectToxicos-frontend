@@ -1,11 +1,13 @@
 /* styles/global.css */
 
 :root {
-  --glow-green: #39ff14;
-  --dark-background: #02040a;
-  --container-background: rgba(20, 20, 20, 0.85); /* <-- ADICIONE ESTA LINHA */
-  --light-text: #f0fff0;
-  /* Outras variáveis de cor, se precisar */
+  --glow-green: #39ff14; /* Verde Tóxico Principal */
+  --dark-background: #02040a; /* Fundo muito escuro */
+  
+  /* --- ADICIONE ESTA LINHA --- */
+  --container-background: rgba(20, 20, 20, 0.85); /* Fundo dos painéis */
+
+  --light-text: #f0fff0; /* Texto claro (pode ajustar se necessário) */
   --accent-color: var(--glow-green); /* Usar verde como acento principal */
   --border-color: rgba(57, 255, 20, 0.3); /* Verde semi-transparente para bordas */
   --hover-bg-color: rgba(57, 255, 20, 0.15); /* Fundo de hover verde */

@@ -18,10 +18,10 @@
   width: 100%;
   max-width: 400px;
   padding: 40px;
-  background-color: rgba(10, 25, 47, 0.85);
+  background-color: var(--container-background); /* MODIFICADO */
   /* MUDANÇA: Cor da borda e sombra */
   border: 1px solid var(--glow-green);
-  box-shadow: 0 0 30px rgba(57, 255, 20, 0.3), inset 0 0 20px rgba(57, 255, 20, 0.1);
+  box-shadow: 0 0 30px var(--shadow-color), inset 0 0 20px rgba(57, 255, 20, 0.1); /* MODIFICADO */
   backdrop-filter: blur(5px);
   position: relative;
   animation: fadeIn 1s ease-out; /* Reutiliza a animação de fade-in */
@@ -80,7 +80,7 @@
   background-color: transparent;
   border: none;
   /* MUDANÇA: Cor da borda */
-  border-bottom: 2px solid rgba(57, 255, 20, 0.5);
+  border-bottom: 2px solid var(--border-color); /* MODIFICADO */
   color: #e0fbfc;
   font-size: 1.1rem;
   font-family: 'Chakra Petch', sans-serif;
@@ -91,7 +91,7 @@
   outline: none;
   /* MUDANÇA: Cor do foco */
   border-bottom-color: var(--glow-green);
-  box-shadow: 0 5px 15px -5px rgba(57, 255, 20, 0.4);
+  box-shadow: 0 5px 15px -5px var(--shadow-color); /* MODIFICADO */
 }
 
 /* --- Botão e Mensagens --- */
