@@ -125,7 +125,14 @@ tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
   display: flex; align-items: center; justify-content: flex-start; padding: 4px 8px;
   overflow: visible; /* Garante que o conteúdo flex não seja cortado */
 }
-.tier-emblem { width: 24px; height: auto; margin-right: 6px; vertical-align: middle; flex-shrink: 0; }
+.tier-emblem { 
+  width: 24px; 
+  height: 24px; /* <-- MUDADO DE 'auto' PARA FIXO */
+  object-fit: contain; /* <-- ADICIONADO PARA PRESERVAR O ASPECT RATIO */
+  margin-right: 6px; 
+  vertical-align: middle; 
+  flex-shrink: 0; 
+}
 /* Regra específica para o span do Tier (Desktop) que funcionou visualmente */
 .emblem-cell-jsx span {
   font-size: 0.9em;
