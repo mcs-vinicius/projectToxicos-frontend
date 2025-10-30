@@ -10,7 +10,7 @@
 }
 
 .section {
-    background-color: rgba(10, 25, 47, 0.8);
+    background-color: var(--container-background); /* MODIFICADO */
     /* Borda principal verde */
     border: 1px solid var(--border-color, rgba(57, 255, 20, 0.2)); /* Default para verde se não definida globalmente */
     border-radius: 8px;
@@ -75,7 +75,7 @@
     padding: 8px 0;
 }
 
-/* --- Estilização do Pódio da Temporada (CORES RESTAURADAS) --- */
+/* --- Estilização do Pódio da Temporada (CORES DO PÓDIO MANTIDAS) --- */
 .podium-container {
     display: flex;
     justify-content: center;
@@ -86,7 +86,7 @@
     margin-top: 40px;
 }
 
-/* --- REGRAS CSS PARA A MOLDURA ANIMADA (CORES ORIGINAIS RESTAURADAS) --- */
+/* --- REGRAS CSS PARA A MOLDURA ANIMADA (CORES DO PÓDIO MANTIDAS) --- */
 
 /* Base Variables - Gold, Silver, Bronze */
 :root {

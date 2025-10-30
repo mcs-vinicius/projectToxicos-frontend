@@ -17,11 +17,11 @@
   max-width: 1200px;
   margin: 80px auto 20px auto;
   padding: 30px;
-  background-color: rgba(10, 25, 47, 0.8);
-  border: 1px solid var(--glow-green);
+  background-color: var(--container-background); /* MODIFICADO */
+  border: 1px solid var(--border-color); /* MODIFICADO */
   border-radius: 8px;
-  box-shadow: 0 0 30px var(--shadow-color),
-    inset 0 0 20px rgba(57, 255, 20, 0.1);
+  box-shadow: 0 0 30px var(--shadow-color), /* MODIFICADO */
+    inset 0 0 20px rgba(57, 255, 20, 0.1); /* MODIFICADO */
   backdrop-filter: blur(5px);
   position: relative;
   animation: fadeIn 1s ease-out;
@@ -33,7 +33,7 @@
 .results-page-container::before,
 .results-page-container::after {
   content: ""; position: absolute; width: 25px; height: 25px;
-  border-color: var(--glow-green); border-style: solid; z-index: 2;
+  border-color: var(--glow-green); border-style: solid; z-index: 2; /* MODIFICADO */
 }
 .results-page-container::before { top: -5px; left: -5px; border-width: 2px 0 0 2px; }
 .results-page-container::after { bottom: -5px; right: -5px; border-width: 0 2px 2px 0; }
@@ -52,7 +52,7 @@
 }
 .season-info {
   text-align: center; font-size: 1.2rem; color: var(--glow-green);
-  border: 1px dashed var(--border-color); padding: 10px 20px;
+  border: 1px dashed var(--border-color); padding: 10px 20px; /* MODIFICADO */
   border-radius: 4px; margin-bottom: 0;
 }
 .btn-delete-season {
@@ -69,20 +69,21 @@
 }
 .table-wrapper {
   flex: 1; min-width: 400px; background-color: transparent;
-  border: 1px solid var(--border-color); border-radius: 6px;
+  border: 1px solid var(--border-color); border-radius: 6px; /* MODIFICADO */
   overflow: hidden; /* Mantém hidden no wrapper */
 }
 .table-title {
-  font-size: 1.5rem; font-weight: 600; color: #ffffff; background-color: var(--hover-bg-color);
+  font-size: 1.5rem; font-weight: 600; color: #ffffff; background-color: var(--hover-bg-color); /* MODIFICADO */
   padding: 15px; text-align: center; text-transform: uppercase; letter-spacing: 2px;
 }
 table {
   width: 100%;
   border-collapse: collapse;
+  /* table-layout: fixed; */ /* Removido no ajuste anterior */
 }
 th, td {
   padding: 10px 8px;
-  text-align: center; border-bottom: 1px solid var(--border-color);
+  text-align: center; border-bottom: 1px solid var(--border-color); /* MODIFICADO */
   overflow: hidden; /* Mantém na célula TD por padrão */
   text-overflow: ellipsis; /* Mantém na célula TD por padrão */
   white-space: nowrap;
@@ -91,7 +92,7 @@ th, td {
 }
 thead tr {
   background-color: transparent;
-  color: var(--glow-green);
+  color: var(--glow-green); /* MODIFICADO */
   font-weight: 600;
 }
 
@@ -99,13 +100,13 @@ thead tr {
 /* Rank Acesso */
 .table-wrapper:first-child th:nth-child(1), .table-wrapper:first-child td:nth-child(1) { width: 15%; text-align: center; } /* Posição */
 .table-wrapper:first-child th:nth-child(2), .table-wrapper:first-child td:nth-child(2) { width: 30%; text-align: left; } /* Nome */
-.table-wrapper:first-child th:nth-child(3) { width: 25%; text-align: left; } /* Tier Header */
+.table-wrapper:first-child th:nth-child(3) { /* width: 25%; */ text-align: left; } /* Tier Header (largura removida) */
 /* Regra específica para a célula TD do Tier (Desktop) que funcionou visualmente */
 .table-wrapper:first-child td:nth-child(3) {
+    /* width: 25%; */ /* (largura removida) */
     text-align: left;
     overflow: visible; /* <<< Garante que o conteúdo possa transbordar a célula */
     text-overflow: clip; /* <<< Evita ellipsis na célula */
-    height: auto;
 }
 .table-wrapper:first-child th:nth-child(4), .table-wrapper:first-child td:nth-child(4) { width: 15%; text-align: center; } /* Fase */
 .table-wrapper:first-child th:nth-child(5), .table-wrapper:first-child td:nth-child(5) { width: 15%; text-align: center; } /* Evolução */
@@ -118,17 +119,17 @@ thead tr {
 .table-wrapper:last-child th:nth-child(6), .table-wrapper:last-child td:nth-child(6) { width: 12.5%; text-align: center; } /* Total */
 
 tbody tr { transition: background-color 0.3s ease; }
-tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
+tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; } /* MODIFICADO */
 
 /* Emblema (Desktop) */
 .emblem-cell-jsx {
-  display: flex; align-items: center; justify-content: flex-start; padding: 10px 8px;
+  display: flex; align-items: center; justify-content: flex-start; padding: 4px 8px;
   overflow: visible; /* Garante que o conteúdo flex não seja cortado */
 }
 .tier-emblem { 
   width: 24px; 
-  height: 30px; /* <-- MUDADO DE 'auto' PARA FIXO */
-  object-fit: contain; /* <-- ADICIONADO PARA PRESERVAR O ASPECT RATIO */
+  height: 24px; /* Ajustado */
+  object-fit: contain; /* Ajustado */
   margin-right: 6px; 
   vertical-align: middle; 
   flex-shrink: 0; 
@@ -137,7 +138,7 @@ tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
 .emblem-cell-jsx span {
   font-size: 0.9em;
   line-height: 1;
-  white-space: nowrap;
+  white-space: normal; /* Ajustado */
   overflow: visible; /* <<< Garante que o span não seja cortado */
   text-overflow: clip; /* <<< Evita ellipsis no span */
   display: inline-block;
@@ -153,21 +154,21 @@ tbody tr:hover { background-color: var(--hover-bg-color); color: #fff; }
 .pagination { display: flex; justify-content: center; gap: 15px; margin-top: 40px; }
 .pagination button {
   padding: 10px 20px; font-size: 1rem; font-weight: bold; font-family: "Chakra Petch", sans-serif;
-  color: var(--glow-green); background-color: transparent; border: 2px solid var(--glow-green);
+  color: var(--glow-green); background-color: transparent; border: 2px solid var(--glow-green); /* MODIFICADO */
   border-radius: 4px; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase;
 }
 .pagination button:hover:not(:disabled) {
-  background-color: var(--glow-green); color: #02040a; box-shadow: 0 0 20px var(--glow-green);
+  background-color: var(--glow-green); color: #02040a; box-shadow: 0 0 20px var(--glow-green); /* MODIFICADO */
 }
 .pagination button:disabled {
-  color: rgba(57, 255, 20, 0.3); border-color: rgba(57, 255, 20, 0.3); cursor: not-allowed;
+  color: var(--border-color); border-color: var(--border-color); cursor: not-allowed; /* MODIFICADO */
 }
 
 /* Inativos */
 .inactive-participant td { color: rgba(224, 251, 252, 0.4); font-style: italic; }
 
 /* Rodapé Tabela */
-tfoot tr { background-color: var(--hover-bg-color); color: #ffffff; font-weight: bold; text-transform: uppercase; text-align: center; }
+tfoot tr { background-color: var(--hover-bg-color); color: #ffffff; font-weight: bold; text-transform: uppercase; text-align: center; } /* MODIFICADO */
 tfoot .lvtt { display: table-cell; text-align: center; vertical-align: middle; }
 tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 .txtcenter { display: flex; justify-content: center; }
@@ -183,9 +184,9 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     max-width: 100%;
   }
   .results-page-container .title {
-    font-size: 1.7rem;
-    margin-bottom: 12px;
-    letter-spacing: 2px;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    letter-spacing: 3px;
   }
   .season-info-container {
     flex-direction: column;
@@ -203,9 +204,9 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 
   .table-wrapper {
     min-width: unset;
-    width: 91%;
+    width: 100%;
     overflow-x: auto;
-    overflow-y: auto;
+    overflow-y: auto; /* Corrigido */
     border: 1px solid var(--border-color);
     background-color: transparent;
     border-radius: 6px;
@@ -217,8 +218,8 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
 
   table {
     table-layout: auto;
-    width: auto;
-    min-width: 290px;
+    width: auto; /* Corrigido */
+    min-width: 300px;
   }
 
   th, td {
@@ -237,7 +238,7 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
       text-align: center; /* Centraliza no mobile */
   }
   th {
-      font-size: 0.60rem;
+      font-size: 0.65rem;
       white-space: normal;
   }
 
@@ -262,8 +263,8 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
   }
   .tier-emblem {
     width: 18px;
-    height: 18px; /* <-- DEFINA UMA ALTURA FIXA */
-    object-fit: contain; /* <-- ADICIONE ESTA LINHA */
+    height: 18px; /* Corrigido */
+    object-fit: contain; /* Corrigido */
     margin-right: 0;
     margin-bottom: 2px;
   }
@@ -273,16 +274,13 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     white-space: normal; /* Permite quebra */
     line-height: 1.1;
     text-align: center;
-    /* display: block; */ /* Substituído por flex */
+    display: flex; /* Corrigido */
+    align-items: center; /* Corrigido */
+    justify-content: center; /* Corrigido */
+    min-height: 18px; /* Corrigido */
     overflow: visible;
     text-overflow: clip;
     vertical-align: initial;
-    
-    /* --- ADIÇÕES AQUI --- */
-    display: flex; /* Para centralizar verticalmente */
-    align-items: center; /* Centraliza o texto de 1 linha */
-    justify-content: center; /* Centraliza o texto (caso text-align falhe) */
-    min-height: 18px; /* Força uma altura mínima igual à da imagem */
   }
 
   /* Rodapé no Mobile */
