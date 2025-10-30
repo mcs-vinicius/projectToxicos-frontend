@@ -262,8 +262,8 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
   }
   .tier-emblem {
     width: 18px;
-    height: 18px; /* <-- MUDADO DE 'auto' PARA FIXO */
-    object-fit: contain; /* <-- ADICIONADO PARA PRESERVAR O ASPECT RATIO */
+    height: 18px; /* <-- DEFINA UMA ALTURA FIXA */
+    object-fit: contain; /* <-- ADICIONE ESTA LINHA */
     margin-right: 0;
     margin-bottom: 2px;
   }
@@ -273,10 +273,16 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     white-space: normal; /* Permite quebra */
     line-height: 1.1;
     text-align: center;
-    display: block;
+    /* display: block; */ /* Substituído por flex */
     overflow: visible;
     text-overflow: clip;
-   
+    vertical-align: initial;
+    
+    /* --- ADIÇÕES AQUI --- */
+    display: flex; /* Para centralizar verticalmente */
+    align-items: center; /* Centraliza o texto de 1 linha */
+    justify-content: center; /* Centraliza o texto (caso text-align falhe) */
+    min-height: 18px; /* Força uma altura mínima igual à da imagem */
   }
 
   /* Rodapé no Mobile */
