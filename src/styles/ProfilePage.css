@@ -298,18 +298,18 @@
   border-radius: 6px;
   border-top: 1px solid rgba(0, 255, 255, 0.2);
   margin-top: 15px; /* Espaçamento do ATK/HP */
-  justify-content: center; /* <-- ADICIONADO PARA CENTRALIZAR */
+  justify-content: center; /* <-- CORRIGIDO: Centraliza o conteúdo */
 }
 
 .tier-emblem-profile {
-  width: 48px;  /* <-- ALTERADO DE 40px */
-  height: 48px; /* <-- ALTERADO DE 40px */
+  width: 48px;  /* <-- CORRIGIDO: Aumentado */
+  height: 48px; /* <-- CORRIGIDO: Aumentado */
   object-fit: contain;
   flex-shrink: 0;
 }
 
 .tier-details {
-  flex-grow: 1;
+  flex-grow: 0; /* <-- CORRIGIDO: Removido o flex-grow */
 }
 
 .tier-details h4 {
@@ -356,8 +356,15 @@
   line-height: 1.2; /* Garante que o input não seja muito alto */
 }
 
-/* Sobrescreve o 'gap' do .profile-history apenas para o inventário */
+/* --- CORREÇÕES FINAIS --- */
+
+/* Sobrescreve o 'gap' e 'justify-content' do .profile-history apenas para o inventário */
 .profile-inventory {
-  gap: 5px; /* <-- Define um gap horizontal menor */
-  justify-content: space-evenly; /* Distribui melhor os 4 itens */
+  gap: 5px; /* <-- CORRIGIDO: Define um gap horizontal menor */
+  justify-content: center; /* <-- CORRIGIDO: Centraliza os 4 itens */
+}
+
+/* Garante que os itens do inventário não cresçam */
+.profile-inventory .history-item {
+    flex-grow: 0;
 }

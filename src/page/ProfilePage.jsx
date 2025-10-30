@@ -230,7 +230,7 @@ const ProfilePage = ({ currentUser }) => {
                     )}
 
                     {/* --- NOVO GRUPO DE INVENTÁRIO (Estilo Histórico) --- */}
-                    {/* (MOVIDO PARA CÁ) */}
+                    {/* (MOVIDO PARA CÁ E COM NOVA CLASSE) */}
                     <div className="profile-history profile-inventory">
                         {renderInventoryItem("Núcleo de Relíquia", "relic_core", nucleoRelicIcon)}
                         {renderInventoryItem("Chip de Ressonância", "resonance_chip", chipRessoIcon)}
