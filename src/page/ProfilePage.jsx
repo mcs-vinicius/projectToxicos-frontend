@@ -164,8 +164,7 @@ const ProfilePage = ({ currentUser }) => {
             <div className="profile-main-info">
                 <div className="profile-pic-wrapper">
                     <img src={isEditing ? formData.profile_pic_url : profile.profile_pic_url} alt={`Foto de ${profile.nick}`} className="profile-pic" />
-                </div>
-                <div className="profile-details">
+
                     {isEditing ? (
                         <>
                             <input
@@ -190,6 +189,10 @@ const ProfilePage = ({ currentUser }) => {
                         </>
                     )}
                     <p>Habby ID: {profile.habby_id}</p>
+
+                </div>
+                <div className="profile-details">
+                    
                     
                     
                     {/* --- FIM DA CORREÇÃO --- */}
