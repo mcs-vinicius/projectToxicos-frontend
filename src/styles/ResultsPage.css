@@ -261,16 +261,16 @@ tfoot .lvtt:first-child { text-align: right; padding-right: 20px; }
     margin-bottom: 2px;
   }
   /* Estilo do span do tier especificamente no mobile */
-  .emblem-cell-jsx span {
-    font-size: 0.6em;
-    white-space: normal; /* Permite quebra */
-    line-height: 1.1;
-    text-align: center;
-    display: block;
-    overflow: visible;
-    text-overflow: clip;
-    vertical-align: initial;
-  }
+  /* Regra específica para o span do Tier (Desktop) que funcionou visualmente */
+.emblem-cell-jsx span {
+  font-size: 0.9em;
+  line-height: 1;
+  white-space: normal; /* <<< CORRIGIDO: Permite quebra de linha */
+  overflow: visible; /* <<< Garante que o span não seja cortado */
+  text-overflow: clip; /* <<< Evita ellipsis no span */
+  display: inline-block;
+  vertical-align: middle;
+}
 
   /* Rodapé no Mobile */
   tfoot td.lvtt {
