@@ -15,7 +15,7 @@
 .profile-main-info {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 10px;
     padding-bottom: 25px;
     margin-bottom: 25px;
     border-bottom: 1px solid rgba(0, 255, 255, 0.2);
@@ -216,7 +216,7 @@
 .profile-history {
     display: flex;
     gap: 10px; /* Reduzindo o gap entre os itens de histórico */
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0);
     padding: 12px 10px; /* Ajustado padding */
     border-radius: 6px;
     border-top: 1px solid rgba(0, 255, 255, 0.2);
