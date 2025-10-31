@@ -214,26 +214,7 @@ const ProfilePage = ({ currentUser }) => {
                         </div>
                     )}
 
-                    {history && history.position != null ? (
-                        <div className="profile-history">
-                            <div className="history-item">
-                                <h4>Última Posição</h4>
-                                <p>{history.position}º</p>
-                            </div>
-                            <div className="history-item">
-                                <h4>Última Fase</h4>
-                                <p>{history.fase_acesso}</p>
-                            </div>
-                            <div className="history-item">
-                                <h4>Evolução</h4>
-                                {renderEvolutionText(history.evolution)}
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="profile-history-empty">
-                            <p>Sem dados de histórico de ranking para exibir.</p>
-                        </div>
-                    )}
+                    
 
                     <div className="profile-inventory-container">
                         {renderInventoryItem("Núcleo de Relíquia", "relic_core", nucleoRelicIcon)}
