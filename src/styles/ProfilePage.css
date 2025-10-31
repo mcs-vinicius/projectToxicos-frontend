@@ -18,7 +18,7 @@
     align-items: center; /* Centraliza verticalmente */
     justify-content: center; /* Centraliza os blocos */
     flex-wrap: wrap; /* Permite quebrar a linha em telas menores */
-    gap: 50px; /* Aumenta o espaço entre os blocos */
+    gap: 150px; /* Aumenta o espaço entre os blocos */
     padding-bottom: 25px;
     margin-bottom: 25px;
     border-bottom: 1px solid var(--border-color);

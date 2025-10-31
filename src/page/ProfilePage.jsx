@@ -181,7 +181,7 @@ const ProfilePage = ({ currentUser }) => {
             <div className="profile-main-info">
                 {/* Bloco 1: Informações do Usuário */}
                 <div className="profile-pic-wrapper">
-                    <h1>{profile.nick || 'Nome não definido'}</h1>
+                    <img src={isEditing ? formData.profile_pic_url : profile.profile_pic_url} alt={`Foto de ${profile.nick}`} className="profile-pic" />
                     {isEditing ? (
                         <>
                             <input
@@ -201,8 +201,7 @@ const ProfilePage = ({ currentUser }) => {
                             />
                         </>
                     ) : (
-                        <img src={isEditing ? formData.profile_pic_url : profile.profile_pic_url} alt={`Foto de ${profile.nick}`} className="profile-pic" />
-                        
+                        <h1>{profile.nick || 'Nome não definido'}</h1>
                     )}
                     <p>Habby ID: {profile.habby_id}</p>
                 </div>
@@ -210,9 +209,9 @@ const ProfilePage = ({ currentUser }) => {
                 {/* Bloco 2: Tier (Agora é irmão do profile-pic-wrapper) */}
                 {currentTier && (
                     <div className="profile-tier-container">
+                        <h4>Tier Atual</h4>
                         <img src={getTierImageUrl(currentTier.emblem)} alt={currentTier.name} className="tier-emblem-profile" />
                         <div className="tier-details">
-                            <h4>Tier Atual</h4>
                             <p>{currentTier.name}</p>
                         </div>
                     </div>
