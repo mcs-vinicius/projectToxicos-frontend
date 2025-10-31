@@ -1,23 +1,28 @@
 // src/components/admin/HabbyManagement.jsx
-import React, { useState, useEffect, useCallback } from 'react'; // --- MODIFICAÇÃO: Importar useCallback ---
+// --- ARQUIVO CORRIGIDO ---
+
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { FaPlus, FaTrash, FaSpinner } from 'react-icons/fa';
 
-// Reutiliza o hook de mensagens da UserManagementPage (opcional, mas limpo)
+// --- MODIFICAÇÃO: Corrigido o hook 'useMessages' com useCallback ---
 const useMessages = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
-    const showError = (msg) => {
+    const showError = useCallback((msg) => {
         setError(msg);
         setTimeout(() => setError(''), 4000);
-    };
-    const showSuccess = (msg) => {
+    }, []); // <-- Adicionado useCallback com array vazio
+
+    const showSuccess = useCallback((msg) => {
         setSuccess(msg);
         setTimeout(() => setSuccess(''), 3000);
-    };
+    }, []); // <-- Adicionado useCallback com array vazio
+
     return { error, success, showError, showSuccess };
 };
+// --- FIM DA MODIFICAÇÃO ---
 
 const HabbyManagement = () => {
     const [habbys, setHabbys] = useState([]);
@@ -28,7 +33,6 @@ const HabbyManagement = () => {
 
     const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-    // --- MODIFICAÇÃO: Envolver a função em useCallback ---
     const fetchHabbys = useCallback(async () => {
         setIsLoading(true);
         try {
@@ -39,11 +43,11 @@ const HabbyManagement = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [API_URL, showError]); // Adicionar dependências do useCallback
+    }, [API_URL, showError]); // Agora 'showError' é estável
 
     useEffect(() => {
         fetchHabbys();
-    }, [fetchHabbys]); // --- MODIFICAÇÃO: Adicionar fetchHabbys à lista de dependências ---
+    }, [fetchHabbys]); // Este hook agora roda apenas uma vez
 
     const handleAddHabby = async (e) => {
         e.preventDefault();
@@ -53,8 +57,8 @@ const HabbyManagement = () => {
         }
         setIsSubmitting(true);
         try {
-            const response = await axios.post(`${API_URL}/pre-approved-habbys`,
-                { habby_id: newHabbyId.trim() },
+            const response = await axios.post(`${API_URL}/pre-approved-habbys`, 
+                { habby_id: newHabbyId.trim() }, 
                 { withCredentials: true }
             );
             setHabbys([...habbys, response.data.habby]);
@@ -115,7 +119,7 @@ const HabbyManagement = () => {
                             {habbys.map(habby => (
                                 <li key={habby.id}>
                                     <span>{habby.habby_id}</span>
-                                    <button
+                                    <button 
                                         onClick={() => handleDeleteHabby(habby.id)}
                                         className="habby-button-delete"
                                         title="Remover liberação"
