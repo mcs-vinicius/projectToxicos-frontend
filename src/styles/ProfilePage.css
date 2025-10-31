@@ -4,8 +4,8 @@
     max-width: 1200px;
     margin: 40px auto;
     padding: 30px;
-    background-color: var(--container-background); /* MODIFICADO */
-    border: 1px solid var(--border-color); /* MODIFICADO */
+    background-color: var(--container-background);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     font-family: 'Chakra Petch', sans-serif;
     color: #e0fbfc;
@@ -18,7 +18,7 @@
     gap: 30px;
     padding-bottom: 25px;
     margin-bottom: 25px;
-    border-bottom: 1px solid var(--border-color); /* MODIFICADO */
+    border-bottom: 1px solid var(--border-color);
 }
 
 .profile-pic-wrapper {
@@ -30,16 +30,16 @@
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    border: 3px solid var(--glow-green); /* MODIFICADO */
+    border: 3px solid var(--glow-green);
     object-fit: cover;
-    box-shadow: 0 0 15px var(--shadow-color); /* MODIFICADO */
+    box-shadow: 0 0 15px var(--shadow-color);
 }
 
 .profile-details h1 {
     margin: 0 0 10px 0;
     font-size: 2.5rem;
     color: #ffffff;
-    text-shadow: 0 0 10px var(--glow-green), 0 0 5px var(--glow-green); /* MODIFICADO */
+    text-shadow: 0 0 10px var(--glow-green), 0 0 5px var(--glow-green);
 }
 
 .profile-details p {
@@ -48,27 +48,34 @@
     color: rgba(224, 251, 252, 0.7);
 }
 
+/* --- MODIFICAÇÃO (Estilos ATK/HP Destaque) --- */
 .main-stats {
     display: flex;
     gap: 20px;
+    justify-content: center; /* Centraliza no desktop */
+    margin-bottom: 25px; /* Adiciona espaço abaixo */
+    width: 100%;
 }
 
-.stat-item {
-    background: rgba(0,0,0,0.2);
-    padding: 8px 15px;
-    border-radius: 4px;
-    font-size: 1rem;
-    color: var(--glow-green); /* MODIFICADO */
-    /* Adicionado para alinhar o input */
+.main-stats .stat-item {
+    background: rgba(0,0,0,0.3);
+    padding: 12px 20px; /* Mais padding */
+    border-radius: 6px;
+    font-size: 1.25rem; /* Fonte maior */
+    color: var(--glow-green);
     display: flex;
     align-items: center;
+    border-bottom: 2px solid var(--glow-green);
 }
 
-.stat-item span {
+.main-stats .stat-item span {
     color: #fff;
     font-weight: bold;
-    margin-left: 8px;
+    margin-left: 10px;
+    font-size: 1.3rem; /* Fonte maior para o número */
 }
+/* --- FIM DA MODIFICAÇÃO --- */
+
 
 .stats-section {
     display: flex;
@@ -76,18 +83,30 @@
     margin-bottom: 25px;
 }
 
+/* --- MODIFICAÇÃO (Novo Título de Seção) --- */
+.section-title-group {
+    font-size: 1.8rem;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: var(--glow-green);
+    text-shadow: 0 0 10px var(--shadow-color);
+    text-align: center;
+    text-transform: uppercase;
+}
+/* --- FIM DA MODIFICAÇÃO --- */
+
 .stats-group {
     background-color: rgba(0, 0, 0, 0.2);
     padding: 20px;
     border-radius: 6px;
     flex: 1;
-    border-left: 3px solid var(--glow-green); /* MODIFICADO */
+    border-left: 3px solid var(--glow-green);
 }
 
 .stats-group h3 {
     margin-top: 0;
-    color: var(--glow-green); /* MODIFICADO */
-    border-bottom: 1px solid var(--border-color); /* MODIFICADO */
+    color: var(--glow-green);
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
     margin-bottom: 15px;
     font-size: 1.2rem;
@@ -117,7 +136,7 @@
     width: 80px;
     padding: 5px;
     background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--border-color); /* MODIFICADO */
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     color: #fff;
     text-align: right;
@@ -144,17 +163,17 @@
     font-size: 1.1rem;
     font-family: 'Chakra Petch', sans-serif;
     background: transparent;
-    color: var(--glow-green); /* MODIFICADO */
-    border: 2px solid var(--glow-green); /* MODIFICADO */
+    color: var(--glow-green);
+    border: 2px solid var(--glow-green);
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s;
 }
 
 .profile-edit-cta button:hover {
-    background: var(--glow-green); /* MODIFICADO */
+    background: var(--glow-green);
     color: #02040a;
-    box-shadow: 0 0 15px var(--shadow-color); /* MODIFICADO */
+    box-shadow: 0 0 15px var(--shadow-color);
 }
 .profile-edit-cta .btn-cancel {
     color: #ff4d4d;
@@ -174,7 +193,7 @@
 }
 
 
-/* --- ESTILIZAÇÃO PARA MEMBROS DE HONRA (ADICIONADO) --- */
+/* --- ESTILIZAÇÃO PARA MEMBROS DE HONRA --- */
 
 .gloria-profile {
     border-color: #ffd700;
@@ -200,20 +219,14 @@
   50% { opacity: 0.8; text-shadow: 0 0 5px #ffd700, 0 0 8px #ffd700, 0 0 12px #ffae00; }
 }
 
-@media (max-width: 768px) {
-    .stats-section { flex-direction: column; }
-    .profile-main-info { flex-direction: column; text-align: center; }
-}
 
-
-
-/* Adicione este código no final do seu arquivo ProfilePage.css */
+/* --- HISTÓRICO RÁPIDO (ÚLTIMA TEMPORADA) --- */
 
 .profile-details {
     flex-grow: 1;
     display: flex;
-    flex-direction: column; /* Organiza nome/id e histórico verticalmente */
-    gap: 10px; /* Espaçamento entre os elementos */
+    flex-direction: column;
+    gap: 10px;
 }
 
 .profile-history {
@@ -222,7 +235,7 @@
     background: rgba(0, 0, 0, 0.25);
     padding: 12px 10px; 
     border-radius: 6px;
-    border-top: 1px solid var(--border-color); /* MODIFICADO */
+    border-top: 1px solid var(--border-color);
     align-items: flex-start; 
     justify-content: space-around; 
     margin-top: 15px; 
@@ -237,7 +250,7 @@
 .history-item h4 {
     margin: 0 0 3px 0; 
     font-size: 0.8rem; 
-    color: var(--glow-green); /* MODIFICADO */
+    color: var(--glow-green);
     font-weight: 500;
     text-transform: uppercase;
 }
@@ -264,7 +277,6 @@
 .history-item p.negative::before {
     content: '▼ ';
 }
-/* ADICIONADO PARA EVOLUÇÃO NEUTRA */
 .history-item p.neutral {
     color: rgba(255,255,255,0.7);
 }
@@ -274,7 +286,7 @@
     background: rgba(0, 0, 0, 0.25);
     padding: 10px;
     border-radius: 6px;
-    border-top: 1px solid var(--border-color); /* MODIFICADO */
+    border-top: 1px solid var(--border-color);
     text-align: center;
     font-size: 0.9rem;
     color: rgba(224, 251, 252, 0.7);
@@ -284,9 +296,9 @@
 .pic-url-edit-input {
     width: 100%;
     padding: 5px 8px;
-    margin-top: 5px; /* Espaçamento abaixo do input do nick */
+    margin-top: 5px;
     background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--border-color); /* MODIFICADO */
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     color: #fff;
     font-family: inherit;
@@ -294,21 +306,19 @@
 }
 
 
-/* --- NOVOS ESTILOS PARA TIER E INVENTÁRIO (REESCRITOS) --- */
+/* --- TIER E INVENTÁRIO (NÚCLEOS) --- */
 
-/* 1. Estilo para o Bloco do Tier (Ranking) */
 .profile-tier-container {
   display: flex;
-  flex-direction: column; /* Centraliza tudo verticalmente */
+  flex-direction: column;
   align-items: center;
-  gap: 5px; /* Espaço entre emblema e texto */
-  margin-top: 20px; /* Espaçamento do ATK/HP */
-  /* Sem fundo, sem borda */
+  gap: 5px;
+  margin-top: 20px;
 }
 
 .tier-emblem-profile {
-  width: 180px;  /* Aumentado */
-  height: 180px; /* Aumentado */
+  width: 180px;
+  height: 180px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -320,7 +330,7 @@
 .tier-details h4 {
   margin: 0 0 3px 0;
   font-size: 0.8rem;
-  color: var(--glow-green); /* MODIFICADO */
+  color: var(--glow-green);
   font-weight: 500;
   text-transform: uppercase;
 }
@@ -332,29 +342,25 @@
   color: #fff;
 }
 
-
-/* 2. Estilo para o Bloco de Inventário */
 .profile-inventory-container {
     display: flex;
-    justify-content: space-evenly; /* Espalha os 4 itens */
-    gap: 5px; /* Define um gap horizontal menor */
+    justify-content: space-evenly;
+    gap: 5px;
     flex-wrap: wrap; 
-    margin-top: 10px; /* Espaço abaixo do histórico */
-    
-    /* Adicionando o fundo que você queria manter */
+    margin-top: 10px;
     background: rgba(0, 0, 0, 0.25);
     padding: 12px 10px;
     border-radius: 6px;
-    border-top: 1px solid var(--border-color); /* MODIFICADO */
+    border-top: 1px solid var(--border-color);
 }
 
 .inventory-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px; /* Espaço entre o ícone e o texto/input */
+  gap: 5px;
   cursor: help;
-  min-width: 80px; /* Largura mínima */
+  min-width: 80px;
   text-align: center;
 }
 
@@ -366,7 +372,7 @@
 }
 
 .inventory-icon {
-  width: 32px;  /* Tamanho reduzido para caber melhor */
+  width: 32px;
   height: 32px;
   object-fit: contain;
   margin-bottom: 3px;
@@ -376,7 +382,7 @@
   width: 60px; 
   padding: 5px;
   background-color: rgba(0, 0, 0, 0.5);
-  border: 1px solid var(--border-color); /* MODIFICADO */
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   color: #fff;
   text-align: center;
@@ -385,12 +391,11 @@
   line-height: 1.2;
 }
 
-/* --- ADIÇÃO PARA CORRIGIR INPUTS DE ATK/HP --- */
 .stat-input {
     width: 80px;
     padding: 5px;
     background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--border-color); /* MODIFICADO */
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     color: #fff;
     text-align: left;
@@ -401,7 +406,6 @@
 
 /* --- (Novos Estilos para Histórico LME) --- */
 
-/* Título da seção */
 .lme-history-section .section-title {
     font-size: 1.8rem;
     margin-top: 40px; /* Espaço acima da nova seção */
@@ -441,7 +445,6 @@
     padding: 15px;
 }
 
-/* Reutilizando .history-item da seção principal */
 .lme-history-body .history-item {
     flex: 1;
     text-align: center;
@@ -462,7 +465,6 @@
     color: #fff;
 }
 
-/* Reutilizando classes de evolução */
 .lme-history-body .history-item p.positive {
     color: #28a745;
     text-shadow: 0 0 5px #28a745;
@@ -475,5 +477,17 @@
     color: rgba(255,255,255,0.7);
 }
 
+/* --- MODIFICAÇÃO (Media Query) --- */
+@media (max-width: 768px) {
+    .stats-section { flex-direction: column; }
+    .profile-main-info { flex-direction: column; text-align: center; }
 
-/* --- FIM DA MODIFICAÇÃO --- */
+    /* Desfaz a centralização no mobile */
+    .main-stats {
+        justify-content: center;
+    }
+
+    .main-stats .stat-item {
+        font-size: 1rem; /* Reduz um pouco no mobile */
+    }
+}

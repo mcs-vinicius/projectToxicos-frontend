@@ -1,3 +1,6 @@
+/* src/styles/SearchedUserProfile.css */
+/* --- ARQUIVO ATUALIZADO --- */
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -14,8 +17,8 @@
 }
 
 .searched-user-profile-modal {
-    background-color: var(--container-background); /* MODIFICADO */
-    border: 1px solid var(--border-color); /* MODIFICADO */
+    background-color: var(--container-background);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     width: 90%;
     max-width: 800px;
@@ -24,7 +27,7 @@
     flex-direction: column;
     font-family: 'Chakra Petch', sans-serif;
     color: #e0fbfc;
-    box-shadow: 0 0 25px var(--shadow-color); /* MODIFICADO */
+    box-shadow: 0 0 25px var(--shadow-color);
     position: relative;
     animation: slideInModal 0.4s ease;
     transition: all 0.4s ease-in-out;
@@ -59,7 +62,7 @@
     gap: 30px;
     padding-bottom: 25px;
     margin-bottom: 25px;
-    border-bottom: 1px solid var(--border-color); /* MODIFICADO */
+    border-bottom: 1px solid var(--border-color);
 }
 
 .profile-pic-wrapper {
@@ -71,16 +74,16 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    border: 3px solid var(--glow-green); /* MODIFICADO */
+    border: 3px solid var(--glow-green);
     object-fit: cover;
-    box-shadow: 0 0 15px var(--shadow-color); /* MODIFICADO */
+    box-shadow: 0 0 15px var(--shadow-color);
 }
 
 .profile-details h1 {
     margin: 0 0 10px 0;
     font-size: 2rem;
     color: #ffffff;
-    text-shadow: 0 0 10px var(--glow-green), 0 0 5px var(--glow-green); /* MODIFICADO */
+    text-shadow: 0 0 10px var(--glow-green), 0 0 5px var(--glow-green);
 }
 
 .profile-details p {
@@ -99,7 +102,7 @@
     padding: 6px 12px;
     border-radius: 4px;
     font-size: 0.9rem;
-    color: var(--glow-green); /* MODIFICADO */
+    color: var(--glow-green);
 }
 
 .stat-item span {
@@ -107,6 +110,26 @@
     font-weight: bold;
     margin-left: 6px;
 }
+
+/* --- MODIFICAÇÃO (Estilos para Modal) --- */
+.profile-details-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.section-title-group {
+    font-size: 1.5rem; /* Menor que o H1 */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: var(--glow-green);
+    text-shadow: 0 0 10px var(--shadow-color);
+    text-align: center;
+    text-transform: uppercase;
+}
+/* --- FIM DA MODIFICAÇÃO --- */
+
 
 .stats-section {
     display: flex;
@@ -119,13 +142,13 @@
     padding: 15px;
     border-radius: 6px;
     flex: 1;
-    border-left: 3px solid var(--glow-green); /* MODIFICADO */
+    border-left: 3px solid var(--glow-green);
 }
 
 .stats-group h3 {
     margin-top: 0;
-    color: var(--glow-green); /* MODIFICADO */
-    border-bottom: 1px solid var(--border-color); /* MODIFICADO */
+    color: var(--glow-green);
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
     margin-bottom: 10px;
     font-size: 1.1rem;
@@ -159,7 +182,7 @@
     to { transform: translateY(0); opacity: 1; }
 }
 
-/* --- ESTILOS DE HISTÓRICO (EXISTENTES) --- */
+/* --- Estilos de Histórico Rápido --- */
 
 .profile-details {
     flex-grow: 1;
@@ -174,10 +197,10 @@
     background: rgba(0, 0, 0, 0.25);
     padding: 10px;
     border-radius: 6px;
-    border-top: 1px solid var(--border-color); /* MODIFICADO */
+    border-top: 1px solid var(--border-color);
     align-items: center;
     justify-content: space-around;
-    margin-top: 10px; /* Ajustado */
+    margin-top: 10px;
 }
 
 .history-item {
@@ -189,7 +212,7 @@
 .history-item h4 {
     margin: 0 0 3px 0;
     font-size: 0.8rem;
-    color: var(--glow-green); /* MODIFICADO */
+    color: var(--glow-green);
     font-weight: 500;
     text-transform: uppercase;
 }
@@ -201,6 +224,7 @@
     color: #fff;
 }
 
+/* --- MODIFICAÇÃO (Classes de evolução) --- */
 .history-item p.positive {
     color: #28a745;
     text-shadow: 0 0 5px #28a745;
@@ -216,33 +240,37 @@
 .history-item p.negative::before {
     content: '▼ ';
 }
+.history-item p.neutral {
+    color: rgba(255,255,255,0.7);
+}
+/* --- FIM DA MODIFICAÇÃO --- */
+
 
 .profile-history-empty {
     background: rgba(0, 0, 0, 0.25);
     padding: 10px;
     border-radius: 6px;
-    border-top: 1px solid var(--border-color); /* MODIFICADO */
+    border-top: 1px solid var(--border-color);
     text-align: center;
     font-size: 0.9rem;
     color: rgba(224, 251, 252, 0.7);
-    margin-top: 10px; /* Ajustado */
+    margin-top: 10px;
 }
 
-/* --- NOVOS ESTILOS PARA TIER E INVENTÁRIO (COPIADOS DE ProfilePage.css) --- */
+/* --- Estilos Tier e Inventário --- */
 
-/* 1. Estilo para o Bloco do Tier (Ranking) */
 .profile-tier-container {
   display: flex;
-  flex-direction: column; /* Centraliza tudo verticalmente */
+  flex-direction: column;
   align-items: center;
-  gap: 5px; /* Espaço entre emblema e texto */
-  margin-top: 10px; /* Espaçamento (Ajustado para modal) */
-  /* Sem fundo, sem borda */
+  gap: 5px;
+  margin-top: 10px;
 }
 
 .tier-emblem-profile {
-  width: 48px;
-  height: 48px;
+  /* --- MODIFICAÇÃO (Menor no Modal) --- */
+  width: 100px;
+  height: 100px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -254,7 +282,7 @@
 .tier-details h4 {
   margin: 0 0 3px 0;
   font-size: 0.8rem;
-  color: var(--glow-green); /* MODIFICADO */
+  color: var(--glow-green);
   font-weight: 500;
   text-transform: uppercase;
 }
@@ -267,28 +295,25 @@
 }
 
 
-/* 2. Estilo para o Bloco de Inventário */
 .profile-inventory-container {
     display: flex;
-    justify-content: space-evenly; /* Espalha os 4 itens */
-    gap: 5px; /* Define um gap horizontal menor */
+    justify-content: space-evenly;
+    gap: 5px;
     flex-wrap: wrap; 
-    margin-top: 10px; /* Espaço abaixo do histórico */
-    
-    /* Adicionando o fundo */
+    margin-top: 10px;
     background: rgba(0, 0, 0, 0.25);
     padding: 12px 10px;
     border-radius: 6px;
-    border-top: 1px solid var(--border-color); /* MODIFICADO */
+    border-top: 1px solid var(--border-color);
 }
 
 .inventory-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px; /* Espaço entre o ícone e o texto/input */
+  gap: 5px;
   cursor: help;
-  min-width: 80px; /* Largura mínima */
+  min-width: 80px;
   text-align: center;
 }
 
@@ -305,3 +330,79 @@
   object-fit: contain;
   margin-bottom: 3px;
 }
+
+/* --- MODIFICAÇÃO (Estilos de Histórico LME para o Modal) --- */
+.lme-history-section {
+    margin-top: 25px;
+}
+
+.lme-history-section .section-title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: var(--glow-green);
+    text-shadow: 0 0 10px var(--shadow-color);
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.lme-history-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+}
+
+.lme-history-card {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.lme-history-header {
+    background-color: var(--hover-bg-color);
+    padding: 8px 12px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    font-size: 0.8rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.lme-history-body {
+    display: flex;
+    justify-content: space-around;
+    padding: 12px;
+}
+
+.lme-history-body .history-item {
+    flex: 1;
+    text-align: center;
+}
+
+.lme-history-body .history-item h4 {
+    margin: 0 0 5px 0;
+    font-size: 0.7rem;
+    color: var(--glow-green);
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.lme-history-body .history-item p {
+    margin: 0;
+    font-size: 1.1rem; 
+    font-weight: bold;
+    color: #fff;
+}
+
+.lme-history-body .history-item p.positive {
+    color: #28a745;
+    text-shadow: 0 0 5px #28a745;
+}
+.lme-history-body .history-item p.negative {
+    color: #dc3545;
+    text-shadow: 0 0 5px #dc3545;
+}
+.lme-history-body .history-item p.neutral {
+    color: rgba(255,255,255,0.7);
+}
+/* --- FIM DA MODIFICAÇÃO --- */

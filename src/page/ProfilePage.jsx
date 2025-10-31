@@ -1,4 +1,6 @@
 // src/page/ProfilePage.jsx
+// --- ARQUIVO ATUALIZADO ---
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -49,29 +51,27 @@ const ProfilePage = ({ currentUser }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({});
     const [isHonorMember, setIsHonorMember] = useState(false);
-    const [history, setHistory] = useState(null);
     
-    // --- MODIFICAÇÃO (Novo state para histórico completo) ---
+    // --- MODIFICAÇÃO (Unificado state de histórico) ---
     const [fullHistory, setFullHistory] = useState([]);
+    // O state 'history' foi removido
     // --- FIM DA MODIFICAÇÃO ---
 
     const fetchProfileData = useCallback(async () => {
         if (!habby_id) return;
         setLoading(true);
         try {
-            // --- MODIFICAÇÃO (Adicionada 4ª chamada de API) ---
-            const [profileRes, honorRes, historyRes, fullHistoryRes] = await Promise.all([
+            // --- MODIFICAÇÃO (Removida chamada /history) ---
+            const [profileRes, honorRes, fullHistoryRes] = await Promise.all([
                 axios.get(`${import.meta.env.VITE_API_URL}/profile/${habby_id}`),
                 axios.get(`${import.meta.env.VITE_API_URL}/honor-status/${habby_id}`),
-                axios.get(`${import.meta.env.VITE_API_URL}/history/${habby_id}`),
-                axios.get(`${import.meta.env.VITE_API_URL}/full-history/${habby_id}`) // Nova rota
+                axios.get(`${import.meta.env.VITE_API_URL}/full-history/${habby_id}`) // Rota única
             ]);
             // --- FIM DA MODIFICAÇÃO ---
             
             setProfile(profileRes.data);
             setFormData(profileRes.data);
             setIsHonorMember(honorRes.data.is_honor_member);
-            setHistory(historyRes.data);
             
             // --- MODIFICAÇÃO (Setar novo state) ---
             setFullHistory(fullHistoryRes.data);
@@ -121,7 +121,11 @@ const ProfilePage = ({ currentUser }) => {
 
     const containerClassName = `profile-container ${isHonorMember ? 'gloria-profile' : ''}`;
     
-    const currentTier = history && history.fase_acesso != null ? getTier(history.fase_acesso) : null;
+    // --- MODIFICAÇÃO (Derivado do fullHistory) ---
+    // Pega o item mais recente do histórico (ou null)
+    const latestHistory = fullHistory.length > 0 ? fullHistory[0] : null;
+    const currentTier = latestHistory && latestHistory.fase_acesso != null ? getTier(latestHistory.fase_acesso) : null;
+    // --- FIM DA MODIFICAÇÃO ---
 
     const renderField = (label, name, formatter = formatStat, type = 'number') => (
         <li>
@@ -156,7 +160,6 @@ const ProfilePage = ({ currentUser }) => {
         </div>
     );
     
-    // --- MODIFICAÇÃO (Helper para Evolução) ---
     const renderEvolutionText = (evolution) => {
         if (evolution === '-') {
             return <p className="neutral">{evolution}</p>;
@@ -170,12 +173,10 @@ const ProfilePage = ({ currentUser }) => {
         }
         return <p className="neutral">–</p>; // Para evolução 0 ou n/a
     };
-    // --- FIM DA MODIFICAÇÃO ---
 
 
     return (
         <div className={containerClassName}>
-            {/* ... (seção profile-main-info e main-stats permanecem iguais) ... */}
             <div className="profile-main-info">
                 <div className="profile-pic-wrapper">
                     <img src={isEditing ? formData.profile_pic_url : profile.profile_pic_url} alt={`Foto de ${profile.nick}`} className="profile-pic" />
@@ -214,8 +215,32 @@ const ProfilePage = ({ currentUser }) => {
                         </div>
                     )}
 
-                    
+                    {/* --- MODIFICAÇÃO (Usa 'latestHistory') --- */}
+                    {latestHistory && latestHistory.position != null ? (
+                        <div className="profile-history">
+                            <div className="history-item">
+                                <h4>Última Posição</h4>
+                                <p>{latestHistory.position}º</p>
+                            </div>
+                            <div className="history-item">
+                                <h4>Última Fase</h4>
+                                <p>{latestHistory.fase_acesso}</p>
+                            </div>
+                            <div className="history-item">
+                                <h4>Evolução</h4>
+                                {renderEvolutionText(latestHistory.evolution)}
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="profile-history-empty">
+                            <p>Sem dados de histórico de ranking para exibir.</p>
+                        </div>
+                    )}
+                    {/* --- FIM DA MODIFICAÇÃO --- */}
 
+                    {/* --- MODIFICAÇÃO (Adicionado Título "Núcleos") --- */}
+                    <h3 className="section-title-group">Núcleos</h3>
+                    {/* --- FIM DA MODIFICAÇÃO --- */}
                     <div className="profile-inventory-container">
                         {renderInventoryItem("Núcleo de Relíquia", "relic_core", nucleoRelicIcon)}
                         {renderInventoryItem("Chip de Ressonância", "resonance_chip", chipRessoIcon)}
@@ -225,8 +250,8 @@ const ProfilePage = ({ currentUser }) => {
                 </div>
             </div>
 
+            {/* --- MODIFICAÇÃO (ATK/HP movido para fora e centralizado) --- */}
             <div className="main-stats">
-                {/* ... (stats de ATK e HP) ... */}
                  <div className="stat-item">ATK: 
                     {isEditing ? (
                         <input
@@ -254,11 +279,12 @@ const ProfilePage = ({ currentUser }) => {
                     )}
                 </div>
             </div>
+            {/* --- FIM DA MODIFICAÇÃO --- */}
 
-            <br /><br />
-
+            {/* --- MODIFICAÇÃO (Adicionado Título "Stats") --- */}
+            <h3 className="section-title-group">Stats do Sobrevivente</h3>
+            {/* --- FIM DA MODIFICAÇÃO --- */}
             <div className="stats-section">
-                {/* ... (stats-group 1 - Atributos) ... */}
                 <div className="stats-group">
                     <h3>Atributos do Sobrevivente</h3>
                     <ul>
@@ -270,7 +296,6 @@ const ProfilePage = ({ currentUser }) => {
                         {renderField("HP Final", "survivor_final_hp")}
                     </ul>
                 </div>
-                {/* ... (stats-group 2 - Bônus Dano) ... */}
                 <div className="stats-group">
                     <h3>Bônus de Dano (Sobrevivente)</h3>
                      <ul>
@@ -280,7 +305,6 @@ const ProfilePage = ({ currentUser }) => {
                         {renderField("Dano de Escudo", "survivor_shield_boost", formatPercent)}
                     </ul>
                 </div>
-                {/* ... (stats-group 3 - Bônus Especiais) ... */}
                  <div className="stats-group">
                     <h3>Bônus Especiais (Sobrevivente)</h3>
                      <ul>
@@ -292,10 +316,10 @@ const ProfilePage = ({ currentUser }) => {
                 </div>
             </div>
             
-            {/* --- MODIFICAÇÃO (Nova Seção Histórico LME) --- */}
             <div className="lme-history-section">
                 <h3 className="section-title">Histórico LME</h3>
                 <div className="lme-history-grid">
+                    {/* --- MODIFICAÇÃO (Corrigido bug da evolução) --- */}
                     {fullHistory.length > 0 ? (
                         fullHistory.slice(0, 3).map((item, index) => (
                             <div className="lme-history-card" key={index}>
@@ -321,9 +345,9 @@ const ProfilePage = ({ currentUser }) => {
                     ) : (
                         <p>Sem histórico de temporadas anteriores para exibir.</p>
                     )}
+                    {/* --- FIM DA MODIFICAÇÃO --- */}
                 </div>
             </div>
-            {/* --- FIM DA MODIFICAÇÃO --- */}
 
             {currentUser && currentUser.habby_id === habby_id && (
                 <div className="profile-edit-cta">

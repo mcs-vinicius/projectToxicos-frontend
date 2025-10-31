@@ -1,28 +1,26 @@
+// src/components/search/SearchedUserProfile.jsx
+// --- ARQUIVO ATUALIZADO ---
+
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import '../../styles/SearchedUserProfile.css';
 
-// --- ADICIONE OS IMPORTS DOS ÍCONES ---
+// --- ÍCONES ---
 import nucleoRelicIcon from '../../assets/icons/nucleo-relic.png';
 import chipRessoIcon from '../../assets/icons/chip-resso.png';
 import nucleoDespertarIcon from '../../assets/icons/nucleo-despertar.png';
 import nucleoXenoIcon from '../../assets/icons/nucleo-xeno.png';
 
-// --- Funções copiadas de ResultsPage.jsx para exibir o Tier ---
-
-// Helper para construir o URL da imagem dinamicamente
+// --- Funções de Tier (copiadas) ---
 const getTierImageUrl = (emblem) => {
   const validEmblem = String(emblem || '1');
   try {
-    // Caminho relativo ajustado para /components/search/
     return new URL(`../../assets/tier/${validEmblem}.png`, import.meta.url).href;
   } catch (error) {
     console.error(`Erro ao criar URL para emblema: ${validEmblem}`, error);
     return new URL(`../../assets/tier/1.png`, import.meta.url).href;
   }
 };
-
-// Função para obter o Tier com base na fase
 const getTier = (fase) => {
     if (fase >= 0 && fase <= 500) return { name: "Coimbra", emblem: "1" };
     if (fase >= 501 && fase <= 530) return { name: "Petista", emblem: "2" };
@@ -39,9 +37,8 @@ const getTier = (fase) => {
     if (fase >= 900 && fase <= 999) return { name: "Aristocrata", emblem: "13" };
     if (fase >= 1000 && fase <= 1500) return { name: "Nobreza", emblem: "14" };
     if (fase > 1500) return { name: "Baleia", emblem: "15" };
-    return { name: "Coimbra", emblem: "1" }; // Padrão
+    return { name: "Coimbra", emblem: "1" };
 };
-
 // --- Fim das funções de Tier ---
 
 
@@ -49,43 +46,49 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isHonorMember, setIsHonorMember] = useState(false);
-    const [history, setHistory] = useState(null);
+    
+    // --- MODIFICAÇÃO (States de Histórico) ---
+    const [latestHistory, setLatestHistory] = useState(null);
+    const [fullHistory, setFullHistory] = useState([]);
+    // --- FIM DA MODIFICAÇÃO ---
 
-    // --- CORRIGIDO COM useCallback ---
     const fetchProfileData = useCallback(async () => {
         if (!habbyId) return;
         setLoading(true);
         try {
-            // Busca todos os dados em paralelo, incluindo o histórico
-            const [profileRes, honorRes, historyRes] = await Promise.all([
+            // --- MODIFICAÇÃO (API calls) ---
+            const [profileRes, honorRes, fullHistoryRes] = await Promise.all([
                 axios.get(`${import.meta.env.VITE_API_URL}/profile/${habbyId}`),
                 axios.get(`${import.meta.env.VITE_API_URL}/honor-status/${habbyId}`),
-                axios.get(`${import.meta.env.VITE_API_URL}/history/${habbyId}`)
+                axios.get(`${import.meta.env.VITE_API_URL}/full-history/${habbyId}`) // Busca o histórico completo
             ]);
             
             setProfile(profileRes.data);
             setIsHonorMember(honorRes.data.is_honor_member);
-            setHistory(historyRes.data); // Salva os dados do histórico
+            
+            setFullHistory(fullHistoryRes.data);
+            setLatestHistory(fullHistoryRes.data.length > 0 ? fullHistoryRes.data[0] : null);
+            // --- FIM DA MODIFICAÇÃO ---
 
         } catch (error) {
             console.error("Erro ao buscar perfil pesquisado:", error);
         } finally {
             setLoading(false);
         }
-    }, [habbyId]); // <-- Dependência do useCallback
+    }, [habbyId]); 
 
-    // --- CORRIGIDO COM useCallback ---
     useEffect(() => {
         fetchProfileData();
-    }, [fetchProfileData]); // <-- Dependência do useEffect
+    }, [fetchProfileData]); 
 
     const formatStat = (value) => parseInt(value, 10) || 0;
     const formatPercent = (value) => `${parseInt(value, 10) || 0}%`;
 
     const modalClassName = `searched-user-profile-modal ${isHonorMember ? 'gloria-profile' : ''}`;
 
-    // Calcula o Tier atual
-    const currentTier = history && history.fase_acesso != null ? getTier(history.fase_acesso) : null;
+    // --- MODIFICAÇÃO (Usa 'latestHistory') ---
+    const currentTier = latestHistory && latestHistory.fase_acesso != null ? getTier(latestHistory.fase_acesso) : null;
+    // --- FIM DA MODIFICAÇÃO ---
 
     // Helper (view only)
     const renderField = (label, name, formatter = formatStat) => (
@@ -102,6 +105,22 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
             <p>{formatStat(profile[name])}</p>
         </div>
     );
+    
+    // --- MODIFICAÇÃO (Helper de Evolução) ---
+    const renderEvolutionText = (evolution) => {
+        if (evolution === '-') {
+            return <p className="neutral">{evolution}</p>;
+        }
+        const isNumeric = typeof evolution === "number";
+        if (isNumeric && evolution > 0) {
+            return <p className="positive">▲ +{evolution}</p>;
+        }
+        if (isNumeric && evolution < 0) {
+            return <p className="negative">▼ {evolution}</p>;
+        }
+        return <p className="neutral">–</p>; // Para evolução 0 ou n/a
+    };
+    // --- FIM DA MODIFICAÇÃO ---
 
 
     return (
@@ -115,6 +134,8 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
                         <div className="profile-main-info">
                             <div className="profile-pic-wrapper">
                                 <img src={profile.profile_pic_url} alt={`Foto de ${profile.nick}`} className="profile-pic" />
+                            </div>
+                            <div className="profile-details">
                                 <h1>{profile.nick || 'N/A'}</h1>
                                 <p>Habby ID: {profile.habby_id}</p>
                                 <div className="main-stats">
@@ -122,58 +143,55 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
                                     <div className="stat-item">HP: <span>{formatStat(profile.hp)}</span></div>
                                 </div>
                             </div>
-                            <div className="profile-details">
-                                
-                                {/* --- SEÇÃO DO TIER (MOVIDA PARA DIV PRÓPRIA) --- */}
-                                {currentTier && (
-                                    <div className="profile-tier-container">
-                                        <img src={getTierImageUrl(currentTier.emblem)} alt={currentTier.name} className="tier-emblem-profile" />
-                                        <div className="tier-details">
-                                            <h4>Tier Atual</h4>
-                                            <p>{currentTier.name}</p>
-                                        </div>
+                        </div>
+                        
+                        <div className="profile-details-modal">
+                            {currentTier && (
+                                <div className="profile-tier-container">
+                                    <img src={getTierImageUrl(currentTier.emblem)} alt={currentTier.name} className="tier-emblem-profile" />
+                                    <div className="tier-details">
+                                        <h4>Tier Atual</h4>
+                                        <p>{currentTier.name}</p>
                                     </div>
-                                )}
-                                
-                                {/* SEÇÃO DE HISTÓRICO ADICIONADA AO MODAL */}
-                                {history && history.position != null ? (
-                                    <div className="profile-history">
-                                        <div className="history-item">
-                                            <h4>Última Posição</h4>
-                                            <p>{history.position}º</p>
-                                        </div>
-                                        <div className="history-item">
-                                            <h4>Última Fase</h4>
-                                            <p>{history.fase_acesso}</p>
-                                        </div>
-                                        <div className="history-item">
-                                            <h4>Evolução</h4>
-                                            <p className={history.evolution > 0 ? 'positive' : history.evolution < 0 ? 'negative' : ''}>
-                                                {history.evolution > 0 ? `+${history.evolution}` : (history.evolution === 0 ? '–' : history.evolution)}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="profile-history-empty">
-                                        <p>Sem dados de histórico de ranking.</p>
-                                    </div>
-                                )}
-
-                                {/* --- NOVO GRUPO DE INVENTÁRIO (MOVIDO PARA DIV PRÓPRIA) --- */}
-                                <div className="profile-inventory-container">
-                                    {renderInventoryItem("Núcleo de Relíquia", "relic_core", nucleoRelicIcon)}
-                                    {renderInventoryItem("Chip de Ressonância", "resonance_chip", chipRessoIcon)}
-                                    {renderInventoryItem("Núcleo de Despertar", "survivor_awakening_core", nucleoDespertarIcon)}
-                                    {renderInventoryItem("Núcleo de Bichinho Xeno", "xeno_pet_core", nucleoXenoIcon)}
                                 </div>
+                            )}
+                            
+                            {/* --- MODIFICAÇÃO (Usa 'latestHistory') --- */}
+                            {latestHistory && latestHistory.position != null ? (
+                                <div className="profile-history">
+                                    <div className="history-item">
+                                        <h4>Última Posição</h4>
+                                        <p>{latestHistory.position}º</p>
+                                    </div>
+                                    <div className="history-item">
+                                        <h4>Última Fase</h4>
+                                        <p>{latestHistory.fase_acesso}</p>
+                                    </div>
+                                    <div className="history-item">
+                                        <h4>Evolução</h4>
+                                        {renderEvolutionText(latestHistory.evolution)}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="profile-history-empty">
+                                    <p>Sem dados de histórico de ranking.</p>
+                                </div>
+                            )}
+                            {/* --- FIM DA MODIFICAÇÃO --- */}
 
+                            <h3 className="section-title-group">Núcleos</h3>
+                            <div className="profile-inventory-container">
+                                {renderInventoryItem("Núcleo de Relíquia", "relic_core", nucleoRelicIcon)}
+                                {renderInventoryItem("Chip de Ressonância", "resonance_chip", chipRessoIcon)}
+                                {renderInventoryItem("Núcleo de Despertar", "survivor_awakening_core", nucleoDespertarIcon)}
+                                {renderInventoryItem("Núcleo de Bichinho Xeno", "xeno_pet_core", nucleoXenoIcon)}
                             </div>
                         </div>
 
-                        {/* O restante dos atributos continua aqui */}
+                        <h3 className="section-title-group">Stats do Sobrevivente</h3>
                         <div className="stats-section">
                             <div className="stats-group">
-                                <h3>Atributos do Sobrevivente</h3>
+                                <h3>Atributos</h3>
                                 <ul>
                                     {renderField("ATK Base", "survivor_base_atk")}
                                     {renderField("HP Base", "survivor_base_hp")}
@@ -184,11 +202,11 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
                                 </ul>
                             </div>
                              <div className="stats-group">
-                                <h3>Bônus de Dano (Sobrevivente)</h3>
+                                <h3>Bônus de Dano</h3>
                                  <ul>
                                     {renderField("Taxa Crítica", "survivor_crit_rate", formatPercent)}
                                     {renderField("Dano Crítico", "survivor_crit_damage", formatPercent)}
-                                    {renderField("Dano de Habilidade", "survivor_skill_damage", formatPercent)}
+                                    {renderField("Dano de Habilidade", "survivor_skill_damage")}
                                     {renderField("Dano de Escudo", "survivor_shield_boost", formatPercent)}
                                 </ul>
                             </div>
@@ -196,7 +214,7 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
                         
                         <div className="stats-section">
                            <div className="stats-group">
-                                <h3>Bônus Especiais (Sobrevivente)</h3>
+                                <h3>Bônus Especiais</h3>
                                 <ul>
                                     {renderField("Alvos Envenenados", "survivor_poison_targets", formatPercent)}
                                     {renderField("Alvos Enfraquecidos", "survivor_weak_targets", formatPercent)}
@@ -205,6 +223,40 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
                                 </ul>
                             </div>
                         </div>
+
+                        {/* --- MODIFICAÇÃO (Histórico LME Adicionado ao Modal) --- */}
+                        <div className="lme-history-section">
+                            <h3 className="section-title">Histórico LME</h3>
+                            <div className="lme-history-grid">
+                                {fullHistory.length > 0 ? (
+                                    fullHistory.slice(0, 3).map((item, index) => (
+                                        <div className="lme-history-card" key={index}>
+                                            <div className="lme-history-header">
+                                                {item.season_info_str}
+                                            </div>
+                                            <div className="lme-history-body">
+                                                <div className="history-item">
+                                                    <h4>Posição</h4>
+                                                    <p>{item.position}º</p>
+                                                </div>
+                                                <div className="history-item">
+                                                    <h4>Fase</h4>
+                                                    <p>{item.fase_acesso}</p>
+                                                </div>
+                                                <div className="history-item">
+                                                    <h4>Evolução</h4>
+                                                    {renderEvolutionText(item.evolution)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>Sem histórico de temporadas anteriores para exibir.</p>
+                                )}
+                            </div>
+                        </div>
+                        {/* --- FIM DA MODIFICAÇÃO --- */}
+
                     </div>
                 ) : (
                     <p>Não foi possível carregar o perfil.</p>
