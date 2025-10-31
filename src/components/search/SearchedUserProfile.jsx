@@ -67,6 +67,7 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
             setIsHonorMember(honorRes.data.is_honor_member);
             
             setFullHistory(fullHistoryRes.data);
+            // Define o histórico mais recente (para o resumo)
             setLatestHistory(fullHistoryRes.data.length > 0 ? fullHistoryRes.data[0] : null);
             // --- FIM DA MODIFICAÇÃO ---
 
@@ -86,9 +87,7 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
 
     const modalClassName = `searched-user-profile-modal ${isHonorMember ? 'gloria-profile' : ''}`;
 
-    // --- MODIFICAÇÃO (Usa 'latestHistory') ---
     const currentTier = latestHistory && latestHistory.fase_acesso != null ? getTier(latestHistory.fase_acesso) : null;
-    // --- FIM DA MODIFICAÇÃO ---
 
     // Helper (view only)
     const renderField = (label, name, formatter = formatStat) => (
@@ -106,7 +105,6 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
         </div>
     );
     
-    // --- MODIFICAÇÃO (Helper de Evolução) ---
     const renderEvolutionText = (evolution) => {
         if (evolution === '-') {
             return <p className="neutral">{evolution}</p>;
@@ -120,7 +118,6 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
         }
         return <p className="neutral">–</p>; // Para evolução 0 ou n/a
     };
-    // --- FIM DA MODIFICAÇÃO ---
 
 
     return (
@@ -128,7 +125,7 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
             <div className={modalClassName} onClick={(e) => e.stopPropagation()}>
                 <button className="close-button" onClick={onClose}>×</button>
                 {loading ? (
-                    <p>Carregando perfil...</p>
+                    <div className="modal-scroll-content"><p>Carregando perfil...</p></div>
                 ) : profile ? (
                     <div className="modal-scroll-content">
                         <div className="profile-main-info">
@@ -156,7 +153,6 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
                                 </div>
                             )}
                             
-                            {/* --- MODIFICAÇÃO (Usa 'latestHistory') --- */}
                             {latestHistory && latestHistory.position != null ? (
                                 <div className="profile-history">
                                     <div className="history-item">
@@ -177,18 +173,21 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
                                     <p>Sem dados de histórico de ranking.</p>
                                 </div>
                             )}
-                            {/* --- FIM DA MODIFICAÇÃO --- */}
 
-                            <h3 className="section-title-group">Núcleos</h3>
+                            {/* --- MODIFICAÇÃO (Título "Núcleos" movido para dentro) --- */}
                             <div className="profile-inventory-container">
+                                <h3 className="section-title-group-internal">Núcleos</h3>
                                 {renderInventoryItem("Núcleo de Relíquia", "relic_core", nucleoRelicIcon)}
                                 {renderInventoryItem("Chip de Ressonância", "resonance_chip", chipRessoIcon)}
                                 {renderInventoryItem("Núcleo de Despertar", "survivor_awakening_core", nucleoDespertarIcon)}
                                 {renderInventoryItem("Núcleo de Bichinho Xeno", "xeno_pet_core", nucleoXenoIcon)}
                             </div>
+                            {/* --- FIM DA MODIFICAÇÃO --- */}
                         </div>
 
-                        <h3 className="section-title-group">Stats do Sobrevivente</h3>
+                        {/* --- MODIFICAÇÃO (Título "Stats" Adicionado) --- */}
+                        <h3 className="section-title-header">Stats do Sobrevivente</h3>
+                        {/* --- FIM DA MODIFICAÇÃO --- */}
                         <div className="stats-section">
                             <div className="stats-group">
                                 <h3>Atributos</h3>
@@ -206,7 +205,7 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
                                  <ul>
                                     {renderField("Taxa Crítica", "survivor_crit_rate", formatPercent)}
                                     {renderField("Dano Crítico", "survivor_crit_damage", formatPercent)}
-                                    {renderField("Dano de Habilidade", "survivor_skill_damage")}
+                                    {renderField("Dano de Habilidade", "survivor_skill_damage", formatPercent)}
                                     {renderField("Dano de Escudo", "survivor_shield_boost", formatPercent)}
                                 </ul>
                             </div>
@@ -226,7 +225,7 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
 
                         {/* --- MODIFICAÇÃO (Histórico LME Adicionado ao Modal) --- */}
                         <div className="lme-history-section">
-                            <h3 className="section-title">Histórico LME</h3>
+                            <h3 className="section-title-header">Histórico LME</h3>
                             <div className="lme-history-grid">
                                 {fullHistory.length > 0 ? (
                                     fullHistory.slice(0, 3).map((item, index) => (
@@ -237,7 +236,7 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
                                             <div className="lme-history-body">
                                                 <div className="history-item">
                                                     <h4>Posição</h4>
-                                                    <p>{item.position}º</p>
+                                                    <p>{item.position ? `${item.position}º` : 'N/A'}</p>
                                                 </div>
                                                 <div className="history-item">
                                                     <h4>Fase</h4>
@@ -251,7 +250,7 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
                                         </div>
                                     ))
                                 ) : (
-                                    <p>Sem histórico de temporadas anteriores para exibir.</p>
+                                    <p className="lme-history-empty">Sem histórico de temporadas anteriores para exibir.</p>
                                 )}
                             </div>
                         </div>
@@ -259,7 +258,7 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
 
                     </div>
                 ) : (
-                    <p>Não foi possível carregar o perfil.</p>
+                    <div className="modal-scroll-content"><p>Não foi possível carregar o perfil.</p></div>
                 )}
             </div>
         </div>

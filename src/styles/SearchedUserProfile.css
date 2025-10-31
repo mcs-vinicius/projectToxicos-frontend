@@ -55,6 +55,9 @@
     overflow-y: auto;
     padding: 25px;
 }
+.modal-scroll-content p {
+    margin: 0; /* Reset de parágrafo no modal */
+}
 
 .profile-main-info {
     display: flex;
@@ -119,8 +122,9 @@
     margin-bottom: 25px;
 }
 
-.section-title-group {
-    font-size: 1.5rem; /* Menor que o H1 */
+/* Título externo (Stats) */
+.section-title-header {
+    font-size: 1.5rem;
     margin-top: 10px;
     margin-bottom: 10px;
     color: var(--glow-green);
@@ -268,7 +272,6 @@
 }
 
 .tier-emblem-profile {
-  /* --- MODIFICAÇÃO (Menor no Modal) --- */
   width: 100px;
   height: 100px;
   object-fit: contain;
@@ -299,13 +302,25 @@
     display: flex;
     justify-content: space-evenly;
     gap: 5px;
-    flex-wrap: wrap; 
+    flex-wrap: wrap; /* Alterado para wrap */
     margin-top: 10px;
     background: rgba(0, 0, 0, 0.25);
     padding: 12px 10px;
     border-radius: 6px;
     border-top: 1px solid var(--border-color);
 }
+
+/* --- MODIFICAÇÃO (Título INTERNO "Núcleos") --- */
+.section-title-group-internal {
+    width: 100%;
+    text-align: center;
+    color: var(--glow-green);
+    margin: 0 0 10px 0;
+    font-size: 1.1rem; /* Menor para o modal */
+    text-transform: uppercase;
+    font-weight: 600;
+}
+/* --- FIM DA MODIFICAÇÃO --- */
 
 .inventory-item {
   display: flex;
@@ -331,18 +346,14 @@
   margin-bottom: 3px;
 }
 
-/* --- MODIFICAÇÃO (Estilos de Histórico LME para o Modal) --- */
+/* --- Estilos de Histórico LME para o Modal --- */
 .lme-history-section {
     margin-top: 25px;
 }
 
-.lme-history-section .section-title {
+.lme-history-section .section-title-header { /* Reutiliza o estilo de "Stats" */
     font-size: 1.5rem;
     margin-bottom: 15px;
-    color: var(--glow-green);
-    text-shadow: 0 0 10px var(--shadow-color);
-    text-align: center;
-    text-transform: uppercase;
 }
 
 .lme-history-grid {
@@ -405,4 +416,11 @@
 .lme-history-body .history-item p.neutral {
     color: rgba(255,255,255,0.7);
 }
-/* --- FIM DA MODIFICAÇÃO --- */
+
+.lme-history-empty {
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(224, 251, 252, 0.7);
+    padding: 10px;
+}
+/* --- FIM DE ARQUIVO --- */

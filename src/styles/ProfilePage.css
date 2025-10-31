@@ -53,15 +53,15 @@
     display: flex;
     gap: 20px;
     justify-content: center; /* Centraliza no desktop */
-    margin-bottom: 25px; /* Adiciona espaço abaixo */
+    margin-bottom: 25px;
     width: 100%;
 }
 
 .main-stats .stat-item {
     background: rgba(0,0,0,0.3);
-    padding: 12px 20px; /* Mais padding */
+    padding: 12px 20px;
     border-radius: 6px;
-    font-size: 1.25rem; /* Fonte maior */
+    font-size: 1.25rem;
     color: var(--glow-green);
     display: flex;
     align-items: center;
@@ -72,7 +72,7 @@
     color: #fff;
     font-weight: bold;
     margin-left: 10px;
-    font-size: 1.3rem; /* Fonte maior para o número */
+    font-size: 1.3rem;
 }
 /* --- FIM DA MODIFICAÇÃO --- */
 
@@ -83,8 +83,8 @@
     margin-bottom: 25px;
 }
 
-/* --- MODIFICAÇÃO (Novo Título de Seção) --- */
-.section-title-group {
+/* --- MODIFICAÇÃO (Novo Título de Seção EXTERNO) --- */
+.section-title-header {
     font-size: 1.8rem;
     margin-top: 10px;
     margin-bottom: 20px;
@@ -346,13 +346,26 @@
     display: flex;
     justify-content: space-evenly;
     gap: 5px;
-    flex-wrap: wrap; 
+    flex-wrap: wrap; /* Permite que o título fique acima */
     margin-top: 10px;
     background: rgba(0, 0, 0, 0.25);
     padding: 12px 10px;
     border-radius: 6px;
     border-top: 1px solid var(--border-color);
 }
+
+/* --- MODIFICAÇÃO (Título INTERNO "Núcleos") --- */
+.section-title-group-internal {
+    width: 100%;
+    text-align: center;
+    color: var(--glow-green);
+    margin: 0 0 15px 0;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+/* --- FIM DA MODIFICAÇÃO --- */
+
 
 .inventory-item {
   display: flex;
@@ -404,16 +417,10 @@
     margin-left: 8px;
 }
 
-/* --- (Novos Estilos para Histórico LME) --- */
+/* --- (Estilos para Histórico LME) --- */
 
-.lme-history-section .section-title {
-    font-size: 1.8rem;
-    margin-top: 40px; /* Espaço acima da nova seção */
-    margin-bottom: 20px;
-    color: var(--glow-green);
-    text-shadow: 0 0 10px var(--shadow-color);
-    text-align: center;
-    text-transform: uppercase;
+.lme-history-section .section-title-header { /* Reutiliza o estilo de "Stats" */
+    margin-top: 40px; 
 }
 
 .lme-history-grid {
@@ -465,19 +472,16 @@
     color: #fff;
 }
 
-.lme-history-body .history-item p.positive {
-    color: #28a745;
-    text-shadow: 0 0 5px #28a745;
-}
-.lme-history-body .history-item p.negative {
-    color: #dc3545;
-    text-shadow: 0 0 5px #dc3545;
-}
-.lme-history-body .history-item p.neutral {
-    color: rgba(255,255,255,0.7);
+/* Mensagem de "Sem histórico" */
+.lme-history-empty {
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(224, 251, 252, 0.7);
+    padding: 10px;
 }
 
-/* --- MODIFICAÇÃO (Media Query) --- */
+
+/* --- Media Query --- */
 @media (max-width: 768px) {
     .stats-section { flex-direction: column; }
     .profile-main-info { flex-direction: column; text-align: center; }

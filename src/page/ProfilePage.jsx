@@ -238,25 +238,19 @@ const ProfilePage = ({ currentUser }) => {
                     )}
                     {/* --- FIM DA MODIFICAÇÃO --- */}
 
-                    {/* --- MODIFICAÇÃO (Adicionado Título "Núcleos") --- */}
-                    <h3 className="section-title-group">Núcleos</h3>
-                    {/* --- FIM DA MODIFICAÇÃO --- */}
+                    {/* --- MODIFICAÇÃO (Título "Núcleos" movido para dentro) --- */}
                     <div className="profile-inventory-container">
+                        <h3 className="section-title-group-internal">Núcleos</h3>
                         {renderInventoryItem("Núcleo de Relíquia", "relic_core", nucleoRelicIcon)}
                         {renderInventoryItem("Chip de Ressonância", "resonance_chip", chipRessoIcon)}
                         {renderInventoryItem("Núcleo de Despertar", "survivor_awakening_core", nucleoDespertarIcon)}
                         {renderInventoryItem("Núcleo de Bichinho Xeno", "xeno_pet_core", nucleoXenoIcon)}
                     </div>
+                    {/* --- FIM DA MODIFICAÇÃO --- */}
                 </div>
             </div>
 
             {/* --- MODIFICAÇÃO (ATK/HP movido para fora e centralizado) --- */}
-            
-            {/* --- FIM DA MODIFICAÇÃO --- */}
-
-            {/* --- MODIFICAÇÃO (Adicionado Título "Stats") --- */}
-            <h3 className="section-title-group">Stats do Sobrevivente</h3>
-
             <div className="main-stats">
                  <div className="stat-item">ATK: 
                     {isEditing ? (
@@ -285,7 +279,10 @@ const ProfilePage = ({ currentUser }) => {
                     )}
                 </div>
             </div>
+            {/* --- FIM DA MODIFICAÇÃO --- */}
 
+            {/* --- MODIFICAÇÃO (Adicionado Título "Stats") --- */}
+            <h3 className="section-title-header">Stats do Sobrevivente</h3>
             {/* --- FIM DA MODIFICAÇÃO --- */}
             <div className="stats-section">
                 <div className="stats-group">
@@ -319,10 +316,10 @@ const ProfilePage = ({ currentUser }) => {
                 </div>
             </div>
             
+            {/* --- MODIFICAÇÃO (Usa fullHistory para corrigir bug) --- */}
             <div className="lme-history-section">
-                <h3 className="section-title">Histórico LME</h3>
+                <h3 className="section-title-header">Histórico LME</h3>
                 <div className="lme-history-grid">
-                    {/* --- MODIFICAÇÃO (Corrigido bug da evolução) --- */}
                     {fullHistory.length > 0 ? (
                         fullHistory.slice(0, 3).map((item, index) => (
                             <div className="lme-history-card" key={index}>
@@ -332,7 +329,7 @@ const ProfilePage = ({ currentUser }) => {
                                 <div className="lme-history-body">
                                     <div className="history-item">
                                         <h4>Posição</h4>
-                                        <p>{item.position}º</p>
+                                        <p>{item.position ? `${item.position}º` : 'N/A'}</p>
                                     </div>
                                     <div className="history-item">
                                         <h4>Fase</h4>
@@ -346,11 +343,11 @@ const ProfilePage = ({ currentUser }) => {
                             </div>
                         ))
                     ) : (
-                        <p>Sem histórico de temporadas anteriores para exibir.</p>
+                        <p className="lme-history-empty">Sem histórico de temporadas anteriores para exibir.</p>
                     )}
-                    {/* --- FIM DA MODIFICAÇÃO --- */}
                 </div>
             </div>
+            {/* --- FIM DA MODIFICAÇÃO --- */}
 
             {currentUser && currentUser.habby_id === habby_id && (
                 <div className="profile-edit-cta">
