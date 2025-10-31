@@ -17,8 +17,7 @@ import ProfilePage from "./page/ProfilePage.jsx";
 import HonorPage from "./page/HonorPage.jsx";
 import HonorRegisterPage from "./components/honor/HonorRegisterPage.jsx";
 import AdminToolsPage from "./page/AdminToolsPage.jsx";
-// --- 1. IMPORTE A NOVA PÁGINA ---
-import FeedPage from "./page/FeedPage.jsx"; 
+import FeedPage from "./page/FeedPage.jsx"; // Importação já existe
 
 import "./App.css";
 
@@ -89,7 +88,6 @@ const App = () => {
           <NavLink to="/" className="btt-menu">Home</NavLink>
           <NavLink to="/results" className="btt-menu">Ranking</NavLink>
           <NavLink to="/honor" className="btt-menu">Honra</NavLink>
-          {/* --- 2. ADICIONE O LINK DO FEED AQUI --- */}
           <NavLink to="/feed" className="btt-menu">Publicações</NavLink>
           
           {auth.isLoggedIn && (
@@ -102,7 +100,6 @@ const App = () => {
               <NavLink to="/user-management" className="btt-menu">Gerenciar Usuários</NavLink>
             </>
           )}
-          {/* LINK PARA ADMINS */}
           {auth.isLoggedIn && auth.user.role === 'admin' && (
             <NavLink to="/admin-tools" className="btt-menu">Admin Tools</NavLink>
           )}
@@ -136,7 +133,6 @@ const App = () => {
           <NavLink to="/" className="btt-menu-mobile">Home</NavLink>
           <NavLink to="/results" className="btt-menu-mobile">Ranking</NavLink>
           <NavLink to="/honor" className="btt-menu-mobile">Honra</NavLink>
-          {/* --- 3. ADICIONE O LINK DO FEED NO MENU MOBILE --- */}
           <NavLink to="/feed" className="btt-menu-mobile">Publicações</NavLink>
           
           {auth.isLoggedIn && (
@@ -149,7 +145,6 @@ const App = () => {
               <NavLink to="/user-management" className="btt-menu-mobile">Gerenciar Usuários</NavLink>
             </>
           )}
-          {/* LINK PARA ADMINS (MÓVIL) */}
           {auth.isLoggedIn && auth.user.role === 'admin' && (
             <NavLink to="/admin-tools" className="btt-menu-mobile">Admin Tools</NavLink>
           )}
@@ -171,6 +166,10 @@ const App = () => {
             <Route path="/register-user" element={<RegisterUserPage />} />
             <Route path="/honor" element={<HonorPage currentUser={auth.user} />} />
             
+            {/* --- ROTA DO FEED AGORA É PÚBLICA --- */}
+            {/* Ela ainda recebe auth.user, que será 'null' se não estiver logado */}
+            <Route path="/feed" element={<FeedPage currentUser={auth.user} />} />
+
             <Route path="/register-member" element={
                 <ProtectedRoute roles={['admin', 'leader']}><RegisterMemberPage /></ProtectedRoute>
             } />
@@ -184,13 +183,6 @@ const App = () => {
                 <ProtectedRoute roles={['admin', 'leader', 'member']}><ProfilePage currentUser={auth.user}/></ProtectedRoute>
             } />
             
-            {/* --- 4. ADICIONE A ROTA DO FEED --- */}
-            {/* Todos os membros logados podem ver */}
-            <Route path="/feed" element={
-                <ProtectedRoute roles={['admin', 'leader', 'member']}><FeedPage currentUser={auth.user} /></ProtectedRoute>
-            } />
-            
-            {/* ROTA PROTEGIDA PARA ADMINS */}
             <Route path="/admin-tools" element={
                 <ProtectedRoute roles={['admin']}><AdminToolsPage /></ProtectedRoute>
             } />

@@ -232,3 +232,19 @@
     background-color: var(--glow-green);
     color: #02040a;
 }
+
+/* --- NOVO ESTILO ADICIONADO --- */
+.comment-login-prompt {
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(224, 251, 252, 0.7);
+    margin-top: 15px;
+}
+.comment-login-prompt a {
+    color: var(--glow-green);
+    font-weight: bold;
+    text-decoration: none;
+}
+.comment-login-prompt a:hover {
+    text-decoration: underline;
+}

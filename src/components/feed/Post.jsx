@@ -2,12 +2,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { FaTrash, FaCommentDots } from 'react-icons/fa';
+import { Link } from 'react-router-dom'; // Importar Link
 
 const Post = ({ postData, currentUser, onDeletePost }) => {
     const [comments, setComments] = useState(postData.comments || []);
     const [newComment, setNewComment] = useState('');
     
-    // Formata a data (ex: "há 5 minutos", "ontem às 10:30")
+    // Formata a data
     const formatTimeAgo = (isoDate) => {
         const date = new Date(isoDate);
         const now = new Date();
@@ -26,9 +27,12 @@ const Post = ({ postData, currentUser, onDeletePost }) => {
         return `${Math.floor(seconds)}s`;
     };
 
-    // Permissão para deletar o POST (Admin ou o próprio autor, se for líder)
-    const canDeletePost = currentUser.role === 'admin' || 
-                         (currentUser.role === 'leader' && postData.author.habby_id === currentUser.habby_id);
+    // --- MODIFICAÇÃO AQUI ---
+    // Permissão para deletar o POST (Verifica se currentUser existe)
+    const canDeletePost = currentUser && (
+        currentUser.role === 'admin' || 
+        (currentUser.role === 'leader' && postData.author.habby_id === currentUser.habby_id)
+    );
 
     // Lidar com a submissão de um novo comentário
     const handleCommentSubmit = async (e) => {
@@ -41,7 +45,7 @@ const Post = ({ postData, currentUser, onDeletePost }) => {
                 { text: newComment },
                 { withCredentials: true }
             );
-            setComments([...comments, response.data]); // Adiciona o novo comentário à lista
+            setComments([...comments, response.data]);
             setNewComment('');
         } catch (error) {
             console.error("Erro ao adicionar comentário:", error);
@@ -74,7 +78,7 @@ const Post = ({ postData, currentUser, onDeletePost }) => {
                 `${import.meta.env.VITE_API_URL}/posts/${postData.id}`,
                 { withCredentials: true }
             );
-            onDeletePost(postData.id); // Informa o pai (FeedPage) que o post foi deletado
+            onDeletePost(postData.id);
         } catch (error) {
             console.error("Erro ao excluir post:", error);
             alert("Não foi possível excluir a publicação.");
@@ -112,10 +116,13 @@ const Post = ({ postData, currentUser, onDeletePost }) => {
             <div className="post-comments-section">
                 <div className="comments-list">
                     {comments.map(comment => {
-                        // Permissão para deletar o comentário
-                        const canDeleteComment = currentUser.role === 'admin' || 
-                                                 currentUser.role === 'leader' || 
-                                                 comment.author.habby_id === currentUser.habby_id;
+                        // --- MODIFICAÇÃO AQUI ---
+                        // Permissão para deletar o comentário (Verifica se currentUser existe)
+                        const canDeleteComment = currentUser && (
+                            currentUser.role === 'admin' || 
+                            currentUser.role === 'leader' || 
+                            (comment.author.habby_id && comment.author.habby_id === currentUser.habby_id)
+                        );
                         
                         return (
                             <div className="comment" key={comment.id}>
@@ -131,18 +138,27 @@ const Post = ({ postData, currentUser, onDeletePost }) => {
                         );
                     })}
                 </div>
-                <form className="comment-form" onSubmit={handleCommentSubmit}>
-                    <input
-                        type="text"
-                        className="comment-input"
-                        placeholder="Adicione um comentário..."
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                    />
-                    <button type="submit" className="btn-comment" title="Comentar">
-                        <FaCommentDots />
-                    </button>
-                </form>
+                
+                {/* --- MODIFICAÇÃO AQUI --- */}
+                {/* Mostra o formulário de comentário se estiver logado, ou um link para login se não estiver */}
+                {currentUser ? (
+                    <form className="comment-form" onSubmit={handleCommentSubmit}>
+                        <input
+                            type="text"
+                            className="comment-input"
+                            placeholder="Adicione um comentário..."
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                        />
+                        <button type="submit" className="btn-comment" title="Comentar">
+                            <FaCommentDots />
+                        </button>
+                    </form>
+                ) : (
+                    <p className="comment-login-prompt">
+                        <Link to="/login">Faça login</Link> para deixar um comentário.
+                    </p>
+                )}
             </div>
         </div>
     );

@@ -10,16 +10,18 @@ const FeedPage = ({ currentUser }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    const canCreatePost = currentUser.role === 'admin' || currentUser.role === 'leader';
+    // --- MODIFICAÇÃO AQUI ---
+    // Verifica se currentUser existe antes de checar a role
+    const canCreatePost = currentUser && (currentUser.role === 'admin' || currentUser.role === 'leader');
 
     // Busca inicial dos posts
     useEffect(() => {
         const fetchPosts = async () => {
             setLoading(true);
             try {
+                // Não precisa mais de credenciais para *buscar* posts
                 const response = await axios.get(
-                    `${import.meta.env.VITE_API_URL}/posts`,
-                    { withCredentials: true }
+                    `${import.meta.env.VITE_API_URL}/posts`
                 );
                 setPosts(response.data);
             } catch (err) {
@@ -61,15 +63,15 @@ const FeedPage = ({ currentUser }) => {
             <div className="feed-post-list">
                 {posts.length === 0 ? (
                     <p style={{ textAlign: 'center', color: '#aaa' }}>
-                        Nenhuma publicação ainda. Seja o primeiro!
+                        Nenhuma publicação ainda.
                     </p>
                 ) : (
                     posts.map(post => (
                         <Post 
                             key={post.id} 
                             postData={post} 
-                            currentUser={currentUser}
-                            onDeletePost={handlePostDeleted} // Passa a função de deletar
+                            currentUser={currentUser} // Passa o currentUser (que pode ser null)
+                            onDeletePost={handlePostDeleted}
                         />
                     ))
                 )}
