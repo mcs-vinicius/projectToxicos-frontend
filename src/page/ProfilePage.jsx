@@ -250,7 +250,9 @@ const ProfilePage = ({ currentUser }) => {
                 </div>
             </div>
 
-            {/* --- MODIFICAÇÃO (ATK/HP movido para fora e centralizado) --- */}
+            {/* --- MODIFICAÇÃO (Adicionado Título "Stats") --- */}
+            <h3 className="section-title-header">Stats do Sobrevivente</h3>
+
             <div className="main-stats">
                  <div className="stat-item">ATK: 
                     {isEditing ? (
@@ -279,10 +281,7 @@ const ProfilePage = ({ currentUser }) => {
                     )}
                 </div>
             </div>
-            {/* --- FIM DA MODIFICAÇÃO --- */}
 
-            {/* --- MODIFICAÇÃO (Adicionado Título "Stats") --- */}
-            <h3 className="section-title-header">Stats do Sobrevivente</h3>
             {/* --- FIM DA MODIFICAÇÃO --- */}
             <div className="stats-section">
                 <div className="stats-group">
