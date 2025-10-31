@@ -261,6 +261,7 @@ const ProfilePage = ({ currentUser }) => {
                     )}
                 </div>
             </div>
+            <br /><br />
 
             {/* --- FIM DA MODIFICAÇÃO --- */}
             <div className="stats-section">

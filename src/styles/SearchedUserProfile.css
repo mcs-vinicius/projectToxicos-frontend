@@ -59,10 +59,9 @@
     margin: 0; /* Reset de parágrafo no modal */
 }
 
-.profile-main-info {
+.profile-main-info-s {
     display: flex;
     align-items: center;
-    gap: 30px;
     padding-bottom: 25px;
     margin-bottom: 25px;
 }

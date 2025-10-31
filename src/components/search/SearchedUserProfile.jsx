@@ -128,7 +128,7 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
                     <div className="modal-scroll-content"><p>Carregando perfil...</p></div>
                 ) : profile ? (
                     <div className="modal-scroll-content">
-                        <div className="profile-main-info">
+                        <div className="profile-main-info-s">
                             <div className="profile-pic-wrapper">
                                 <img src={profile.profile_pic_url} alt={`Foto de ${profile.nick}`} className="profile-pic" />
                                 <div className="profile-details">
