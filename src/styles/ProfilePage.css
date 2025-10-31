@@ -12,18 +12,27 @@
     transition: all 0.4s ease-in-out;
 }
 
+/* --- MODIFICAÇÃO (Seção principal agora centraliza os blocos) --- */
 .profile-main-info {
     display: flex;
     align-items: center;
-    gap: 30px;
+    justify-content: center; /* Centraliza os blocos */
+    flex-wrap: wrap; /* Permite quebrar a linha em telas menores */
+    gap: 50px; /* Aumenta o espaço entre os blocos */
     padding-bottom: 25px;
     margin-bottom: 25px;
     border-bottom: 1px solid var(--border-color);
 }
 
+/* --- MODIFICAÇÃO (Wrapper da foto agora é flex column) --- */
 .profile-pic-wrapper {
     position: relative;
     flex-shrink: 0;
+    display: flex; /* Adicionado */
+    flex-direction: column; /* Adicionado */
+    align-items: center; /* Adicionado */
+    text-align: center; /* Adicionado */
+    max-width: 400px; /* Adicionado */
 }
 
 .profile-pic {
@@ -35,20 +44,22 @@
     box-shadow: 0 0 15px var(--shadow-color);
 }
 
-.profile-details h1 {
-    margin: 0 0 10px 0;
+.profile-pic-wrapper h1 {
+    margin: 10px 0 10px 0; /* Ajustado */
     font-size: 2.5rem;
     color: #ffffff;
     text-shadow: 0 0 10px var(--glow-green), 0 0 5px var(--glow-green);
 }
 
-.profile-details p {
+.profile-pic-wrapper p {
     margin: 0 0 15px 0;
     font-size: 1.1rem;
     color: rgba(224, 251, 252, 0.7);
 }
+/* --- FIM DAS MODIFICAÇÕES PRINCIPAIS --- */
 
-/* --- MODIFICAÇÃO (Estilos ATK/HP Destaque) --- */
+
+/* --- (Estilos ATK/HP Destaque) --- */
 .main-stats {
     display: flex;
     gap: 20px;
@@ -74,7 +85,6 @@
     margin-left: 10px;
     font-size: 1.3rem;
 }
-/* --- FIM DA MODIFICAÇÃO --- */
 
 
 .stats-section {
@@ -83,7 +93,6 @@
     margin-bottom: 25px;
 }
 
-/* --- MODIFICAÇÃO (Novo Título de Seção EXTERNO) --- */
 .section-title-header {
     font-size: 1.8rem;
     margin-top: 10px;
@@ -93,7 +102,6 @@
     text-align: center;
     text-transform: uppercase;
 }
-/* --- FIM DA MODIFICAÇÃO --- */
 
 .stats-group {
     background-color: rgba(0, 0, 0, 0.2);
@@ -222,12 +230,8 @@
 
 /* --- HISTÓRICO RÁPIDO (ÚLTIMA TEMPORADA) --- */
 
-.profile-details {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+/* --- MODIFICAÇÃO (Removido .profile-details) --- */
+/* A classe .profile-details foi removida do CSS */
 
 .profile-history {
     display: flex;
@@ -342,19 +346,19 @@
   color: #fff;
 }
 
+/* --- MODIFICAÇÃO (Inventário agora é uma seção) --- */
 .profile-inventory-container {
     display: flex;
     justify-content: space-evenly;
     gap: 5px;
-    flex-wrap: wrap; /* Permite que o título fique acima */
-    margin-top: 10px;
+    flex-wrap: wrap; 
+    margin-bottom: 25px; /* Adicionado espaçamento inferior */
     background: rgba(0, 0, 0, 0.25);
     padding: 12px 10px;
     border-radius: 6px;
     border-top: 1px solid var(--border-color);
 }
 
-/* --- MODIFICAÇÃO (Título INTERNO "Núcleos") --- */
 .section-title-group-internal {
     width: 100%;
     text-align: center;
@@ -484,7 +488,14 @@
 /* --- Media Query --- */
 @media (max-width: 768px) {
     .stats-section { flex-direction: column; }
-    .profile-main-info { flex-direction: column; text-align: center; }
+    
+    /* --- MODIFICAÇÃO (Ajuste mobile) --- */
+    .profile-main-info { 
+        flex-direction: column; 
+        text-align: center; 
+        gap: 20px; /* Reduz o gap no mobile */
+    }
+    /* --- FIM DA MODIFICAÇÃO --- */
 
     /* Desfaz a centralização no mobile */
     .main-stats {

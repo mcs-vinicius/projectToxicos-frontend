@@ -177,7 +177,9 @@ const ProfilePage = ({ currentUser }) => {
 
     return (
         <div className={containerClassName}>
+            {/* --- ESTRUTURA JSX MODIFICADA --- */}
             <div className="profile-main-info">
+                {/* Bloco 1: Informações do Usuário */}
                 <div className="profile-pic-wrapper">
                     <img src={isEditing ? formData.profile_pic_url : profile.profile_pic_url} alt={`Foto de ${profile.nick}`} className="profile-pic" />
                     {isEditing ? (
@@ -204,27 +206,28 @@ const ProfilePage = ({ currentUser }) => {
                     <p>Habby ID: {profile.habby_id}</p>
                 </div>
                 
-                <div className="profile-details">
-                    {currentTier && (
-                        <div className="profile-tier-container">
-                            <img src={getTierImageUrl(currentTier.emblem)} alt={currentTier.name} className="tier-emblem-profile" />
-                            <div className="tier-details">
-                                <h4>Tier Atual</h4>
-                                <p>{currentTier.name}</p>
-                            </div>
+                {/* Bloco 2: Tier (Agora é irmão do profile-pic-wrapper) */}
+                {currentTier && (
+                    <div className="profile-tier-container">
+                        <img src={getTierImageUrl(currentTier.emblem)} alt={currentTier.name} className="tier-emblem-profile" />
+                        <div className="tier-details">
+                            <h4>Tier Atual</h4>
+                            <p>{currentTier.name}</p>
                         </div>
-                    )}
-
-                    <div className="profile-inventory-container">
-                        <h3 className="section-title-group-internal">Núcleos</h3>
-                        {renderInventoryItem("Núcleo de Relíquia", "relic_core", nucleoRelicIcon)}
-                        {renderInventoryItem("Chip de Ressonância", "resonance_chip", chipRessoIcon)}
-                        {renderInventoryItem("Núcleo de Despertar", "survivor_awakening_core", nucleoDespertarIcon)}
-                        {renderInventoryItem("Núcleo de Bichinho Xeno", "xeno_pet_core", nucleoXenoIcon)}
                     </div>
-                    
-                </div>
+                )}
             </div>
+
+            {/* Bloco 3: Inventário (Movido para fora do profile-main-info) */}
+            <div className="profile-inventory-container">
+                <h3 className="section-title-group-internal">Núcleos</h3>
+                {renderInventoryItem("Núcleo de Relíquia", "relic_core", nucleoRelicIcon)}
+                {renderInventoryItem("Chip de Ressonância", "resonance_chip", chipRessoIcon)}
+                {renderInventoryItem("Núcleo de Despertar", "survivor_awakening_core", nucleoDespertarIcon)}
+                {renderInventoryItem("Núcleo de Bichinho Xeno", "xeno_pet_core", nucleoXenoIcon)}
+            </div>
+            {/* --- FIM DA ESTRUTURA JSX MODIFICADA --- */}
+            
 
             {/* --- MODIFICAÇÃO (Adicionado Título "Stats") --- */}
             <h3 className="section-title-header">Stats do Sobrevivente</h3>
