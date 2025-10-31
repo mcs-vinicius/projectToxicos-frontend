@@ -134,11 +134,11 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
                             </div>
                             <div className="profile-details">
                                 <h1>{profile.nick || 'N/A'}</h1>
-                                <p>Habby ID: {profile.habby_id}</p>
-                                <div className="main-stats">
-                                    <div className="stat-item">ATK: <span>{formatStat(profile.atk)}</span></div>
-                                    <div className="stat-item">HP: <span>{formatStat(profile.hp)}</span></div>
-                                </div>
+                                <p>Habby ID: {profile.habby_id}</p>                                
+                            </div>
+                            <div className="main-stats">
+                                <div className="stat-item">ATK: <span>{formatStat(profile.atk)}</span></div>
+                                <div className="stat-item">HP: <span>{formatStat(profile.hp)}</span></div>
                             </div>
                         </div>
                         
@@ -151,29 +151,8 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
                                         <p>{currentTier.name}</p>
                                     </div>
                                 </div>
-                            )}
-                            
-                            {latestHistory && latestHistory.position != null ? (
-                                <div className="profile-history">
-                                    <div className="history-item">
-                                        <h4>Última Posição</h4>
-                                        <p>{latestHistory.position}º</p>
-                                    </div>
-                                    <div className="history-item">
-                                        <h4>Última Fase</h4>
-                                        <p>{latestHistory.fase_acesso}</p>
-                                    </div>
-                                    <div className="history-item">
-                                        <h4>Evolução</h4>
-                                        {renderEvolutionText(latestHistory.evolution)}
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="profile-history-empty">
-                                    <p>Sem dados de histórico de ranking.</p>
-                                </div>
-                            )}
-
+                            )}  
+                        
                             {/* --- MODIFICAÇÃO (Título "Núcleos" movido para dentro) --- */}
                             <div className="profile-inventory-container">
                                 <h3 className="section-title-group-internal">Núcleos</h3>
