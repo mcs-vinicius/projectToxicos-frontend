@@ -2,59 +2,37 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { FaTrash, FaCommentDots } from 'react-icons/fa';
-import { Link } from 'react-router-dom'; // Importar Link
+import { Link } from 'react-router-dom';
 
 const Post = ({ postData, currentUser, onDeletePost }) => {
     const [comments, setComments] = useState(postData.comments || []);
     const [newComment, setNewComment] = useState('');
     
-    // --- FUNÇÃO formatTimeAgo ATUALIZADA ---
-    // Esta função agora calcula o tempo exato como no Instagram
+    // Função de "tempo atrás"
     const formatTimeAgo = (isoDate) => {
         const date = new Date(isoDate);
         const now = new Date();
         const seconds = Math.floor((now - date) / 1000);
 
-        // 1. Anos
-        let interval = seconds / 31536000; // 60 * 60 * 24 * 365
-        if (interval > 1) {
-            return `${Math.floor(interval)}a`; // 'a' de ano
-        }
-        // 2. Meses
-        interval = seconds / 2592000; // 60 * 60 * 24 * 30
-        if (interval > 1) {
-            return `${Math.floor(interval)}mês`;
-        }
-        // 3. Semanas
-        interval = seconds / 604800; // 60 * 60 * 24 * 7
-        if (interval > 1) {
-            return `${Math.floor(interval)}sem`; // 'sem' de semana
-        }
-        // 4. Dias
-        interval = seconds / 86400; // 60 * 60 * 24
-        if (interval > 1) {
-            return `${Math.floor(interval)}d`; // 'd' de dia
-        }
-        // 5. Horas
-        interval = seconds / 3600; // 60 * 60
-        if (interval > 1) {
-            return `${Math.floor(interval)}h`; // 'h' de hora
-        }
-        // 6. Minutos
+        let interval = seconds / 31536000;
+        if (interval > 1) return `${Math.floor(interval)}a`;
+        interval = seconds / 2592000;
+        if (interval > 1) return `${Math.floor(interval)}mês`;
+        interval = seconds / 604800;
+        if (interval > 1) return `${Math.floor(interval)}sem`;
+        interval = seconds / 86400;
+        if (interval > 1) return `${Math.floor(interval)}d`;
+        interval = seconds / 3600;
+        if (interval > 1) return `${Math.floor(interval)}h`;
         interval = seconds / 60;
-        if (interval > 1) {
-            return `${Math.floor(interval)}m`; // 'm' de minuto
-        }
-        // 7. Segundos
-        return `${Math.max(0, Math.floor(seconds))}s`; // 's' de segundo
+        if (interval > 1) return `${Math.floor(interval)}m`;
+        return `${Math.max(0, Math.floor(seconds))}s`;
     };
-    // --- FIM DA FUNÇÃO ATUALIZADA ---
 
-    // Permissão para deletar o POST (Verifica se currentUser existe)
-    const canDeletePost = currentUser && (
-        currentUser.role === 'admin' || 
-        (currentUser.role === 'leader' && postData.author.habby_id === currentUser.habby_id)
-    );
+    // --- ALTERAÇÃO AQUI ---
+    // Permissão para deletar o POST (Apenas se o usuário logado for o autor do post)
+    const canDeletePost = currentUser && (postData.author.habby_id === currentUser.habby_id);
+    // --- FIM DA ALTERAÇÃO ---
 
     // Lidar com a submissão de um novo comentário
     const handleCommentSubmit = async (e) => {
@@ -103,7 +81,8 @@ const Post = ({ postData, currentUser, onDeletePost }) => {
             onDeletePost(postData.id);
         } catch (error) {
             console.error("Erro ao excluir post:", error);
-            alert("Não foi possível excluir a publicação.");
+            // Mostra o erro do backend se ele existir
+            alert(error.response?.data?.error || "Não foi possível excluir a publicação.");
         }
     };
 
@@ -138,7 +117,7 @@ const Post = ({ postData, currentUser, onDeletePost }) => {
             <div className="post-comments-section">
                 <div className="comments-list">
                     {comments.map(comment => {
-                        // Permissão para deletar o comentário (Verifica se currentUser existe)
+                        // Permissão para deletar o comentário (Admin, Leader, ou o próprio autor)
                         const canDeleteComment = currentUser && (
                             currentUser.role === 'admin' || 
                             currentUser.role === 'leader' || 
