@@ -25,6 +25,7 @@
 
 /* --- MODIFICAÇÃO (Wrapper da foto agora é flex column) --- */
 .profile-pic-wrapper {
+    padding-top: 10px;
     position: relative;
     flex-shrink: 0;
     display: flex; /* Adicionado */
@@ -331,7 +332,7 @@
 
 .tier-details h4 {
   margin: 0 0 3px 0;
-  font-size: 1.0rem;
+  font-size: 1.5rem;
   color: var(--glow-green);
   font-weight: 500;
   text-transform: uppercase;

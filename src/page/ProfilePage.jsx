@@ -212,8 +212,8 @@ const ProfilePage = ({ currentUser }) => {
                         
                         <img src={getTierImageUrl(currentTier.emblem)} alt={currentTier.name} className="tier-emblem-profile" />
                         <div className="tier-details">
-                            <p>{currentTier.name}</p>
                             <h4>Tier Atual</h4>
+                            <p>{currentTier.name}</p>
                         </div>
                     </div>
                 )}
