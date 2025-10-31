@@ -61,7 +61,9 @@
 
 .profile-main-info-s {
     display: flex;
-    align-items: center;
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza os blocos */
+    flex-wrap: wrap; /* Permite quebrar a linha em telas menores */
     padding-bottom: 25px;
     margin-bottom: 25px;
 }
