@@ -16,7 +16,9 @@ import UserManagementPage from "./page/UserManagementPage.jsx";
 import ProfilePage from "./page/ProfilePage.jsx";
 import HonorPage from "./page/HonorPage.jsx";
 import HonorRegisterPage from "./components/honor/HonorRegisterPage.jsx";
-import AdminToolsPage from "./page/AdminToolsPage.jsx"; // <<< NOVO
+import AdminToolsPage from "./page/AdminToolsPage.jsx";
+// --- 1. IMPORTE A NOVA PÁGINA ---
+import FeedPage from "./page/FeedPage.jsx"; 
 
 import "./App.css";
 
@@ -87,6 +89,9 @@ const App = () => {
           <NavLink to="/" className="btt-menu">Home</NavLink>
           <NavLink to="/results" className="btt-menu">Ranking</NavLink>
           <NavLink to="/honor" className="btt-menu">Honra</NavLink>
+          {/* --- 2. ADICIONE O LINK DO FEED AQUI --- */}
+          <NavLink to="/feed" className="btt-menu">Publicações</NavLink>
+          
           {auth.isLoggedIn && (
             <NavLink to={`/profile/${auth.user.habby_id}`} className="btt-menu">Meu Perfil</NavLink>
           )}
@@ -131,6 +136,9 @@ const App = () => {
           <NavLink to="/" className="btt-menu-mobile">Home</NavLink>
           <NavLink to="/results" className="btt-menu-mobile">Ranking</NavLink>
           <NavLink to="/honor" className="btt-menu-mobile">Honra</NavLink>
+          {/* --- 3. ADICIONE O LINK DO FEED NO MENU MOBILE --- */}
+          <NavLink to="/feed" className="btt-menu-mobile">Publicações</NavLink>
+          
           {auth.isLoggedIn && (
             <NavLink to={`/profile/${auth.user.habby_id}`} className="btt-menu-mobile">Meu Perfil</NavLink>
           )}
@@ -174,6 +182,12 @@ const App = () => {
             } />
             <Route path="/profile/:habby_id" element={
                 <ProtectedRoute roles={['admin', 'leader', 'member']}><ProfilePage currentUser={auth.user}/></ProtectedRoute>
+            } />
+            
+            {/* --- 4. ADICIONE A ROTA DO FEED --- */}
+            {/* Todos os membros logados podem ver */}
+            <Route path="/feed" element={
+                <ProtectedRoute roles={['admin', 'leader', 'member']}><FeedPage currentUser={auth.user} /></ProtectedRoute>
             } />
             
             {/* ROTA PROTEGIDA PARA ADMINS */}

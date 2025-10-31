@@ -1,0 +1,234 @@
+/* src/styles/FeedPage.css */
+
+.feed-container {
+    max-width: 700px;
+    margin: 20px auto;
+    font-family: 'Chakra Petch', sans-serif;
+}
+
+/* --- Formulário de Criação de Post --- */
+.create-post-container {
+    background-color: var(--container-background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.create-post-container h2 {
+    text-align: center;
+    color: var(--glow-green);
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.create-post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.create-post-form input,
+.create-post-form textarea {
+    width: 100%;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    color: #e0fbfc;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.create-post-form textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.btn-post {
+    padding: 10px 15px;
+    font-family: 'Chakra Petch', sans-serif;
+    border: 1px solid var(--glow-green);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--glow-green);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-post:hover:not(:disabled) {
+    background-color: var(--glow-green);
+    color: #02040a;
+}
+.btn-post:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* --- Estilo do Post (Card) --- */
+.feed-post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.post-card {
+    background-color: var(--container-background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden; /* Para a imagem não vazar */
+    animation: fadeIn 0.5s ease-out;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    gap: 12px;
+}
+
+.post-author-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    object-fit: cover;
+}
+
+.post-author-info {
+    flex-grow: 1;
+}
+
+.post-author-nick {
+    font-weight: bold;
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.post-timestamp {
+    font-size: 0.8rem;
+    color: rgba(224, 251, 252, 0.6);
+}
+
+.post-delete-btn {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    font-size: 1rem;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s, color 0.2s;
+}
+.post-delete-btn:hover {
+    opacity: 1;
+    color: #ff2d55;
+}
+
+.post-image {
+    width: 100%;
+    max-height: 700px;
+    object-fit: cover;
+    display: block;
+    background-color: rgba(0,0,0,0.2);
+}
+
+.post-caption {
+    padding: 12px 15px;
+    color: #e0fbfc;
+    line-height: 1.5;
+    white-space: pre-wrap; /* Preserva quebras de linha na legenda */
+}
+
+.post-caption strong {
+    color: #fff;
+    margin-right: 5px;
+}
+
+/* --- Seção de Comentários --- */
+.post-comments-section {
+    padding: 0 15px 15px 15px;
+    border-top: 1px solid var(--border-color);
+    margin-top: 10px;
+}
+
+.comments-list {
+    max-height: 250px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    padding-right: 5px; /* Espaço para scrollbar */
+}
+
+.comment {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    font-size: 0.9rem;
+}
+
+.comment-author {
+    font-weight: bold;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.comment-text {
+    color: #e0fbfc;
+    word-break: break-word;
+    flex-grow: 1;
+    white-space: pre-wrap; /* Preserva quebras de linha */
+}
+
+.comment-delete-btn {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    font-size: 0.8rem;
+    cursor: pointer;
+    opacity: 0.5;
+    margin-left: auto;
+    padding: 0 5px;
+}
+.comment:hover .comment-delete-btn {
+    opacity: 1;
+}
+
+.comment-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.comment-input {
+    flex-grow: 1;
+    padding: 8px 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    color: #e0fbfc;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.btn-comment {
+    padding: 8px 12px;
+    font-family: 'Chakra Petch', sans-serif;
+    border: 1px solid var(--glow-green);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--glow-green);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.btn-comment:hover {
+    background-color: var(--glow-green);
+    color: #02040a;
+}
