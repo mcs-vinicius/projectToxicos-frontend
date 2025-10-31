@@ -25,7 +25,7 @@
 
 /* --- MODIFICAÇÃO (Wrapper da foto agora é flex column) --- */
 .profile-pic-wrapper {
-    padding-top: 10px;
+    top: 20px;
     position: relative;
     flex-shrink: 0;
     display: flex; /* Adicionado */
