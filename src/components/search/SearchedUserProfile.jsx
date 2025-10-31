@@ -146,7 +146,7 @@ const SearchedUserProfile = ({ habbyId, onClose }) => {
                         <div className="profile-details-modal">
                             {currentTier && (
                                 <div className="profile-tier-container">
-                                    <img src={getTierImageUrl(currentTier.emblem)} alt={currentTier.name} className="tier-emblem-profile" />
+                                    <img src={getTierImageUrl(currentTier.emblem)} alt={currentTier.name} className="tier-emblem-profile-s" />
                                     <div className="tier-details">
                                         <h4>Tier Atual</h4>
                                         <p>{currentTier.name}</p>
