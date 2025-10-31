@@ -64,8 +64,7 @@
     align-items: center; /* Centraliza verticalmente */
     justify-content: center; /* Centraliza os blocos */
     flex-wrap: wrap; /* Permite quebrar a linha em telas menores */
-    padding-bottom: 25px;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
 }
 
 .profile-pic-wrapper {
@@ -267,7 +266,7 @@
 
 /* --- Estilos Tier e Inventário --- */
 
-.profile-tier-container {
+.profile-tier-container-s {
   display: flex;
   flex-direction: column;
   align-items: center;
