@@ -8,31 +8,47 @@ const Post = ({ postData, currentUser, onDeletePost }) => {
     const [comments, setComments] = useState(postData.comments || []);
     const [newComment, setNewComment] = useState('');
     
-    // Função de "tempo atrás"
+    // --- FUNÇÃO formatTimeAgo TOTALMENTE CORRIGIDA ---
     const formatTimeAgo = (isoDate) => {
-        const date = new Date(isoDate);
-        const now = new Date();
-        const seconds = Math.floor((now - date) / 1000);
+        try {
+            const date = new Date(isoDate); // O 'Z' do backend garante que isso seja UTC
+            const now = new Date();
+            
+            // Calcula a diferença em segundos (o método mais robusto)
+            const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-        let interval = seconds / 31536000;
-        if (interval > 1) return `${Math.floor(interval)}a`;
-        interval = seconds / 2592000;
-        if (interval > 1) return `${Math.floor(interval)}mês`;
-        interval = seconds / 604800;
-        if (interval > 1) return `${Math.floor(interval)}sem`;
-        interval = seconds / 86400;
-        if (interval > 1) return `${Math.floor(interval)}d`;
-        interval = seconds / 3600;
-        if (interval > 1) return `${Math.floor(interval)}h`;
-        interval = seconds / 60;
-        if (interval > 1) return `${Math.floor(interval)}m`;
-        return `${Math.max(0, Math.floor(seconds))}s`;
+            // 1. Anos (365.25 dias para ser mais preciso)
+            let interval = seconds / 31557600; 
+            if (interval > 1) return `${Math.floor(interval)}a`;
+            
+            // 2. Semanas (não vamos usar meses)
+            interval = seconds / 604800; 
+            if (interval > 1) return `${Math.floor(interval)}sem`;
+            
+            // 3. Dias
+            interval = seconds / 86400;
+            if (interval > 1) return `${Math.floor(interval)}d`;
+            
+            // 4. Horas
+            interval = seconds / 3600;
+            if (interval > 1) return `${Math.floor(interval)}h`;
+            
+            // 5. Minutos
+            interval = seconds / 60;
+            if (interval > 1) return `${Math.floor(interval)}m`;
+            
+            // 6. Segundos
+            return `${Math.max(0, Math.floor(seconds))}s`;
+
+        } catch (error) {
+            console.error("Erro ao formatar data:", isoDate, error);
+            return "agora"; // Fallback
+        }
     };
+    // --- FIM DA CORREÇÃO ---
 
-    // --- ALTERAÇÃO AQUI ---
     // Permissão para deletar o POST (Apenas se o usuário logado for o autor do post)
     const canDeletePost = currentUser && (postData.author.habby_id === currentUser.habby_id);
-    // --- FIM DA ALTERAÇÃO ---
 
     // Lidar com a submissão de um novo comentário
     const handleCommentSubmit = async (e) => {
@@ -45,7 +61,7 @@ const Post = ({ postData, currentUser, onDeletePost }) => {
                 { text: newComment },
                 { withCredentials: true }
             );
-            setComments([...comments, response.data]);
+            setComments([...comments, response.data]); // Adiciona o novo comentário à lista
             setNewComment('');
         } catch (error) {
             console.error("Erro ao adicionar comentário:", error);
@@ -78,7 +94,7 @@ const Post = ({ postData, currentUser, onDeletePost }) => {
                 `${import.meta.env.VITE_API_URL}/posts/${postData.id}`,
                 { withCredentials: true }
             );
-            onDeletePost(postData.id);
+            onDeletePost(postData.id); // Informa o pai (FeedPage) que o post foi deletado
         } catch (error) {
             console.error("Erro ao excluir post:", error);
             // Mostra o erro do backend se ele existir
