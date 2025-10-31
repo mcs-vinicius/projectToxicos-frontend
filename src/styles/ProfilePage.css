@@ -264,6 +264,11 @@
 .history-item p.negative::before {
     content: '▼ ';
 }
+/* ADICIONADO PARA EVOLUÇÃO NEUTRA */
+.history-item p.neutral {
+    color: rgba(255,255,255,0.7);
+}
+
 
 .profile-history-empty {
     background: rgba(0, 0, 0, 0.25);
@@ -393,3 +398,82 @@
     font-size: 1rem;
     margin-left: 8px;
 }
+
+/* --- (Novos Estilos para Histórico LME) --- */
+
+/* Título da seção */
+.lme-history-section .section-title {
+    font-size: 1.8rem;
+    margin-top: 40px; /* Espaço acima da nova seção */
+    margin-bottom: 20px;
+    color: var(--glow-green);
+    text-shadow: 0 0 10px var(--shadow-color);
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.lme-history-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.lme-history-card {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.lme-history-header {
+    background-color: var(--hover-bg-color);
+    padding: 10px 15px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.lme-history-body {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+}
+
+/* Reutilizando .history-item da seção principal */
+.lme-history-body .history-item {
+    flex: 1;
+    text-align: center;
+}
+
+.lme-history-body .history-item h4 {
+    margin: 0 0 5px 0;
+    font-size: 0.8rem;
+    color: var(--glow-green);
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.lme-history-body .history-item p {
+    margin: 0;
+    font-size: 1.3rem; 
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Reutilizando classes de evolução */
+.lme-history-body .history-item p.positive {
+    color: #28a745;
+    text-shadow: 0 0 5px #28a745;
+}
+.lme-history-body .history-item p.negative {
+    color: #dc3545;
+    text-shadow: 0 0 5px #dc3545;
+}
+.lme-history-body .history-item p.neutral {
+    color: rgba(255,255,255,0.7);
+}
+
+
+/* --- FIM DA MODIFICAÇÃO --- */

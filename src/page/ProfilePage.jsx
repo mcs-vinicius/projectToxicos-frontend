@@ -1,31 +1,26 @@
+// src/page/ProfilePage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/ProfilePage.css';
 
-// --- ASSUMINDO QUE VOCÊ ADICIONARÁ OS ÍCONES NESTA PASTA ---
-// (Você precisa adicionar essas imagens no projeto)
+// --- ÍCONES ---
 import nucleoRelicIcon from '../assets/icons/nucleo-relic.png';
 import chipRessoIcon from '../assets/icons/chip-resso.png';
 import nucleoDespertarIcon from '../assets/icons/nucleo-despertar.png';
 import nucleoXenoIcon from '../assets/icons/nucleo-xeno.png';
 
 
-// --- Funções copiadas de ResultsPage.jsx para exibir o Tier ---
-
-// Helper para construir o URL da imagem dinamicamente
+// --- Funções de Tier (copiadas) ---
 const getTierImageUrl = (emblem) => {
   const validEmblem = String(emblem || '1');
   try {
-    // Caminho relativo ajustado para /page/
     return new URL(`../assets/tier/${validEmblem}.png`, import.meta.url).href;
   } catch (error) {
     console.error(`Erro ao criar URL para emblema: ${validEmblem}`, error);
     return new URL(`../assets/tier/1.png`, import.meta.url).href;
   }
 };
-
-// Função para obter o Tier com base na fase
 const getTier = (fase) => {
     if (fase >= 0 && fase <= 500) return { name: "Coimbra", emblem: "1" };
     if (fase >= 501 && fase <= 530) return { name: "Petista", emblem: "2" };
@@ -42,9 +37,8 @@ const getTier = (fase) => {
     if (fase >= 900 && fase <= 999) return { name: "Aristocrata", emblem: "13" };
     if (fase >= 1000 && fase <= 1500) return { name: "Nobreza", emblem: "14" };
     if (fase > 1500) return { name: "Baleia", emblem: "15" };
-    return { name: "Coimbra", emblem: "1" }; // Padrão
+    return { name: "Coimbra", emblem: "1" };
 };
-
 // --- Fim das funções de Tier ---
 
 
@@ -56,34 +50,43 @@ const ProfilePage = ({ currentUser }) => {
     const [formData, setFormData] = useState({});
     const [isHonorMember, setIsHonorMember] = useState(false);
     const [history, setHistory] = useState(null);
+    
+    // --- MODIFICAÇÃO (Novo state para histórico completo) ---
+    const [fullHistory, setFullHistory] = useState([]);
+    // --- FIM DA MODIFICAÇÃO ---
 
-    // --- CORRIGIDO COM useCallback ---
     const fetchProfileData = useCallback(async () => {
         if (!habby_id) return;
         setLoading(true);
         try {
-            const [profileRes, honorRes, historyRes] = await Promise.all([
+            // --- MODIFICAÇÃO (Adicionada 4ª chamada de API) ---
+            const [profileRes, honorRes, historyRes, fullHistoryRes] = await Promise.all([
                 axios.get(`${import.meta.env.VITE_API_URL}/profile/${habby_id}`),
                 axios.get(`${import.meta.env.VITE_API_URL}/honor-status/${habby_id}`),
-                axios.get(`${import.meta.env.VITE_API_URL}/history/${habby_id}`)
+                axios.get(`${import.meta.env.VITE_API_URL}/history/${habby_id}`),
+                axios.get(`${import.meta.env.VITE_API_URL}/full-history/${habby_id}`) // Nova rota
             ]);
+            // --- FIM DA MODIFICAÇÃO ---
             
             setProfile(profileRes.data);
             setFormData(profileRes.data);
             setIsHonorMember(honorRes.data.is_honor_member);
             setHistory(historyRes.data);
+            
+            // --- MODIFICAÇÃO (Setar novo state) ---
+            setFullHistory(fullHistoryRes.data);
+            // --- FIM DA MODIFICAÇÃO ---
 
         } catch (error) {
             console.error("Erro ao buscar dados do perfil:", error);
         } finally {
             setLoading(false);
         }
-    }, [habby_id]); // <-- Dependência do useCallback
+    }, [habby_id]); 
     
-    // --- CORRIGIDO COM useCallback ---
     useEffect(() => {
         fetchProfileData();
-    }, [fetchProfileData]); // <-- Dependência do useEffect
+    }, [fetchProfileData]); 
 
     const handleEdit = () => setIsEditing(true);
     const handleCancel = () => {
@@ -118,10 +121,8 @@ const ProfilePage = ({ currentUser }) => {
 
     const containerClassName = `profile-container ${isHonorMember ? 'gloria-profile' : ''}`;
     
-    // Calcula o Tier atual
     const currentTier = history && history.fase_acesso != null ? getTier(history.fase_acesso) : null;
 
-    // Helper para campos de lista (li)
     const renderField = (label, name, formatter = formatStat, type = 'number') => (
         <li>
             {label}:
@@ -138,8 +139,6 @@ const ProfilePage = ({ currentUser }) => {
         </li>
     );
 
-    // Helper para os novos campos de inventário (com ícones)
-    // *** REMOVIDA A CLASSE "history-item" ***
     const renderInventoryItem = (label, name, iconSrc) => (
         <div className="inventory-item" title={label}>
             <img src={iconSrc} alt={label} className="inventory-icon" />
@@ -152,19 +151,34 @@ const ProfilePage = ({ currentUser }) => {
                     className="inventory-input"
                 />
             ) : (
-                // *** MODIFICADO para <p> para consistência ***
                 <p>{formatStat(profile[name])}</p> 
             )}
         </div>
     );
+    
+    // --- MODIFICAÇÃO (Helper para Evolução) ---
+    const renderEvolutionText = (evolution) => {
+        if (evolution === '-') {
+            return <p className="neutral">{evolution}</p>;
+        }
+        const isNumeric = typeof evolution === "number";
+        if (isNumeric && evolution > 0) {
+            return <p className="positive">▲ +{evolution}</p>;
+        }
+        if (isNumeric && evolution < 0) {
+            return <p className="negative">▼ {evolution}</p>;
+        }
+        return <p className="neutral">–</p>; // Para evolução 0 ou n/a
+    };
+    // --- FIM DA MODIFICAÇÃO ---
 
 
     return (
         <div className={containerClassName}>
+            {/* ... (seção profile-main-info e main-stats permanecem iguais) ... */}
             <div className="profile-main-info">
                 <div className="profile-pic-wrapper">
                     <img src={isEditing ? formData.profile_pic_url : profile.profile_pic_url} alt={`Foto de ${profile.nick}`} className="profile-pic" />
-
                     {isEditing ? (
                         <>
                             <input
@@ -184,20 +198,12 @@ const ProfilePage = ({ currentUser }) => {
                             />
                         </>
                     ) : (
-                        <>
-                            <h1>{profile.nick || 'Nome não definido'}</h1>
-                        </>
+                        <h1>{profile.nick || 'Nome não definido'}</h1>
                     )}
                     <p>Habby ID: {profile.habby_id}</p>
-
                 </div>
+                
                 <div className="profile-details">
-                    
-                    
-                    
-                    {/* --- FIM DA CORREÇÃO --- */}
-                    
-                    {/* --- SEÇÃO DO TIER (MOVIDA PARA DIV PRÓPRIA) --- */}
                     {currentTier && (
                         <div className="profile-tier-container">
                             <img src={getTierImageUrl(currentTier.emblem)} alt={currentTier.name} className="tier-emblem-profile" />
@@ -208,7 +214,6 @@ const ProfilePage = ({ currentUser }) => {
                         </div>
                     )}
 
-                    {/* --- HISTÓRICO (Mantido) --- */}
                     {history && history.position != null ? (
                         <div className="profile-history">
                             <div className="history-item">
@@ -221,9 +226,7 @@ const ProfilePage = ({ currentUser }) => {
                             </div>
                             <div className="history-item">
                                 <h4>Evolução</h4>
-                                <p className={history.evolution > 0 ? 'positive' : history.evolution < 0 ? 'negative' : ''}>
-                                    {history.evolution > 0 ? `+${history.evolution}` : (history.evolution === 0 ? '–' : history.evolution)}
-                                </p>
+                                {renderEvolutionText(history.evolution)}
                             </div>
                         </div>
                     ) : (
@@ -232,49 +235,49 @@ const ProfilePage = ({ currentUser }) => {
                         </div>
                     )}
 
-                    {/* --- NOVO GRUPO DE INVENTÁRIO (MOVIDO PARA DIV PRÓPRIA) --- */}
                     <div className="profile-inventory-container">
                         {renderInventoryItem("Núcleo de Relíquia", "relic_core", nucleoRelicIcon)}
                         {renderInventoryItem("Chip de Ressonância", "resonance_chip", chipRessoIcon)}
                         {renderInventoryItem("Núcleo de Despertar", "survivor_awakening_core", nucleoDespertarIcon)}
                         {renderInventoryItem("Núcleo de Bichinho Xeno", "xeno_pet_core", nucleoXenoIcon)}
                     </div>
-
                 </div>
             </div>
 
             <div className="main-stats">
-                <div className="stat-item">ATK: 
-                            {isEditing ? (
-                                <input
-                                    type="number"
-                                    name="atk"
-                                    value={formData.atk || ''}
-                                    onChange={handleChange}
-                                    className="stat-input" 
-                                />
-                            ) : (
-                                <span>{formatStat(profile.atk)}</span>
-                            )}
+                {/* ... (stats de ATK e HP) ... */}
+                 <div className="stat-item">ATK: 
+                    {isEditing ? (
+                        <input
+                            type="number"
+                            name="atk"
+                            value={formData.atk || ''}
+                            onChange={handleChange}
+                            className="stat-input" 
+                        />
+                    ) : (
+                        <span>{formatStat(profile.atk)}</span>
+                    )}
                 </div>
                 <div className="stat-item">HP: 
-                            {isEditing ? (
-                                <input
-                                    type="number"
-                                    name="hp"
-                                    value={formData.hp || ''}
-                                    onChange={handleChange}
-                                    className="stat-input"
-                                />
-                            ) : (
-                                <span>{formatStat(profile.hp)}</span>
-                            )}
+                    {isEditing ? (
+                        <input
+                            type="number"
+                            name="hp"
+                            value={formData.hp || ''}
+                            onChange={handleChange}
+                            className="stat-input"
+                        />
+                    ) : (
+                        <span>{formatStat(profile.hp)}</span>
+                    )}
                 </div>
             </div>
 
             <br /><br />
 
             <div className="stats-section">
+                {/* ... (stats-group 1 - Atributos) ... */}
                 <div className="stats-group">
                     <h3>Atributos do Sobrevivente</h3>
                     <ul>
@@ -286,31 +289,60 @@ const ProfilePage = ({ currentUser }) => {
                         {renderField("HP Final", "survivor_final_hp")}
                     </ul>
                 </div>
+                {/* ... (stats-group 2 - Bônus Dano) ... */}
                 <div className="stats-group">
                     <h3>Bônus de Dano (Sobrevivente)</h3>
                      <ul>
                         {renderField("Taxa Crítica", "survivor_crit_rate", formatPercent)}
                         {renderField("Dano Crítico", "survivor_crit_damage", formatPercent)}
                         {renderField("Dano de Habilidade", "survivor_skill_damage", formatPercent)}
-                        {/* --- MOVIDO E RENOMEADO --- */}
                         {renderField("Dano de Escudo", "survivor_shield_boost", formatPercent)}
                     </ul>
                 </div>
+                {/* ... (stats-group 3 - Bônus Especiais) ... */}
                  <div className="stats-group">
                     <h3>Bônus Especiais (Sobrevivente)</h3>
                      <ul>
-                        {/* --- REMOVIDO: Reforço de Escudo --- */}
                         {renderField("Alvos Envenenados", "survivor_poison_targets", formatPercent)}
                         {renderField("Alvos Enfraquecidos", "survivor_weak_targets", formatPercent)}
                         {renderField("Alvos Congelados", "survivor_frozen_targets", formatPercent)}
-                        {/* --- ADICIONADO --- */}
                         {renderField("Alvos Dilacerados", "survivor_torn_targets", formatPercent)}
                     </ul>
                 </div>
             </div>
             
-            {/* --- BLOCO DE INVENTÁRIO ORIGINAL REMOVIDO DESTA POSIÇÃO --- */}
-
+            {/* --- MODIFICAÇÃO (Nova Seção Histórico LME) --- */}
+            <div className="lme-history-section">
+                <h3 className="section-title">Histórico LME</h3>
+                <div className="lme-history-grid">
+                    {fullHistory.length > 0 ? (
+                        fullHistory.slice(0, 3).map((item, index) => (
+                            <div className="lme-history-card" key={index}>
+                                <div className="lme-history-header">
+                                    {item.season_info_str}
+                                </div>
+                                <div className="lme-history-body">
+                                    <div className="history-item">
+                                        <h4>Posição</h4>
+                                        <p>{item.position}º</p>
+                                    </div>
+                                    <div className="history-item">
+                                        <h4>Fase</h4>
+                                        <p>{item.fase_acesso}</p>
+                                    </div>
+                                    <div className="history-item">
+                                        <h4>Evolução</h4>
+                                        {renderEvolutionText(item.evolution)}
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p>Sem histórico de temporadas anteriores para exibir.</p>
+                    )}
+                </div>
+            </div>
+            {/* --- FIM DA MODIFICAÇÃO --- */}
 
             {currentUser && currentUser.habby_id === habby_id && (
                 <div className="profile-edit-cta">
