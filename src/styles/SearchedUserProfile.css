@@ -281,11 +281,11 @@
   flex-shrink: 0;
 }
 
-.tier-details {
+.tier-details-s {
   text-align: center;
 }
 
-.tier-details h4 {
+.tier-details-s h4 {
   margin: 0 0 3px 0;
   font-size: 0.8rem;
   color: var(--glow-green);
@@ -293,7 +293,7 @@
   text-transform: uppercase;
 }
 
-.tier-details p {
+.tier-details-s p {
   margin: 0;
   font-size: 1.2rem;
   font-weight: bold;
