@@ -181,7 +181,7 @@ const ProfilePage = ({ currentUser }) => {
             <div className="profile-main-info">
                 {/* Bloco 1: Informações do Usuário */}
                 <div className="profile-pic-wrapper">
-                    <img src={isEditing ? formData.profile_pic_url : profile.profile_pic_url} alt={`Foto de ${profile.nick}`} className="profile-pic" />
+                    <h1>{profile.nick || 'Nome não definido'}</h1>
                     {isEditing ? (
                         <>
                             <input
@@ -201,7 +201,8 @@ const ProfilePage = ({ currentUser }) => {
                             />
                         </>
                     ) : (
-                        <h1>{profile.nick || 'Nome não definido'}</h1>
+                        <img src={isEditing ? formData.profile_pic_url : profile.profile_pic_url} alt={`Foto de ${profile.nick}`} className="profile-pic" />
+                        
                     )}
                     <p>Habby ID: {profile.habby_id}</p>
                 </div>
