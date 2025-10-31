@@ -151,3 +151,143 @@
     color: #28a745;
     border: 1px solid #28a745;
 }
+
+/* --- MODIFICAÇÃO (Novos Estilos para HabbyManagement) --- */
+
+.habby-management-wrapper {
+    background-color: var(--container-background);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.habby-management-wrapper h2 {
+    text-align: center;
+    color: var(--glow-green);
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.habby-management-wrapper p {
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(224, 251, 252, 0.7);
+    margin-bottom: 1.5rem;
+}
+
+.habby-add-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+}
+
+.habby-input {
+    flex-grow: 1;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: #e0fbfc;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.habby-input:focus {
+    outline: none;
+    border-color: var(--glow-green);
+    box-shadow: 0 0 10px var(--shadow-color);
+}
+
+.habby-button-add {
+    padding: 10px 15px;
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: transparent;
+    color: var(--glow-green);
+    border: 2px solid var(--glow-green);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.habby-button-add:hover:not(:disabled) {
+    background-color: var(--glow-green);
+    color: #02040a;
+}
+
+.habby-button-add:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.habby-management-wrapper h3 {
+    font-size: 1.1rem;
+    color: #fff;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 5px;
+    margin-bottom: 1rem;
+}
+
+.habby-list-container {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 5px; /* espaço para scrollbar */
+}
+
+.habby-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.habby-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: rgba(0,0,0,0.2);
+    margin-bottom: 8px;
+}
+
+.habby-list li span {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+.habby-button-delete {
+    background: transparent;
+    border: none;
+    color: #ff4d4d;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.2s;
+}
+
+.habby-button-delete:hover {
+    color: #fff;
+    transform: scale(1.2);
+}
+
+.management-divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--glow-green), transparent);
+    margin: 2rem 0;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.spin {
+    animation: spin 1s linear infinite;
+}

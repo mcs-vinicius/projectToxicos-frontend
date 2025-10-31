@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/UserManagementPage.css';
 import { FaCrown, FaUserShield, FaUser, FaTrash, FaKey } from 'react-icons/fa';
+// --- MODIFICAÇÃO (Importar novo componente) ---
+import HabbyManagement from '../components/admin/HabbyManagement'; 
+// --- FIM DA MODIFICAÇÃO ---
 
 const UserManagementPage = ({ currentUser }) => {
     const [users, setUsers] = useState([]);
@@ -28,6 +31,7 @@ const UserManagementPage = ({ currentUser }) => {
     }, [API_URL]);
     
     const handleRoleChange = async (userId, newRole) => {
+        // ... (função existente sem alterações)
         try {
             const response = await axios.put(`${API_URL}/users/${userId}/role`, { role: newRole }, { withCredentials: true });
             setUsers(users.map(u => (u.id === userId ? { ...u, role: newRole } : u)));
@@ -40,6 +44,7 @@ const UserManagementPage = ({ currentUser }) => {
     };
 
     const handleDeleteUser = async (userId, username) => {
+        // ... (função existente sem alterações)
         if (window.confirm(`Tem certeza que deseja excluir o usuário ${username}? Esta ação não pode ser desfeita.`)) {
             try {
                 const response = await axios.delete(`${API_URL}/users/${userId}`, { withCredentials: true });
@@ -54,6 +59,7 @@ const UserManagementPage = ({ currentUser }) => {
     };
 
     const handleResetPassword = async (userId, username) => {
+        // ... (função existente sem alterações)
         const confirmation = `Você está prestes a redefinir a senha do usuário ${username}. Uma nova senha temporária será gerada. Deseja continuar?`;
         if (window.confirm(confirmation)) {
             try {
@@ -72,6 +78,7 @@ const UserManagementPage = ({ currentUser }) => {
     };
 
     const getRoleIcon = (role) => {
+        // ... (função existente sem alterações)
         if (role === 'admin') return <FaCrown title="Administrador" className="role-icon admin" />;
         if (role === 'leader') return <FaUserShield title="Líder" className="role-icon leader" />;
         return <FaUser title="Membro" className="role-icon member" />;
@@ -84,8 +91,15 @@ const UserManagementPage = ({ currentUser }) => {
             <h1>Gerenciar Usuários</h1>
             {error && <p className="error-message">{error}</p>}
             {successMessage && <p className="success-message">{successMessage}</p>}
+
+            {/* --- MODIFICAÇÃO (Novo Componente Adicionado) --- */}
+            <HabbyManagement />
+            <hr className="management-divider" />
+            {/* --- FIM DA MODIFICAÇÃO --- */}
+
             <div className="user-list-table-wrapper">
                 <table className="user-list-table">
+                    {/* ... (Tabela de usuários existente sem alterações) ... */}
                     <thead>
                         <tr>
                             <th>Usuário</th>
@@ -111,7 +125,6 @@ const UserManagementPage = ({ currentUser }) => {
                                     </div>
                                 </td>
                                 <td className="actions-cell">
-                                    {/* Container para alinhar os botões e o select */}
                                     <div className="action-buttons-container">
                                         {currentUser?.role === 'admin' && currentUser?.id !== user.id && user.role !== 'admin' && (
                                             <select
