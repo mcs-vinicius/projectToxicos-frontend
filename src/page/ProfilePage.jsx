@@ -215,30 +215,6 @@ const ProfilePage = ({ currentUser }) => {
                         </div>
                     )}
 
-                    {/* --- MODIFICAÇÃO (Usa 'latestHistory') --- */}
-                    {latestHistory && latestHistory.position != null ? (
-                        <div className="profile-history">
-                            <div className="history-item">
-                                <h4>Última Posição</h4>
-                                <p>{latestHistory.position}º</p>
-                            </div>
-                            <div className="history-item">
-                                <h4>Última Fase</h4>
-                                <p>{latestHistory.fase_acesso}</p>
-                            </div>
-                            <div className="history-item">
-                                <h4>Evolução</h4>
-                                {renderEvolutionText(latestHistory.evolution)}
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="profile-history-empty">
-                            <p>Sem dados de histórico de ranking para exibir.</p>
-                        </div>
-                    )}
-                    {/* --- FIM DA MODIFICAÇÃO --- */}
-
-                    {/* --- MODIFICAÇÃO (Título "Núcleos" movido para dentro) --- */}
                     <div className="profile-inventory-container">
                         <h3 className="section-title-group-internal">Núcleos</h3>
                         {renderInventoryItem("Núcleo de Relíquia", "relic_core", nucleoRelicIcon)}
@@ -246,7 +222,7 @@ const ProfilePage = ({ currentUser }) => {
                         {renderInventoryItem("Núcleo de Despertar", "survivor_awakening_core", nucleoDespertarIcon)}
                         {renderInventoryItem("Núcleo de Bichinho Xeno", "xeno_pet_core", nucleoXenoIcon)}
                     </div>
-                    {/* --- FIM DA MODIFICAÇÃO --- */}
+                    
                 </div>
             </div>
 
