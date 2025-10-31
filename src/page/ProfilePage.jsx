@@ -209,10 +209,11 @@ const ProfilePage = ({ currentUser }) => {
                 {/* Bloco 2: Tier (Agora é irmão do profile-pic-wrapper) */}
                 {currentTier && (
                     <div className="profile-tier-container">
-                        <h4>Tier Atual</h4>
+                        
                         <img src={getTierImageUrl(currentTier.emblem)} alt={currentTier.name} className="tier-emblem-profile" />
                         <div className="tier-details">
                             <p>{currentTier.name}</p>
+                            <h4>Tier Atual</h4>
                         </div>
                     </div>
                 )}
