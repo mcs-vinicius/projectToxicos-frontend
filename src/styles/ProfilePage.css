@@ -15,7 +15,7 @@
 /* --- MODIFICAÇÃO (Seção principal agora centraliza os blocos) --- */
 .profile-main-info {
     display: flex;
-    align-items: center;
+    align-items: center; /* Centraliza verticalmente */
     justify-content: center; /* Centraliza os blocos */
     flex-wrap: wrap; /* Permite quebrar a linha em telas menores */
     gap: 50px; /* Aumenta o espaço entre os blocos */
@@ -26,7 +26,6 @@
 
 /* --- MODIFICAÇÃO (Wrapper da foto agora é flex column) --- */
 .profile-pic-wrapper {
-    margin-top: 10px;
     position: relative;
     flex-shrink: 0;
     display: flex; /* Adicionado */
@@ -231,9 +230,6 @@
 
 /* --- HISTÓRICO RÁPIDO (ÚLTIMA TEMPORADA) --- */
 
-/* --- MODIFICAÇÃO (Removido .profile-details) --- */
-/* A classe .profile-details foi removida do CSS */
-
 .profile-history {
     display: flex;
     gap: 10px; 
@@ -318,7 +314,9 @@
   flex-direction: column;
   align-items: center;
   gap: 5px;
-  margin-top: 20px;
+  /* --- MODIFICAÇÃO (Margem removida) --- */
+  margin-top: 0; 
+  /* --- FIM DA MODIFICAÇÃO --- */
 }
 
 .tier-emblem-profile {
